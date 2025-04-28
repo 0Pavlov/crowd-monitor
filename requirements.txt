@@ -1,0 +1,6 @@
+Flask
+Flask-Session
+Flask-SQLAlchemy
+python-dotenv # For managing environment variables (like API keys)
+requests # For api calls
+werkzeug # For password hashing

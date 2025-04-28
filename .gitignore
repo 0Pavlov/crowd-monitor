@@ -1,0 +1,20 @@
+# Python Virtual Environment
+venv/
+*.pyc
+__pycache__/
+
+# Instance folder (contains database, secrets)
+instance/
+
+# Environment variables
+.env
+*.env
+
+# Flask session files 
+.webassets-cache/
+.flask_session/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
