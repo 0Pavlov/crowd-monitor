@@ -5,14 +5,14 @@ import os
 DB_FILE = '../test.db'
 
 
-def create_database(filename: str) -> int:
+def create_database(filename: str) -> bool:
     """Creates the SQLite database and the necessary tables if they don't exist.
     
     Args:
         filename (str): the filename of the db it'll create.
 
     Returns:
-        (int): status code (1 is an error, 0 is ok)
+        (bool): status code (False is an error, True is ok)
     """
     # Store the colors for the colored output
     GREEN = '\033[92m'
@@ -94,7 +94,7 @@ def create_database(filename: str) -> int:
         if conn:
             conn.rollback()
         # Return
-        return 1
+        return False
 
     finally:
         # Close the connection
@@ -102,7 +102,7 @@ def create_database(filename: str) -> int:
             conn.close()
             print(f"{GREEN}Database connection closed.{RESET}")
         # Return
-        return 0
+        return True
 
 
 if __name__ == '__main__':
