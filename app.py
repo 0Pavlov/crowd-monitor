@@ -22,6 +22,12 @@ def after_request(response):
     return response
 
 
+@app.route("/")
+def index():
+    """Homepage"""
+    return render_template("index.html")
+
+
 @app.route("/login")
 def login():
     """Login page"""
