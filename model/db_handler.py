@@ -2,7 +2,7 @@ import sqlite3
 import os
 
 # Define the default db name
-DB_FILE = '../test.db'
+DB_FILE = '/test.db'
 
 
 def create_database(filename: str) -> bool:
@@ -106,4 +106,5 @@ def create_database(filename: str) -> bool:
 
 
 if __name__ == '__main__':
+    # Create test db
     create_database(DB_FILE)
