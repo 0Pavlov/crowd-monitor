@@ -3,9 +3,14 @@ venv/
 .venv
 *.pyc
 __pycache__/
+.mypy_cache
 
 # Instance folder (contains database, secrets)
 instance/
+
+# .db files
+.db
+*.db
 
 # Environment variables
 .env
