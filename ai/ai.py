@@ -6,10 +6,10 @@ import json
 
 # Define the test prompts
 test_prompt: str = "Hello, this is the test, just reply something short (3-4 words at max)"
-test_system_promt: str = "You are a helpful assistant. Provide only the final user-facing answer directly, without including any internal reasoning, commentary, or thought process."
+test_system_prompt: str = "You are a helpful assistant. Provide only the final user-facing answer directly, without including any internal reasoning, commentary, or thought process."
 
 
-def ai_get_answer(prompt: str, system_promt: str):
+def ai_get_answer(prompt: str, system_prompt: str):
     # Load env vars from .env file
     load_dotenv()
 
@@ -29,7 +29,7 @@ def ai_get_answer(prompt: str, system_promt: str):
         "messages": [
           {
             "role": "system",
-            "content": system_promt
+            "content": system_prompt
           },
           {
             "role": "user",
@@ -44,4 +44,4 @@ def ai_get_answer(prompt: str, system_promt: str):
 
 
 if __name__ == "__main__":
-    print(ai_get_answer(test_prompt, test_system_promt))
+    print(ai_get_answer(test_prompt, test_system_prompt))
