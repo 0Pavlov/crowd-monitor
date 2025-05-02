@@ -4,7 +4,12 @@ import requests
 import json
 
 
-def ai_get_answer(prompt: str):
+# Define the test prompts
+test_prompt: str = "Hello, this is the test, just reply something short (3-4 words at max)"
+test_system_promt: str = "You are a helpful assistant. Provide only the final user-facing answer directly, without including any internal reasoning, commentary, or thought process."
+
+
+def ai_get_answer(prompt: str, system_promt: str):
     # Load env vars from .env file
     load_dotenv()
 
@@ -24,7 +29,7 @@ def ai_get_answer(prompt: str):
         "messages": [
           {
             "role": "system",
-            "content": "You are a helpful assistant. Provide only the final user-facing answer directly, without including any internal reasoning, commentary, or thought process."
+            "content": system_promt
           },
           {
             "role": "user",
@@ -36,3 +41,7 @@ def ai_get_answer(prompt: str):
     )
 
     return response.json()['choices'][0]['message']['content']
+
+
+if __name__ == "__main__":
+    print(ai_get_answer(test_prompt, test_system_promt))
