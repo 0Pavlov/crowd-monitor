@@ -19,6 +19,7 @@ instance/
 # Flask session files 
 .webassets-cache/
 .flask_session/
+flask_session/
 
 # OS generated files
 .DS_Store
