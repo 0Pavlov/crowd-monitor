@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from model import db_handler
+from helpers import apology
 
 # Create/check the database
 created: bool = db_handler.create_database("crowd.db")
@@ -31,7 +32,7 @@ def after_request(response):
 @app.route("/")
 def index():
     """Homepage"""
-    return render_template("index.html")
+    return apology("Test error occured", code=666)
 
 
 @app.route("/login")
