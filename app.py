@@ -43,5 +43,23 @@ def login():
 
 @app.route("/register")
 def register():
-    """Register page"""
-    return render_template("register.html")
+    """Register page
+
+    The register template takes arguments.
+    Uses Jinja to place the arguments to the page.
+
+    Args:
+        message (str): A message shown to a user on the page.
+        color (str): Color of the message in the format, that html can understand (red | #000000).
+    """
+    # When the user just visits the page
+    if request.method == "GET":
+        # Return the page
+        return render_template("register.html")
+    # When the user tries to submit the form
+    elif request.method == "POST":
+        # Get the data (ensure the datatype of str)
+        new_username: str = str(request.form.get("username"))
+        new_password: str = str(request.form.get("password"))
+        new_password_confirmation: str = str(request.form.get("confirmation"))
+        return render_template("register.html", message="Not implemented yet.", color="red")
