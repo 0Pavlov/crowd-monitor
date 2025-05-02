@@ -5,5 +5,18 @@
 {% endblock %}
 
 {% block main %}
-    <h1>login.html main block</h1>
+    <form action="/login" method="post">
+    <!-- Wrapper Div -->
+        <div>
+            <div>
+                <input autocomplete="off" autofocus name="username" placeholder="Username" type="text">
+            </div>
+            <div>
+                <input name="password" placeholder="Password" type="password">
+            </div>
+            <div>
+                <button type="submit">Log In</button>
+            </div>
+        </div>
+    </form>
 {% endblock %}
