@@ -55,7 +55,7 @@ def register():
     # When the user just visits the page
     if request.method == "GET":
         # Return the page
-        return render_template("register.html")
+        return render_template("register.html", color="red")
     # When the user tries to submit the form
     elif request.method == "POST":
         # Get the data (ensure the datatype of str)
