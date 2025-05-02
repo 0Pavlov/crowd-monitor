@@ -17,7 +17,7 @@ used in IT.
 - All of the metrics are cached and calculated only on Admin's demand for the performance reasons.
 - Workers have their history of the submitted tasks and their score.
 
-## Technologies
+## Technologies:
 
 - Python Flask for the UI.
 - SQLite3 for the db.
