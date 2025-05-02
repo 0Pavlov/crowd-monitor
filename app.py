@@ -35,13 +35,13 @@ def index():
     return apology("Test error occured", code=666)
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
     """Login page"""
     return render_template("login.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
     """Register page
 
