@@ -12,7 +12,7 @@ instance/
 .db
 *.db
 
-# Environment variables
+# Environment variables, API keys
 .env
 *.env
 
