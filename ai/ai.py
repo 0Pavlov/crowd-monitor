@@ -6,6 +6,7 @@ import json
 
 # Define the test prompts
 test_prompt: str = "This is the test, just reply with the short success message (3-4 words at max)"
+
 test_system_prompt: str = "You are a helpful assistant. Provide only the final user-facing answer directly, without including any internal reasoning, commentary, or thought process."
 
 
