@@ -4,6 +4,10 @@ import os
 # Define the default db name
 DB_FILE = 'test.db'
 
+# Store the colors for the colored output
+GREEN = '\033[92m'
+RED = '\033[31m'
+RESET = '\033[0m'
 
 def create_database(filename: str) -> bool:
     """Creates the SQLite database and the necessary tables if they don't exist.
@@ -14,10 +18,6 @@ def create_database(filename: str) -> bool:
     Returns:
         (bool): status code (False is an error, True is ok)
     """
-    # Store the colors for the colored output
-    GREEN = '\033[92m'
-    RED = '\033[31m'
-    RESET = '\033[0m'
 
     # Check if the database file already exists
     if os.path.exists(filename):
