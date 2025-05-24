@@ -1,14 +1,13 @@
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
-from model import db_handler
+from model import db_handler_new
 from helpers import apology
 
 # Create/check the database
-created: bool = db_handler.create_database("crowd.db")
+created: bool = db_handler_new.create_database("crowd.db")
 # Check success
 if not created:
     exit("Database error.")
-
 
 # Configure application
 app = Flask(__name__)
@@ -58,8 +57,14 @@ def register():
         return render_template("register.html", color="red")
     # When the user tries to submit the form
     elif request.method == "POST":
+        # Connect to the db
+        db = db_handler_new.db_connect("crowd.db")
+
+
         # Get the data (ensure the datatype of str)
         new_username: str = str(request.form.get("username"))
         new_password: str = str(request.form.get("password"))
         new_password_confirmation: str = str(request.form.get("confirmation"))
+        # try to execute some query
+        db_handler_new.query(db, "SELECT * FROM users WHERE id = ?", 15)
         return render_template("register.html", message="Not implemented yet.", color="red")
