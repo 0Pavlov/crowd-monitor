@@ -2,12 +2,19 @@ import sqlite3
 import os
 
 # Define the default db name
-DB_FILE = 'test.db'
+DB_FILENAME = 'test.db'
 
-# Store the colors for the colored output
+# Store the colors for the colored console output
 GREEN = '\033[92m'
 RED = '\033[31m'
 RESET = '\033[0m'
+
+# Define a custom error
+class QueryError(Exception):
+    """Exception raised for the query() caller."""
+    def __init__(self):
+        self.message = f"{RED}Unable to perform a query.{RESET}"
+        super().__init__(self.message)
 
 def create_database(filename: str) -> bool:
     """Creates the SQLite database and the necessary tables if they don't exist.
@@ -16,14 +23,15 @@ def create_database(filename: str) -> bool:
         filename (str): the filename of the db it'll create.
 
     Returns:
-        (bool): status code (False is an error, True is ok)
+        (bool): the success status
     """
-
     # Check if the database file already exists
     if os.path.exists(filename):
         # Print out the success message
         print(f"{GREEN}Database file '{filename}' already exists.{RESET}")
 
+    # Initialize the connection
+    conn = None
     try:
         # Connect to the db. Creates the file if it doesn't exist.
         conn = sqlite3.connect(filename)
@@ -88,6 +96,9 @@ def create_database(filename: str) -> bool:
         conn.commit()
         print(f"{GREEN}    Database schema created/verified successfully.{RESET}")
 
+        # Return
+        return True
+
     except sqlite3.Error as e:
         print(f"{RED}SQLite error: {e}{RESET}")
         # Rollback changes if something went wrong
@@ -101,10 +112,52 @@ def create_database(filename: str) -> bool:
         if conn:
             conn.close()
             print(f"{GREEN}Database connection closed.{RESET}")
-        # Return
-        return True
 
+def db_connect(filename: str, use_row_factory=True):
+    """Connects to the database.
+
+    Args:
+        filename (str): The filename of the database to connect to.
+
+    Returns:
+        connection: A database connection.
+    """
+    # Initialize the connection
+    connection = None
+    try:
+        connection = sqlite3.connect(filename, detect_types=sqlite3.PARSE_DECLTYPES)
+
+        if use_row_factory:
+            connection.row_factory = sqlite3.Row
+
+        print(f"{GREEN}    Database '{filename}' connected successfully.{RESET}")
+    except sqlite3.Error as e:
+        print(f"{RED}SQLite error: {e}{RESET}")
+        return None
+
+    # return
+    return connection
+
+def query(connection, query: str, *args):
+    """Executes the query on the db.
+
+    Args:
+        connection: The db connection, to execute on.
+        query (str): The query to execute.
+        *args: Other arguments (mostly for ? placeholders).
+    """
+    try:
+        # Ececute a query
+        result = connection.execute(query, args)
+        # Success output in console
+        print(f"{GREEN}{query}{RESET}")
+        # Return the result to the caller
+        return result
+    except sqlite3.Error as e:
+        # Output the error
+        print(f"{RED}SQLite error: {e}{RESET}")
+        raise QueryError
 
 if __name__ == '__main__':
     # Create test db
-    create_database(DB_FILE)
+    create_database(DB_FILENAME)
