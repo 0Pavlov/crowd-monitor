@@ -65,6 +65,6 @@ def register():
         new_username: str = str(request.form.get("username"))
         new_password: str = str(request.form.get("password"))
         new_password_confirmation: str = str(request.form.get("confirmation"))
-        # try to execute some query
+        # Try to execute some query
         db_handler.query(db, "SELECT * FROM users WHERE id = ?", 15)
         return render_template("register.html", message="Not implemented yet.", color="red")
