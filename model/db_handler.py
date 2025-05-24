@@ -147,7 +147,7 @@ def query(connection, query: str, *args):
         *args: Other arguments (mostly for ? placeholders).
     """
     try:
-        # Execute a query
+        # Ececute a query
         result = connection.execute(query, args)
         # Success output in console
         print(f"{GREEN}{query}{RESET}")
