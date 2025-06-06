@@ -152,7 +152,7 @@ def query(connection, query: str, *args):
         # Success output in console
         print(f"{GREEN}{query}{RESET}")
         # Return the result to the caller
-        return result
+        return result.fetchall()
     except sqlite3.Error as e:
         # Output the error
         print(f"{RED}SQLite error: {e}{RESET}")
