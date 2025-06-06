@@ -2,6 +2,12 @@ from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from model import db_handler
 from helpers import apology
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# Store the colors for the colored console output
+GREEN = '\033[92m'
+RED = '\033[31m'
+RESET = '\033[0m'
 
 # Create/check the database
 created: bool = db_handler.create_database("crowd.db")
@@ -57,14 +63,50 @@ def register():
         return render_template("register.html", color="red")
     # When the user tries to submit the form
     elif request.method == "POST":
+
         # Connect to the db
         db = db_handler.db_connect("crowd.db")
-
 
         # Get the data (ensure the datatype of str)
         new_username: str = str(request.form.get("username"))
         new_password: str = str(request.form.get("password"))
         new_password_confirmation: str = str(request.form.get("confirmation"))
-        # Try to execute some query
-        db_handler.query(db, "SELECT * FROM users WHERE id = ?", 15)
-        return render_template("register.html", message="Not implemented yet.", color="red")
+
+        # Set of the unappropriate chars in the name
+        chars: str = "!?*$#@%^&()_-+=`~\"\'.<>/,"
+        name_has_chars: bool = False
+        for char in new_username:
+            if char in chars:
+                name_has_chars = True
+
+        # Check
+        if name_has_chars:
+            # Notify user
+            return render_template("register.html", message=f"Your name contains {chars}.", color="red")
+
+        # Check if the user with this name already exists
+        query = db_handler.query(db, "SELECT username FROM users WHERE username = ?", new_username)
+        # Check if returned the empty list
+        if query != []:
+            # Notify user
+            return render_template("register.html", message=f"This username is taken.", color="red")
+
+        # Compare the passwords
+        passwords_match: bool = new_password == new_password_confirmation
+        if not passwords_match:
+            return render_template("register.html", message=f"Passwords don't match.", color="red")
+
+        # Generate password hash
+        password_hash: str = generate_password_hash(new_password)
+
+        try:
+            # Add the user to the db
+            db_handler.query(db, "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)", new_username, password_hash, "worker")
+        except:
+            db.rollback()
+            print(f"{RED}Performed rollback.{RESET}")
+            return apology("db fktup sorry")
+        db.commit()
+        print(f"{GREEN}Successfully commited.{RESET}")
+
+        return render_template("register.html", message="Successfully registered.", color="green")
