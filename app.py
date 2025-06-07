@@ -62,18 +62,22 @@ def validate_session(f):
         try:
             data = db_handler.query(db, "SELECT username, id FROM users WHERE id = ?", user_id)
         except:
+            db.close()
             return apology("Invalid session. User no longer exists or the session is corrupted.", code=400)
 
         # Additional checks
         if not data or len(data) == 0:
+            db.close()
             return apology("Invalid session. User with this username doesn't exists or the session is corrupted.", code=400)
 
         # Compare the data
         valid: bool = username == data[0]['username']
 
         if not valid:
+            db.close()
             return apology("Invalid session. User's username doesn't match the internal user id. Session is corrupted.", code=400)
         
+        db.close()
         return f(*args, **kwargs)
     return validate_user_session
 
