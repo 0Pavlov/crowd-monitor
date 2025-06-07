@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from model import db_handler
-from helpers import apology
+from helpers import apology, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Store the colors for the colored console output
@@ -35,6 +35,7 @@ def after_request(response):
 
 
 @app.route("/")
+@login_required
 def index():
     """Homepage"""
     return apology("Test error occured", code=666)
