@@ -72,6 +72,11 @@ def register():
         new_password: str = str(request.form.get("password"))
         new_password_confirmation: str = str(request.form.get("confirmation"))
 
+        # Check if inputs are blank
+        bl: str = ""
+        if new_username == bl or new_password == bl or new_password_confirmation == bl:
+            return render_template("register.html", message=f"You should fill in all of the forms", color="red")
+
         # Set of the unappropriate chars in the name
         chars: str = "!?*$#@%^&()_-+=`~\"\'.<>/,"
         name_has_chars: bool = False
