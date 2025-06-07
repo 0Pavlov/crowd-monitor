@@ -44,13 +44,14 @@ def index():
 def login():
     """Login page"""
 
+    # Clear any previous session
+    session.clear()
+
     # User reached route via GET
     if request.method == "GET":
         return render_template("login.html")
     # User reached route via POST
     elif request.method == "POST":
-        # Clear any previous session
-        session.clear()
 
         # Get the name and password
         username: str = request.form.get("username")
