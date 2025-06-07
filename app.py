@@ -66,8 +66,11 @@ def login():
         for char in username:
             if char in chars:
                 name_has_chars = True
-        if name_has_chars:
-            return render_template("login.html", message=f"Do not submit special characters: {chars}", color="red")
+        # Single space
+        space: str = " "
+
+        if name_has_chars or space in username:
+            return render_template("login.html", message=f"Do not submit name which contains spaces or special characters: {chars}", color="red")
         return render_template("login.html")
 
 
@@ -108,11 +111,13 @@ def register():
         for char in new_username:
             if char in chars:
                 name_has_chars = True
+        # Single space
+        space: str = " "
 
         # Check
-        if name_has_chars:
+        if name_has_chars or space in new_username:
             # Notify user
-            return render_template("register.html", message=f"Your name contains {chars}.", color="red")
+            return render_template("register.html", message=f"Your name contains spaces or {chars}.", color="red")
 
         # Check if the user with this name already exists
         query = db_handler.query(db, "SELECT username FROM users WHERE username = ?", new_username)
