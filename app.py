@@ -61,7 +61,7 @@ def login():
         if username == bl or password == bl:
             return render_template("login.html", message="You must fill in all of the forms.", color="red")
         # Set of the unappropriate chars in the name
-        chars: str = "!?*$#@%^&()_-+=`~\"\'.<>/,"
+        chars: str = "!?*$#@%^&()-+=`~\"\'.<>/,"
         name_has_chars: bool = False
         for char in username:
             if char in chars:
@@ -103,7 +103,7 @@ def register():
             return render_template("register.html", message=f"You should fill in all of the forms.", color="red")
 
         # Set of the unappropriate chars in the name
-        chars: str = "!?*$#@%^&()_-+=`~\"\'.<>/,"
+        chars: str = "!?*$#@%^&()-+=`~\"\'.<>/,"
         name_has_chars: bool = False
         for char in new_username:
             if char in chars:
