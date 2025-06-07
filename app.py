@@ -43,7 +43,24 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Login page"""
-    return render_template("login.html")
+
+    # User reached route via GET
+    if request.method == "GET":
+        return render_template("login.html")
+    # User reached route via POST
+    elif request.method == "POST":
+        # Clear any previous session
+        session.clear()
+
+        # Get the name and password
+        username: str = request.form.get("username")
+        password: str = request.form.get("password")
+
+        # Check if blank
+        bl: str = ""
+        if username == bl or password == bl:
+            return render_template("login.html", message="You must fill in all of the forms.", color="red")
+        return render_template("login.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
