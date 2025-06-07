@@ -60,6 +60,14 @@ def login():
         bl: str = ""
         if username == bl or password == bl:
             return render_template("login.html", message="You must fill in all of the forms.", color="red")
+        # Set of the unappropriate chars in the name
+        chars: str = "!?*$#@%^&()_-+=`~\"\'.<>/,"
+        name_has_chars: bool = False
+        for char in username:
+            if char in chars:
+                name_has_chars = True
+        if name_has_chars:
+            return render_template("login.html", message=f"Do not submit special characters: {chars}", color="red")
         return render_template("login.html")
 
 
