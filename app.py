@@ -131,6 +131,10 @@ def register():
         if not passwords_match:
             return render_template("register.html", message=f"Passwords don't match.", color="red")
 
+        # Disallow spaces in the password
+        if space in new_password:
+            return render_template("register.html", message="Password shouldn't containd spaces.", color="red")
+
         # Generate password hash
         password_hash: str = generate_password_hash(new_password)
 
