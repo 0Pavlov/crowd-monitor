@@ -80,6 +80,7 @@ def validate_session(f):
 
 @app.route("/")
 @login_required
+@validate_session
 def index():
     """Homepage"""
     return apology("Test error occured", code=666)
