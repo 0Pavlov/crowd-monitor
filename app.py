@@ -71,7 +71,32 @@ def login():
 
         if name_has_chars or space in username:
             return render_template("login.html", message=f"Do not submit name which contains spaces or special characters: {chars}", color="red")
-        return render_template("login.html")
+
+        # Connect to the db
+        db = db_handler.db_connect("crowd.db")
+
+        # Query the db for this userdata
+        user = db_handler.query(db, "SELECT * FROM users WHERE username = ?", username)
+
+        # Check if not found
+        if len(user) == 0:
+            return render_template("login.html", message=f"No user with the name: \"{username}\".", color="red")
+
+        # Check the password
+        password_is_correct: bool = check_password_hash(user[0]["password_hash"], password)
+        
+        if not password_is_correct:
+            return render_template("login.html", message="Incorrect password.", color="red")
+
+        # Remember the user in the session
+        session["user_id"] = user[0]["id"]
+        session["username"] = user[0]["username"]
+
+        # Close the db connection
+        db.close()
+
+        # Redirect the user to the homepage
+        return redirect("/")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -147,5 +172,8 @@ def register():
             return apology("db fktup sorry")
         db.commit()
         print(f"{GREEN}Successfully commited.{RESET}")
+
+        # Close the db connection
+        db.close()
 
         return render_template("register.html", message="Successfully registered.", color="green")
