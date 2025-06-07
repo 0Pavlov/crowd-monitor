@@ -3,6 +3,7 @@ from flask_session import Session
 from model import db_handler
 from helpers import apology, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 
 # Store the colors for the colored console output
 GREEN = '\033[92m'
@@ -32,6 +33,49 @@ def after_request(response):
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
+
+
+def validate_session(f):
+    @wraps(f)
+    def validate_user_session(*args, **kwargs):
+        """Validates user session.
+        
+        Handles case where the user already has previous session saved in their browser.
+        Or tries to push custom cookies to the server in order to gain access to the other user's account.
+        Or the current session is no longer valid because the user was deleted internally (users table entry).
+        Checks if the user id is present in the users table.
+        Checks if the username is stored in the session corresponds to that same id.
+        """
+        # Get the session data
+        try:
+            user_id: int = session['user_id']
+            username: str = session['username']
+        except:
+            return apology("Invalid session. Unable to retrieve data from the session, session is corrupted.", code=400)
+        
+        # Compare it to the data from the users table
+
+        # Connect to the db
+        db = db_handler.db_connect("crowd.db")
+
+        # Get the data for this username
+        try:
+            data = db_handler.query(db, "SELECT username, id FROM users WHERE id = ?", user_id)
+        except:
+            return apology("Invalid session. User no longer exists or the session is corrupted.", code=400)
+
+        # Additional checks
+        if not data or len(data) == 0:
+            return apology("Invalid session. User with this username doesn't exists or the session is corrupted.", code=400)
+
+        # Compare the data
+        valid: bool = username == data[0]['username']
+
+        if not valid:
+            return apology("Invalid session. User's username doesn't match the internal user id. Session is corrupted.", code=400)
+        
+        return f(*args, **kwargs)
+    return validate_user_session
 
 
 @app.route("/")
