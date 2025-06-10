@@ -142,6 +142,7 @@ def login():
         # Remember the user in the session
         session["user_id"] = user[0]["id"]
         session["username"] = user[0]["username"]
+        session["role"] = user[0]["role"]
 
         # Close the db connection
         db.close()
