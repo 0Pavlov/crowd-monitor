@@ -95,7 +95,7 @@ def validate_session(f):
 @validate_session
 def index():
     """Homepage"""
-    return apology("Test error occured", code=666)
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -251,3 +251,11 @@ def logout():
         session.clear()
         # Redirect the user to the main page
         return redirect("/")
+
+
+@app.route("/tasks")
+@login_required
+@validate_session
+def tasks():
+    """Homepage"""
+    return render_template("tasks.html")
