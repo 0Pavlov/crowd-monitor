@@ -228,3 +228,17 @@ def register():
         db.close()
 
         return render_template("register.html", message="Successfully registered.", color="green")
+
+
+@app.route("/logout", methods=["GET", "POST"])
+@validate_session
+def logout():
+    """Logs out the user.
+
+    Checks user session, because the user shouldn't access this route without being previously logged in.
+    """
+    if request.method == "GET":
+        # Clear the user session
+        session.clear()
+        # Redirect the user to the main page
+        return redirect("/")
