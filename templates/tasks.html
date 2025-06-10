@@ -8,11 +8,13 @@
     <h1 style="color:green;">Hello from tasks</h1>
     <!-- Tasks navbar -->
     <div>
-        <h1>Navbar</h1>
-        <span>back</span>
-        <span>create task</span>
-        <span>expand</span>
-        <span>hide</span>
+        {% if session['role'] == 'admin' %}:
+            <h1>Navbar</h1>
+            <span>back</span>
+            <span>create task</span>
+            <span>expand</span>
+            <span>hide</span>
+        {% endif %}
     </div>
     <!-- Tasks overview container -->
     <div>
