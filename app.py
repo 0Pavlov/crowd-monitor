@@ -253,9 +253,11 @@ def logout():
         return redirect("/")
 
 
-@app.route("/tasks")
+@app.route("/tasks", methods=["GET", "POST"])
 @login_required
 @validate_session
 def tasks():
     """Homepage"""
+    if request.method == "GET":
+        render_template("tasks.html")
     return render_template("tasks.html")
