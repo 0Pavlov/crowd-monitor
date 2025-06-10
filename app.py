@@ -233,7 +233,7 @@ def register():
 @app.route("/logout", methods=["GET", "POST"])
 @validate_session
 def logout():
-    """Logs out the user.
+    """Logs the user out.
 
     Checks user session, because the user shouldn't access this route without being previously logged in.
     """
