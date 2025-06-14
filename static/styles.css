@@ -14,10 +14,24 @@ body, html {
     background-color: #f0f2f5; /* A light background to see the container */
 }
 
-.Tasks {
-    flex: 2; /* Make it grow by a factor of 2 */
+.TaskContainer {
+    flex: 1; /* Make it grow by a factor of 1 */
+    position: relative;
 }
 
-.Task {
-    flex: 1; /* Make it grow by a factor of 1 */
+.TaskExpandBtn {
+    /* Position the button at the top left corner */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Move it hang out of the parent container */
+    transform: translate(-50%, 0%);
+}
+
+.hidden {
+    display: none;
+}
+
+.Tasks {
+    flex: 2; /* Make it grow by a factor of 2 */
 }
