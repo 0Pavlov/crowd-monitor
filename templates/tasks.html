@@ -9,6 +9,7 @@
     <!-- Main container -->
     <div class="TasksMain">
         <!-- Tasks overview container -->
+        <!-- All of the tasks table -->
         <div class="Tasks">
             {% if session['role'] == 'admin' %}
                 <h1>All tasks:</h1>
@@ -17,6 +18,7 @@
             {% endif %}
         </div>
         <!-- Task container -->
+        <!-- The particular task area if one is chosen -->
         <div class="Task">
             {% if session['role'] == 'admin' %}
                 <h1>Navbar</h1>
