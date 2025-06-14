@@ -6,31 +6,34 @@
 
 {% block main %}
     <h1 style="color:green;">Hello from tasks</h1>
-    <!-- Tasks overview container -->
-    <div>
-        {% if session['role'] == 'admin' %}
-            <h1>All tasks:</h1>
-        {% else %}
-            <h1>My tasks:</h1>
-        {% endif %}
-        <!-- Task details -->
+    <!-- Main container -->
+    <div class="TasksMain">
+        <!-- Tasks overview container -->
         <div>
-            <h1>NO selected task</h1>
+            {% if session['role'] == 'admin' %}
+                <h1>All tasks:</h1>
+            {% else %}
+                <h1>My tasks:</h1>
+            {% endif %}
+            <!-- Task details -->
+            <div>
+                <h1>NO selected task</h1>
+            </div>
         </div>
-    </div>
-    <!-- Tasks navbar -->
-    <div>
-        {% if session['role'] == 'admin' %}
-            <h1>Navbar</h1>
-            <span>back</span>
-            <span>create task</span>
-            <span>expand</span>
-            <span>hide</span>
-        {% else %}
-            <h1>Navbar</h1>
-            <span>back</span>
-            <span>expand</span>
-            <span>hide</span>
-        {% endif %}
-    </div>
+        <!-- Tasks navbar -->
+        <div>
+            {% if session['role'] == 'admin' %}
+                <h1>Navbar</h1>
+                <span>back</span>
+                <span>create task</span>
+                <span>expand</span>
+                <span>hide</span>
+            {% else %}
+                <h1>Navbar</h1>
+                <span>back</span>
+                <span>expand</span>
+                <span>hide</span>
+            {% endif %}
+        </div>
+    <div/>
 {% endblock %}
