@@ -12,6 +12,9 @@
         <!-- All of the tasks table -->
         <div class="Tasks">
             {% if session['role'] == 'admin' %}
+                <div class="TasksNav">
+                    <button>create task</button>
+                </div>
                 <h1>All tasks:</h1>
             {% else %}
                 <h1>My tasks:</h1>
@@ -20,18 +23,11 @@
         <!-- Task container -->
         <!-- The particular task area if one is chosen -->
         <div class="Task">
-            {% if session['role'] == 'admin' %}
-                <h1>Navbar</h1>
-                <span>back</span>
-                <span>create task</span>
-                <span>expand</span>
-                <span>hide</span>
-            {% else %}
-                <h1>Navbar</h1>
-                <span>back</span>
-                <span>expand</span>
-                <span>hide</span>
-            {% endif %}
+            <div class="TaskNav">
+                <button>back</button>
+                <button>expand</button>
+                <button>hide</button>
+            </div>
             <!-- Task details -->
             <div>
                 <h1>NO selected task</h1>
