@@ -6,6 +6,18 @@
 
 {% block main %}
     <h1 style="color:green;">Hello from tasks</h1>
+    <!-- Tasks overview container -->
+    <div>
+        {% if session['role'] == 'admin' %}
+            <h1>All tasks:</h1>
+        {% else %}
+            <h1>My tasks:</h1>
+        {% endif %}
+        <!-- Task details -->
+        <div>
+            <h1>NO selected task</h1>
+        </div>
+    </div>
     <!-- Tasks navbar -->
     <div>
         {% if session['role'] == 'admin' %}
@@ -20,17 +32,5 @@
             <span>expand</span>
             <span>hide</span>
         {% endif %}
-    </div>
-    <!-- Tasks overview container -->
-    <div>
-        {% if session['role'] == 'admin' %}
-            <h1>All tasks:</h1>
-        {% else %}
-            <h1>My tasks:</h1>
-        {% endif %}
-        <!-- Task details -->
-        <div>
-            <h1>NO selected task</h1>
-        </div>
     </div>
 {% endblock %}
