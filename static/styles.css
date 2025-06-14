@@ -1,0 +1,15 @@
+/* Reset default browser margin/padding for a true full-screen. */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Make the main container fill the entire viewport. */
+.TasksMain {
+    width: 100vw; /* 100% of the viewport width */
+    height: 100vh; /* 100% of the viewport height */
+    display: flex; /* Activate Flexbox */
+    flex-direction: row; /* Horizontal alignment */
+    background-color: #f0f2f5; /* A light background to see the container */
+}
