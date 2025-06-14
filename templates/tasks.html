@@ -34,5 +34,36 @@
                 </div>
             </div>
         </div>
-    <div/>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select the elements from the page
+            const taskContainer = document.querySelector('.TaskContainer');
+            const expandBtn = document.querySelector('.TaskExpandBtn');
+            const hideBtn = document.querySelector('.TaskContainer .TaskNav button');
+            const task = document.querySelector('.Task');
+
+            // HIDE
+            // When the 'hide' button is clicked
+            hideBtn.addEventListener('click', () => {
+                // Add the 'hidden' class to the task description
+                task.classList.add('hidden');
+                // Add the 'collapsed' class to shrink the container
+                taskContainer.classList.add('collapsed');
+                // Remove the 'hidden' class from the 'expand' button
+                expandBtn.classList.remove('hidden');
+            });
+
+            // EXPAND
+            // When the 'expand' button is clicked
+            expandBtn.addEventListener('click', () => {
+                // Remove the 'collapsed' class from the container
+                taskContainer.classList.remove('collapsed');
+                // Add the 'hidden' class to the 'expand' button
+                expandBtn.classList.add('hidden');
+                // Remove the 'hidden' class from the task description
+                task.classList.remove('hidden');
+            });
+        });
+    </script>
 {% endblock %}
