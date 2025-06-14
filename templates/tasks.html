@@ -61,8 +61,12 @@
                 taskContainer.classList.remove('collapsed');
                 // Add the 'hidden' class to the 'expand' button
                 expandBtn.classList.add('hidden');
-                // Remove the 'hidden' class from the task description
-                task.classList.remove('hidden');
+                // Listen for the transition to finish
+                taskContainer.addEventListener('transitionend', () => {
+                    // After the container is fully expanded
+                    // Remove the 'hidden' class from the task description
+                    task.classList.remove('hidden');
+                }, {once: true});
             });
         });
     </script>
