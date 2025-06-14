@@ -13,3 +13,11 @@ body, html {
     flex-direction: row; /* Horizontal alignment */
     background-color: #f0f2f5; /* A light background to see the container */
 }
+
+.Tasks {
+    flex: 2; /* Make it grow by a factor of 2 */
+}
+
+.Task {
+    flex: 1; /* Make it grow by a factor of 1 */
+}
