@@ -257,7 +257,7 @@ def logout():
 @login_required
 @validate_session
 def tasks():
-    """Homepage"""
+    """Tasks"""
     if request.method == "GET":
         render_template("tasks.html")
     return render_template("tasks.html")
