@@ -13,7 +13,7 @@
         <div class="Tasks">
             {% if session['role'] == 'admin' %}
                 <div class="TasksNav">
-                    <button>create task</button>
+                    <button id="show-create-task-btn">create task</button>
                 </div>
                 <h1>All tasks:</h1>
             {% else %}
@@ -35,11 +35,9 @@
                 <div class="SelectedTask hidden">
                     <!-- TODO -->
                 </div>
-                {% if session['role'] == 'admin' %}
-                    <div class="CreateTask hidden">
-                        {% include "create-task.html" %}
-                    </div>
-                {% endif %}
+                <div class="CreateTask hidden" id="create-task-container">
+                    <!-- Appended only if the user has permission -->
+                </div>
             </div>
         </div>
     </div>
@@ -50,6 +48,56 @@
             const expandBtn = document.querySelector('.TaskExpandBtn');
             const hideBtn = document.querySelector('.TaskContainer .TaskNav button');
             const task = document.querySelector('.Task');
+            const noSelectedTask = document.querySelector('.NoSelectedTask');
+
+            // Elements for the AJAX part
+            // Append the HTML if the user has permission
+            const showCreateTaskBtn = document.querySelector('#show-create-task-btn');
+            const createTaskContainer = document.querySelector('#create-task-container');
+            
+            // Check if the button exists (it won't for workers)
+            if (showCreateTaskBtn) {
+                showCreateTaskBtn.addEventListener('click', () => {
+                    // Use fetch() to call the new server route
+                    fetch('/get-create-task')
+                        .then(response => {
+                            // Check if the server responded with 'OK' (status 200-299)
+                            if (response.ok) {
+                                // If it's okay, it means the user is an admin and the server is sending HTML
+                                return response.text(); // Get the response body as raw text (HTML 'create-task.html')
+                            } else {
+                                // If the server responded with an error (like 403 Forbidden)
+                                // This will trigger the .catch() block below
+                                throw new Error(`Server responded with ${response.status}: You might not have permission.`);
+                            }
+                        })
+                        .then(html => {
+                            // SUCCESS!
+                            // 'html' now contains the string of the rendered create-task.html
+                            
+                            // Inject the form HTML into our placeholder container
+                            createTaskContainer.innerHTML = html;
+                            
+                            // Make the main panel visible
+                            taskContainer.classList.remove('collapsed');
+                            task.classList.remove('hidden');
+                            // Hide the expand button
+                            expandBtn.classList.add('hidden')
+
+                            // Hide the 'NoSelectedTask' div
+                            noSelectedTask.classList.add('hidden');
+
+                            // Unhide the create task container
+                            createTaskContainer.classList.remove('hidden');
+                        })
+                        .catch(error => {
+                            // This block will run if the fetch fails (network error)
+                            // or if the server returned an error status (like 403)
+                            console.error('Error fetching create task form:', error);
+                            alert(error.message);
+                        });
+                });
+            }
 
             // HIDE
             // When the 'hide' button is clicked
