@@ -35,6 +35,11 @@
                 <div class="SelectedTask hidden">
                     <!-- TODO -->
                 </div>
+                {% if session['role'] == 'admin' %}
+                    <div class="CreateTask hidden">
+                        {% include "create-task.html" %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
