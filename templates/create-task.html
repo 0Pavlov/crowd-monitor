@@ -4,4 +4,11 @@ content (text),
 gold_standart_answer (text),
 deadline (datetime)-->
 <!-- Task creation form -->
+{% for username in users %}
+    <h1>{{username}}</h1>
+{% endfor %}
+<h1 style="color:green;">Hello from create-task</h1>
+<form action="/tasks" method="post">
+    
+</form>
 
