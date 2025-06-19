@@ -9,6 +9,13 @@ deadline (datetime)-->
 {% endfor %}
 <h1 style="color:green;">Hello from create-task</h1>
 <form action="/tasks" method="post">
-    
+    <span>Task type:</span>
+    <select>
+        <option disabled selected>None</option>
+        <option>Classification</option>
+        <option>Ranking</option>
+        <option>Code</option>
+        <option>Free</option>
+    </select>
 </form>
 
