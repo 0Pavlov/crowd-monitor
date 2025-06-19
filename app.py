@@ -275,8 +275,19 @@ def get_create_task():
     session_role_is_admin: bool = session.get("role") == 'admin'
 
     if session_role_is_admin:
+        # Connect to the db
+        db = db_handler.db_connect("crowd.db")
+
+        # Query the db for the usernames
+        db_users: str = db_handler.query(db, "SELECT username FROM users")
+        # Initialize users list
+        users: list = []
+        # Populate the users list with usernames
+        for user in db_users:
+            users.append(user['username'])
+
         # Render the template and return it
         # This sends the HTML back to the JavaScript fetch() call
-        return render_template("create-task.html")
+        return render_template("create-task.html", users=users)
     else:
         return apology("You don't have permission to perform this action.", code=403)
