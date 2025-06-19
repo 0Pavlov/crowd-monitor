@@ -58,7 +58,8 @@ def create_database(filename: str) -> bool:
                 task_type TEXT NOT NULL CHECK(task_type IN ('classification', 'ranking', 'code', 'free')),
                 content TEXT NOT NULL,
                 gold_standart_answer TEXT,
-                creation_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                creation_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                deadline DATETIME
             );
         """)
         print(f"{GREEN}        Table 'tasks' checked/created.{RESET}")
