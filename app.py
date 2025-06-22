@@ -289,5 +289,7 @@ def get_create_task():
         # Render the template and return it
         # This sends the HTML back to the JavaScript fetch() call
         return render_template("create-task.html", users=users)
+        db.close()
     else:
+        db.close()
         return apology("You don't have permission to perform this action.", code=403)
