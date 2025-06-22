@@ -15,7 +15,7 @@ deadline (datetime)-->
     </div>
     <div>
         <span>Task type:</span>
-        <select>
+        <select name="task_type">
             <option disabled selected>None</option>
             <option>Classification</option>
             <option>Ranking</option>
@@ -25,7 +25,7 @@ deadline (datetime)-->
     </div>
     <div>
         <span>Worker:</span>
-        <select>
+        <select name="worker">
             <option disabled selected>None</option>
             {% for username in users %}
                 <option>{{username}}</option>
