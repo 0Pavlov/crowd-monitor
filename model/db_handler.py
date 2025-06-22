@@ -57,7 +57,7 @@ def create_database(filename: str) -> bool:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_type TEXT NOT NULL CHECK(task_type IN ('classification', 'ranking', 'code', 'free')),
                 content TEXT NOT NULL,
-                gold_standart_answer TEXT,
+                gold_standard_answer TEXT,
                 creation_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 deadline DATETIME,
                 status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_review', 'completed'))
