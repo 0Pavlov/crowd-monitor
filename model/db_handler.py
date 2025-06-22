@@ -78,6 +78,23 @@ def create_database(filename: str) -> bool:
         """)
         print(f"{GREEN}        Table 'submissions' checked/created.{RESET}")
 
+        # Assignments table
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS assignments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                task_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                status TEXT NOT NULL DEFAULT 'assigned' CHECK(status IN ('assigned', 'in_progress', 'awaiting_review', 'revision_requested', 'closed')),
+                score INTEGER,
+                feedback TEXT,
+                assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (task_id) REFERENCES tasks (id),
+                FOREIGN KEY (user_id) REFERENCES users (id),
+                UNIQUE (task_id, user_id)
+                );
+        """)
+        print(f"{GREEN}        Table 'assignments' checked/created.{RESET}")
+
         # Metrics cache table
         db.execute("""
             CREATE TABLE IF NOT EXISTS metrics_cache (
