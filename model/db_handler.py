@@ -59,24 +59,11 @@ def create_database(filename: str) -> bool:
                 content TEXT NOT NULL,
                 gold_standart_answer TEXT,
                 creation_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                deadline DATETIME
+                deadline DATETIME,
+                status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_review', 'completed'))
             );
         """)
         print(f"{GREEN}        Table 'tasks' checked/created.{RESET}")
-
-        # Submissions table
-        db.execute("""
-            CREATE TABLE IF NOT EXISTS submissions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                task_id INTEGER NOT NULL,
-                submitted_answer TEXT NOT NULL,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users (id),
-                FOREIGN KEY (task_id) REFERENCES tasks (id)
-            );
-        """)
-        print(f"{GREEN}        Table 'submissions' checked/created.{RESET}")
 
         # Assignments table
         db.execute("""
@@ -95,6 +82,18 @@ def create_database(filename: str) -> bool:
         """)
         print(f"{GREEN}        Table 'assignments' checked/created.{RESET}")
 
+        # Submissions table
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS submissions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                assignment_id INTEGER NOT NULL,
+                submitted_answer TEXT NOT NULL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (assignment_id) REFERENCES assignments (id) ON DELETE CASCADE
+            );
+        """)
+        print(f"{GREEN}        Table 'submissions' checked/created.{RESET}")
+
         # Metrics cache table
         db.execute("""
             CREATE TABLE IF NOT EXISTS metrics_cache (
@@ -106,8 +105,9 @@ def create_database(filename: str) -> bool:
         print(f"{GREEN}        Table 'metrics_cache' checked/created.{RESET}")
 
         # Add indexes for faster lookups
-        db.execute("CREATE INDEX IF NOT EXISTS idx_submissions_user ON submissions (user_id);")
-        db.execute("CREATE INDEX IF NOT EXISTS idx_submissions_task ON submissions (task_id);")
+        db.execute("CREATE INDEX IF NOT EXISTS idx_submissions_assignment ON submissions (assignment_id);")
+        db.execute("CREATE INDEX IF NOT EXISTS idx_assignments_user ON assignments (user_id);")
+        db.execute("CREATE INDEX IF NOT EXISTS idx_assignments_task ON assignments (task_id);")
         print(f"{GREEN}    Indexes checked/created.{RESET}")
 
         # Save the database file
