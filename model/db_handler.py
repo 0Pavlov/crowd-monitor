@@ -145,6 +145,9 @@ def db_connect(filename: str, use_row_factory=True):
     try:
         connection = sqlite3.connect(filename, detect_types=sqlite3.PARSE_DECLTYPES)
 
+        # Ensure foreign key constraints are enforced
+        connection.execute("PRAGMA foreign_keys = ON;")
+
         if use_row_factory:
             connection.row_factory = sqlite3.Row
 
