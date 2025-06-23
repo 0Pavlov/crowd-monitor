@@ -1,6 +1,6 @@
 # This file explains the database on both a technical and on a conceptual level
 
-# Technical part
+# Technical part:
 
 ## Users
 
@@ -113,7 +113,7 @@ this submission is related.
 ## Metrics Cache
     TODO
 
-# Conceptual Part
+# Conceptual Part:
 
 The ultimate goal of the system is to crowdsource solutions for particular tasks.
 The concept is analogous to a school assignment.
