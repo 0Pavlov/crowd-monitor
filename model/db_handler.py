@@ -73,6 +73,7 @@ def create_database(filename: str) -> bool:
                 user_id INTEGER NOT NULL,
                 status TEXT NOT NULL DEFAULT 'assigned' CHECK(status IN ('assigned', 'in_progress', 'awaiting_review', 'revision_requested', 'closed')),
                 score INTEGER,
+                ai_score INTEGER,
                 feedback TEXT,
                 assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (task_id) REFERENCES tasks (id),
