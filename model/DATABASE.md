@@ -2,29 +2,32 @@
 
 # Technical part
 
-    ## Users
+## Users
 
+```
     CREATE TABLE users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL UNIQUE,
                 password_hash TEXT NOT NULL,
                 role TEXT NOT NULL DEFAULT 'worker' CHECK(role IN ('worker', 'admin'))
                 );
+```
 
-    This table contains users.
-        - (id) is a column used to identify the user for
-        login or for assigning a task to them.
-        - (username) is just a username and can be used for
-        identification as well.
-        - (password_hash) is the hash for the user's password,
-        used for authentication. It is checked against the
-        password the user inputs during login.
-        - (role) helps manage rights for certain project
-        features. For example, if the user is a worker, they
-        cannot create a new task.
+#### This table contains users.
+- (id) is a column used to identify the user for
+login or for assigning a task to them.
+- (username) is just a username and can be used for
+identification as well.
+- (password_hash) is the hash for the user's password,
+used for authentication. It is checked against the
+password the user inputs during login.
+- (role) helps manage rights for certain project
+features. For example, if the user is a worker, they
+cannot create a new task.
 
-    ## Tasks
+## Tasks
 
+```
     CREATE TABLE tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_type TEXT NOT NULL CHECK(task_type IN ('classification', 'ranking', 'code', 'free')),
@@ -34,25 +37,27 @@
                 deadline DATETIME,
                 status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_review', 'completed'))
             );
+```
 
-    This table contains tasks.
-        - (id) is the particular task's identifier, which can be
-        used to find the task.
-        - (task_type) classifies tasks by type. It can be used
-        to measure a worker's performance on tasks of
-        a specific type.
-        - (content) is the content of the task.
-        - (gold_standard_answer) is defined by the admin or
-        generated automatically by the AI. A worker's assignment
-        will be compared to the GSA to give
-        them an AI score.
-        - (creation_timestamp) is the time when the task
-        was created.
-        - (deadline) is the deadline for the task.
-        - (status) is the status of the task.
+#### This table contains tasks.
+- (id) is the particular task's identifier, which can be
+used to find the task.
+- (task_type) classifies tasks by type. It can be used
+to measure a worker's performance on tasks of
+a specific type.
+- (content) is the content of the task.
+- (gold_standard_answer) is defined by the admin or
+generated automatically by the AI. A worker's assignment
+will be compared to the GSA to give
+them an AI score.
+- (creation_timestamp) is the time when the task
+was created.
+- (deadline) is the deadline for the task.
+- (status) is the status of the task.
 
-    ## Assignments
+## Assignments
 
+```
     CREATE TABLE assignments (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_id INTEGER NOT NULL,
@@ -66,29 +71,31 @@
                 FOREIGN KEY (user_id) REFERENCES users (id),
                 UNIQUE (task_id, user_id)
                 );
+```
 
-    This table contains an individual worker's assignment to a
-    particular task. A task can have multiple assignments
-    from multiple users.
-        - (id) is the assignment ID.
-        - (task_id) is the ID of the assigned task.
-        - (user_id) is the ID of the assigned user.
-        - (status) shows the system and sometimes the
-        worker the status of their assignment. For example, if
-        the status is 'revision_requested', this means that
-        the admin wants the worker to add more submissions
-        (more on that later).
-        - (score) is the score given by the reviewer upon
-        closing the task.
-        - (ai_score) is the score given by the AI reviewer
-        upon closing the task.
-        - (feedback) is the feedback from the reviewer upon
-        closing the task.
-        - (assigned_at) is the time when the task was assigned
-        to this particular worker.
+#### This table contains an individual worker's assignment to a
+particular task. A task can have multiple assignments
+from multiple users.
+- (id) is the assignment ID.
+- (task_id) is the ID of the assigned task.
+- (user_id) is the ID of the assigned user.
+- (status) shows the system and sometimes the
+worker the status of their assignment. For example, if
+the status is 'revision_requested', this means that
+the admin wants the worker to add more submissions
+(more on that later).
+- (score) is the score given by the reviewer upon
+closing the task.
+- (ai_score) is the score given by the AI reviewer
+upon closing the task.
+- (feedback) is the feedback from the reviewer upon
+closing the task.
+- (assigned_at) is the time when the task was assigned
+to this particular worker.
 
-    ## Submissions
+## Submissions
 
+```
     CREATE TABLE submissions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 assignment_id INTEGER NOT NULL,
@@ -96,19 +103,20 @@
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (assignment_id) REFERENCES assignments (id) ON DELETE CASCADE
             );
+```
 
-    This table contains individual submissions for the
-    assignments (not for the tasks). An assignment is a
-    hub, created for a particular worker, which aggregates
-    all of that worker's submissions. There can be
-    multiple submissions for one assignment.
-        - (id) is the ID of a particular submission.
-        - (assignment_id) specifies to which assignment
-        this submission is related.
-        - (submitted_answer) is the submission itself.
-        - (timestamp) is the time of the submission.
+#### This table contains individual submissions for the
+assignments (not for the tasks). An assignment is a
+hub, created for a particular worker, which aggregates
+all of that worker's submissions. There can be
+multiple submissions for one assignment.
+- (id) is the ID of a particular submission.
+- (assignment_id) specifies to which assignment
+this submission is related.
+- (submitted_answer) is the submission itself.
+- (timestamp) is the time of the submission.
 
-    ## Metrics Cache
+## Metrics Cache
     TODO
 
 # Conceptual Part
