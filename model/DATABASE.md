@@ -1,4 +1,4 @@
-# This file explains the database both on technical and on a conceptional level
+# This file explains the database on both a technical and on a conceptual level
 
 # Technical part
 
@@ -11,16 +11,16 @@
                 role TEXT NOT NULL DEFAULT 'worker' CHECK(role IN ('worker', 'admin'))
                 );
 
-    This table contains users
-        - (id) column is used to identify the user for the
-        login, or for assigning a task to them.
-        - (username) just a username, can be used for
+    This table contains users.
+        - (id) is a column used to identify the user for
+        login or for assigning a task to them.
+        - (username) is just a username and can be used for
         identification as well.
-        - (password_hash) the hash for the user password,
-        used for autentification, checked against the
-        password user inputs during the login.
-        - (role) helps manage rights for sertain project
-        features, for example if the user is worker, they
+        - (password_hash) is the hash for the user's password,
+        used for authentication. It is checked against the
+        password the user inputs during login.
+        - (role) helps manage rights for certain project
+        features. For example, if the user is a worker, they
         cannot create a new task.
 
     ## Tasks
@@ -35,20 +35,20 @@
                 status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_review', 'completed'))
             );
 
-    This table contains tasks
-        - (id) is the particular task's identifier, can be
+    This table contains tasks.
+        - (id) is the particular task's identifier, which can be
         used to find the task.
-        - (task_type) classifies tasks by type, can be used
-        to measure worker's performance on the tasks with
-        the specific type.
+        - (task_type) classifies tasks by type. It can be used
+        to measure a worker's performance on tasks of
+        a specific type.
         - (content) is the content of the task.
         - (gold_standard_answer) is defined by the admin or
-        generated automatically by the AI. Worker's assignment
-        would be later compared to the gsa in order to give
+        generated automatically by the AI. A worker's assignment
+        will be compared to the GSA to give
         them an AI score.
         - (creation_timestamp) is the time when the task
         was created.
-        - (deadline) is the deadline of the task.
+        - (deadline) is the deadline for the task.
         - (status) is the status of the task.
 
     ## Assignments
@@ -67,15 +67,15 @@
                 UNIQUE (task_id, user_id)
                 );
 
-    This table contains individual worker's assignment to a
-    particular task. There is only one task, but there is
-    multiple assignments to this task from multiple users.
-        - (id) assignment id.
-        - (task_id) assignment to which task.
-        - (user_id) assignment from who.
-        - (status) shows to the system and sometimes to the
-        worker the status of their assignment. For example if
-        the status is 'revision_requested' this means that
+    This table contains an individual worker's assignment to a
+    particular task. A task can have multiple assignments
+    from multiple users.
+        - (id) is the assignment ID.
+        - (task_id) is the ID of the assigned task.
+        - (user_id) is the ID of the assigned user.
+        - (status) shows the system and sometimes the
+        worker the status of their assignment. For example, if
+        the status is 'revision_requested', this means that
         the admin wants the worker to add more submissions
         (more on that later).
         - (score) is the score given by the reviewer upon
@@ -84,7 +84,7 @@
         upon closing the task.
         - (feedback) is the feedback from the reviewer upon
         closing the task.
-        - (assigned_at) is the time when the task is assigned
+        - (assigned_at) is the time when the task was assigned
         to this particular worker.
 
     ## Submissions
@@ -97,19 +97,47 @@
                 FOREIGN KEY (assignment_id) REFERENCES assignments (id) ON DELETE CASCADE
             );
 
-    This table contains individual submissions to the
-    assignments (not for the tasks). Assignment is the
-    hub, created for particular worker, which agregates 
-    all of the worker's submissions. There is can be
-    multiple submissions for the one assignment.
-        - (id) is particular submission id.
+    This table contains individual submissions for the
+    assignments (not for the tasks). An assignment is a
+    hub, created for a particular worker, which aggregates
+    all of that worker's submissions. There can be
+    multiple submissions for one assignment.
+        - (id) is the ID of a particular submission.
         - (assignment_id) specifies to which assignment
         this submission is related.
-        - (submitted_answer) is the submittion itself.
-        - (timestamp) is the time of the submittion.
+        - (submitted_answer) is the submission itself.
+        - (timestamp) is the time of the submission.
 
     ## Metrics Cache
     TODO
 
-# Conceptional part
-TODO
+# Conceptual Part
+
+The ultimate goal of the system is to crowdsource solutions for particular tasks.
+The concept is analogous to a school assignment.
+
+There is a **teacher** (an `admin` user), who provides a problem, and there are **students**
+(the `worker` users), who provide the solutions.
+
+## Workflow
+    - An admin (the "teacher") creates a `task` and sets its deadline.
+    - The admin then assigns this single `task` to one or more workers ("students").
+    - This creates an `assignment` for each worker. The `assignment` acts like a 
+    personal project folder for that specific task. A worker has exactly one `assignment` 
+    per task they are assigned.
+    - As workers progress, they submit their work. Each piece of work is a `submission`. 
+    A worker can make multiple `submissions` to their single `assignment` for a task. 
+    All of their work for that task is collected within that assignment.
+    - From the worker's perspective, this interaction feels like having an individual chat 
+    or workspace for each task assigned to them.
+    - At any point, an admin can view every `submission` for every `assignment`.
+    - Once a worker believes they have finished, they change their assignment's status to 
+    `awaiting_review`.
+    - An admin can review the work. If it is incomplete or incorrect, the admin can request 
+    a `revision_requested`, prompting the worker to make more submissions.
+    - An admin can **close** an individual worker's `assignment`. This may happen because 
+    the worker has successfully completed the task, is no longer working on it, or for any 
+    other reason.
+    - An admin can also **close** the entire `task`. When this happens, all related 
+    assignments are automatically closed, and no one can make further submissions. 
+    At this point, the task is considered `completed`.
