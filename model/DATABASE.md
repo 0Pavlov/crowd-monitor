@@ -73,9 +73,7 @@ was created.
                 );
 ```
 
-#### This table contains an individual worker's assignment to a
-particular task. A task can have multiple assignments
-from multiple users.
+#### This table contains an individual worker's assignment to a particular task. A task can have multiple assignments from multiple users.
 - (id) is the assignment ID.
 - (task_id) is the ID of the assigned task.
 - (user_id) is the ID of the assigned user.
@@ -105,11 +103,7 @@ to this particular worker.
             );
 ```
 
-#### This table contains individual submissions for the
-assignments (not for the tasks). An assignment is a
-hub, created for a particular worker, which aggregates
-all of that worker's submissions. There can be
-multiple submissions for one assignment.
+#### This table contains individual submissions for the assignments (not for the tasks). An assignment is a hub, created for a particular worker, which aggregates all of that worker's submissions. There can be multiple submissions for one assignment.
 - (id) is the ID of a particular submission.
 - (assignment_id) specifies to which assignment
 this submission is related.
@@ -128,24 +122,24 @@ There is a **teacher** (an `admin` user), who provides a problem, and there are 
 (the `worker` users), who provide the solutions.
 
 ## Workflow
-    - An admin (the "teacher") creates a `task` and sets its deadline.
-    - The admin then assigns this single `task` to one or more workers ("students").
-    - This creates an `assignment` for each worker. The `assignment` acts like a 
-    personal project folder for that specific task. A worker has exactly one `assignment` 
-    per task they are assigned.
-    - As workers progress, they submit their work. Each piece of work is a `submission`. 
-    A worker can make multiple `submissions` to their single `assignment` for a task. 
-    All of their work for that task is collected within that assignment.
-    - From the worker's perspective, this interaction feels like having an individual chat 
-    or workspace for each task assigned to them.
-    - At any point, an admin can view every `submission` for every `assignment`.
-    - Once a worker believes they have finished, they change their assignment's status to 
-    `awaiting_review`.
-    - An admin can review the work. If it is incomplete or incorrect, the admin can request 
-    a `revision_requested`, prompting the worker to make more submissions.
-    - An admin can **close** an individual worker's `assignment`. This may happen because 
-    the worker has successfully completed the task, is no longer working on it, or for any 
-    other reason.
-    - An admin can also **close** the entire `task`. When this happens, all related 
-    assignments are automatically closed, and no one can make further submissions. 
-    At this point, the task is considered `completed`.
+- An admin (the "teacher") creates a `task` and sets its deadline.
+- The admin then assigns this single `task` to one or more workers ("students").
+- This creates an `assignment` for each worker. The `assignment` acts like a 
+personal project folder for that specific task. A worker has exactly one `assignment` 
+per task they are assigned.
+- As workers progress, they submit their work. Each piece of work is a `submission`. 
+A worker can make multiple `submissions` to their single `assignment` for a task. 
+All of their work for that task is collected within that assignment.
+- From the worker's perspective, this interaction feels like having an individual chat 
+or workspace for each task assigned to them.
+- At any point, an admin can view every `submission` for every `assignment`.
+- Once a worker believes they have finished, they change their assignment's status to 
+`awaiting_review`.
+- An admin can review the work. If it is incomplete or incorrect, the admin can request 
+a `revision_requested`, prompting the worker to make more submissions.
+- An admin can **close** an individual worker's `assignment`. This may happen because 
+the worker has successfully completed the task, is no longer working on it, or for any 
+other reason.
+- An admin can also **close** the entire `task`. When this happens, all related 
+assignments are automatically closed, and no one can make further submissions. 
+At this point, the task is considered `completed`.
