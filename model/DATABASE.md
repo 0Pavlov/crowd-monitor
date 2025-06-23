@@ -130,7 +130,7 @@ per task they are assigned.
 - As workers progress, they submit their work. Each piece of work is a `submission`. 
 A worker can make multiple `submissions` to their single `assignment` for a task. 
 All of their work for that task is collected within that assignment.
-- From the worker's perspective, this interaction feels like having an individual chat 
+    - From the worker's perspective, this interaction feels like having an individual chat 
 or workspace for each task assigned to them.
 - At any point, an admin can view every `submission` for every `assignment`.
 - Once a worker believes they have finished, they change their assignment's status to 
