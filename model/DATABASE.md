@@ -171,3 +171,42 @@ status = 'open'
 
 task = query(db, "INSERT INTO tasks (task_type, content, gold_standart_answer, deadline) VALUES (?, ?, ?, ?)", task_type, task_content, gsa, deadline)
 ```
+
+#### Create Assignment
+
+```
+# Admin assigns the task to the worker (this creates their project folder)
+assignment = query(db, "INSERT INTO assignments (task_id, user_id) VALUES (?, ?)", task_id, alice_id)
+```
+
+#### Make Submission
+
+```
+# Workers submit their answers (putting papers in folders)
+query(db, "INSERT INTO submissions (assignment_id, submitted_answer) VALUES (?, ?)", worker_assignment_id, "The x is 1")
+
+# Now the assignment status should be changed to 'in_progress' or 'awaiting_review' which depends on what the worker has pressed
+query(db, "UPDATE assignments SET status = 'in_progress' WHERE id = ?", worker_assignment_id)
+
+# Puts another answer
+query(db, "INSERT INTO submissions (assignment_id, submitted_answer) VALUES (?, ?)", worker_assignment_id, "Nevermind, the x is 3")
+
+# Now status should be changed to awaiting_review
+query(db, "UPDATE assignments SET status = 'awaiting_review' WHERE id = ?", worker_assignment_id)
+```
+
+#### Work Review
+
+```
+# Fetch all submittions for worker's assignment (worker_assignment_id)
+worker_submissions = query(db, "SELECT submitted_answer, timestamp FROM submissions WHERE assignment_id = ? ORDER BY timestamp ASC", worker_assignment_id, fetch='all')
+# View
+for sub in worker_submissions:
+    print(f"[{sub['timestamp']}] {sub['submitted_answer']}")
+```
+
+#### Score And Provide Feedback
+
+```
+query(db, "UPDATE assignments SET score = 10, feedback = ?, status = 'closed' WHERE id = ?", "Excellent work", worker_assignment_id)
+```
