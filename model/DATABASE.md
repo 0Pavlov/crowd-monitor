@@ -143,3 +143,14 @@ other reason.
 - An admin can also **close** the entire `task`. When this happens, all related 
 assignments are automatically closed, and no one can make further submissions. 
 At this point, the task is considered `completed`.
+
+## Implementation
+
+#### User Creation
+
+```
+# Admin
+admin = query(db, "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)", 'username', 'hash', 'admin')
+# Worker
+worker = query(db, "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)", 'username', 'hash', 'worker')
+```
