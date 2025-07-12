@@ -141,7 +141,8 @@ a `revision_requested`, prompting the worker to make more submissions.
 the worker has successfully completed the task, is no longer working on it, or for any 
 other reason.
 - An admin can also **close** the entire `task`. When this happens, all related 
-assignments are automatically closed, and no one can make further submissions. 
+assignments are automatically closed, and no one can make further submissions. This is
+achieved by updating all related assignments with the 'open' status to 'closed'.
 At this point, the task is considered `completed`.
 
 ## Implementation
