@@ -211,4 +211,8 @@ for sub in worker_submissions:
 query(db, "UPDATE assignments SET score = 10, feedback = ?, status = 'closed' WHERE id = ?", "Excellent work", worker_assignment_id)
 ```
 
-Upon closing you can also generate ai feedback by telling the AI to compare the final answer / all worker submissions chain against the golden_standard_answer
+Upon closing you can also generate ai score by telling the AI to compare the final answer / all worker submissions chain against the golden_standard_answer
+
+```
+query(db, "UPDATE assignments SET ai_score = ? WHERE id = ?", ai_score, worker_assignment_id)
+```
