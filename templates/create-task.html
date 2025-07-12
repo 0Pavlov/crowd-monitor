@@ -14,6 +14,10 @@ deadline (datetime)-->
         <input name="content" type="text" autocomplete="off">
     </div>
     <div>
+        <span>Gold Standard Answer:</span>
+        <input name="gsa" type="text" autocomplete="off">
+    </div>
+    <div>
         <span>Task type:</span>
         <select name="task_type">
             <option disabled selected>None</option>
@@ -31,6 +35,10 @@ deadline (datetime)-->
                 <option>{{username}}</option>
             {% endfor %}
         </select>
+    </div>
+    <div>
+        <span>Deadline:</span>
+        <input type="datetime-local" name"deadline">
     </div>
     <div>
         <button type="submit">Create</button>
