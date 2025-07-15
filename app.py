@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, session, jsonify
+from flask import Flask, redirect, render_template, request, session, jsonify, flash
 from flask_session import Session
 from model import db_handler
 from helpers import apology, login_required
@@ -260,6 +260,18 @@ def tasks():
     """Tasks"""
     if request.method == "GET":
         render_template("tasks.html")
+    if request.method == "POST":
+        # Create task section
+        if request.form.get("task_creation_form") == "create_task":
+            # Check the roles
+            session_role_is_admin: bool = session.get("role") == 'admin'
+            if session_role_is_admin:
+                # TODO
+                flash("HELLO", "success")
+                return render_template("tasks.html")
+            else:
+                return apology("You don't have permission to perform this action.", code=403)
+
     return render_template("tasks.html")
 
 
@@ -288,7 +300,7 @@ def get_create_task():
 
         # Render the template and return it
         # This sends the HTML back to the JavaScript fetch() call
-        return render_template("create-task.html", users=users)
+        return render_template("create-task.html", users=users, color="green")
         db.close()
     else:
         db.close()
