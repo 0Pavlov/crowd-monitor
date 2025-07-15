@@ -9,6 +9,9 @@ deadline (datetime)-->
 {% endfor %}
 <h1 style="color:green;">Hello from create-task</h1>
 <form action="/tasks" method="post">
+    <!-- Form identifier -->
+    <input type="hidden" name="task_creation_form" value="create_task">
+
     <div>
         <span>Task content:</span>
         <input name="content" type="text" autocomplete="off">
