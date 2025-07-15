@@ -5,6 +5,85 @@
 {% endblock %}
 
 {% block main %}
+
+    <!-- Flash messages block START -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <!-- Each message gets a 'flash-message' class so JavaScript can find it -->
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- This styles the messages and adds the fade-out animation -->
+    <style>
+        /* A container to hold the messages in the top right corner */
+        .flash-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050; /* Ensures it's on top of other content */
+        }
+
+        /* Styling for all flash messages */
+        .flash-message {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            min-width: 250px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: opacity 0.5s ease;
+        }
+
+        /* Style for 'success' messages */
+        .flash-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        /* Style for 'danger' or 'error' messages */
+        .flash-danger, .flash-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    </style>
+
+    <!-- This finds the messages and makes them disappear -->
+    <script>
+        // Wait until the entire page is loaded before running the script
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Find all elements with the 'flash-message' class
+            const flashMessages = document.querySelectorAll('.flash-message');
+
+            // Loop through each messages found
+            flashMessages.forEach(function(message) {
+                
+                // Set a timer to run a function after 1 seconds (1000 milliseconds)
+                setTimeout(function() {
+                    // Start the fade-out by setting opacity to 0
+                    message.style.opacity = '0';
+                    
+                    // After the fade-out animation (500ms), hide the element completely
+                    // so it doesn't take up any space on the page.
+                    setTimeout(function() {
+                        message.style.display = 'none';
+                    }, 500); // This must match the CSS transition time
+
+                }, 1000); 
+            });
+        });
+    </script>
+    <!-- Flash messages block END -->
+
     <h1 style="color:green;">Hello from tasks</h1>
     <!-- Main container -->
     <div class="TasksMain">
