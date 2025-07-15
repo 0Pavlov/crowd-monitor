@@ -268,7 +268,7 @@ def tasks():
             if session_role_is_admin:
                 # TODO
                 flash("HELLO", "success")
-                return render_template("tasks.html")
+                return redirect("/tasks")
             else:
                 return apology("You don't have permission to perform this action.", code=403)
 
