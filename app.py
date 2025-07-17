@@ -266,7 +266,12 @@ def tasks():
             # Check the roles
             session_role_is_admin: bool = session.get("role") == 'admin'
             if session_role_is_admin:
-                # TODO
+                # Retrieve the data from the forms
+                # content task_type gsa deadline worker
+                content = request.form.get('content').strip()
+                if content == '' or content == None:
+                    flash("The content field is empty.", "danger")
+                    return redirect("/tasks")
                 flash("HELLO", "success")
                 return redirect("/tasks")
             else:

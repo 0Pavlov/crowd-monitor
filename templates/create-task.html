@@ -10,15 +10,15 @@ deadline (datetime)-->
 <h1 style="color:green;">Hello from create-task</h1>
 <form action="/tasks" method="post">
     <!-- Form identifier -->
-    <input type="hidden" name="task_creation_form" value="create_task" required>
+    <input type="hidden" name="task_creation_form" value="create_task">
 
     <div>
         <span>Task content:</span>
-        <input name="content" type="text" autocomplete="off" required>
+        <input name="content" type="text" autocomplete="off">
     </div>
     <div>
         <span>Gold Standard Answer:</span>
-        <input name="gsa" type="text" autocomplete="off" required>
+        <input name="gsa" type="text" autocomplete="off">
     </div>
     <div>
         <span>Task type:</span>
@@ -41,7 +41,7 @@ deadline (datetime)-->
     </div>
     <div>
         <span>Deadline:</span>
-        <input type="datetime-local" name"deadline" required>
+        <input type="datetime-local" name"deadline">
     </div>
     <div>
         <button type="submit">Create</button>
