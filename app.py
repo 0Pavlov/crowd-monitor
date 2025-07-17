@@ -267,12 +267,34 @@ def tasks():
             session_role_is_admin: bool = session.get("role") == 'admin'
             if session_role_is_admin:
                 # Retrieve the data from the forms
-                # content task_type gsa deadline worker
-                content = request.form.get('content').strip()
-                if content == '' or content == None:
+                content = request.form.get('content')
+                task_type = request.form.get('task_type')
+                gsa = request.form.get('gsa')
+                deadline = request.form.get('deadline')
+                worker = request.form.get('worker')
+
+                # Check the data
+                if content == None or content.strip() == '':
                     flash("The content field is empty.", "danger")
                     return redirect("/tasks")
-                flash("HELLO", "success")
+                if gsa == None or gsa.strip() == '':
+                    flash("The gsa isn't specified.", "danger")
+                    return redirect("/tasks")
+                if task_type == None or task_type.strip() == '':
+                    flash("The task type isn't specified.", "danger")
+                    return redirect("/tasks")
+                if worker == None or worker.strip() == '':
+                    flash("The worker isn't specified.", "danger")
+                    return redirect("/tasks")
+                if deadline == None or deadline.strip() == '':
+                    flash("The deadline isn't specified.", "danger")
+                    return redirect("/tasks")
+
+                # Convert the deadline to the SQL DATETIME
+                deadline = deadline.replace('T', ' ') + ':00'
+
+                # Show the success flash
+                flash("Task successfully created.", "success")
                 return redirect("/tasks")
             else:
                 return apology("You don't have permission to perform this action.", code=403)
