@@ -30,18 +30,21 @@ cannot create a new task.
 ```
     CREATE TABLE tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                creator_id INTEGER NOT NULL,
                 task_type TEXT NOT NULL CHECK(task_type IN ('classification', 'ranking', 'code', 'free')),
                 content TEXT NOT NULL,
                 gold_standard_answer TEXT,
                 creation_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 deadline DATETIME,
-                status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_review', 'completed'))
+                status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_review', 'completed')),
+                FOREIGN KEY (creator_id) REFERENCES users (id)
             );
 ```
 
 #### This table contains tasks.
 - (id) is the particular task's identifier, which can be
 used to find the task.
+- (creator_id) keeps track of who created the task.
 - (task_type) classifies tasks by type. It can be used
 to measure a worker's performance on tasks of
 a specific type.
