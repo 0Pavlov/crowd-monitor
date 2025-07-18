@@ -300,7 +300,7 @@ def tasks():
                 creator_id: int = session['user_id']
 
                 # Get the id of the worker
-                worker_id: int = db_handler.query(db, "SELECT id FROM users WHERE username = ?", worker)
+                worker_id: int = db_handler.query(db, "SELECT id FROM users WHERE username = ?", worker)[0]['id']
 
                 # TODO
                 # Create the task
