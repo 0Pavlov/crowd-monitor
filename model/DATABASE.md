@@ -65,6 +65,7 @@ was created.
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_id INTEGER NOT NULL,
                 user_id INTEGER NOT NULL,
+                assigned_by_id INTEGER NOT NULL,
                 status TEXT NOT NULL DEFAULT 'assigned' CHECK(status IN ('assigned', 'in_progress', 'awaiting_review', 'revision_requested', 'closed')),
                 score INTEGER,
                 ai_score INTEGER,
@@ -72,6 +73,7 @@ was created.
                 assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (task_id) REFERENCES tasks (id),
                 FOREIGN KEY (user_id) REFERENCES users (id),
+                FOREIGN KEY (assigned_by_id) REFERENCES users (id),
                 UNIQUE (task_id, user_id)
                 );
 ```
@@ -80,6 +82,7 @@ was created.
 - (id) is the assignment ID.
 - (task_id) is the ID of the assigned task.
 - (user_id) is the ID of the assigned user.
+- (assigned_by_id) is the ID of who assigned the task to the user.
 - (status) shows the system and sometimes the
 worker the status of their assignment. For example, if
 the status is 'revision_requested', this means that
