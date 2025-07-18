@@ -293,6 +293,22 @@ def tasks():
                 # Convert the deadline to the SQL DATETIME
                 deadline = deadline.replace('T', ' ') + ':00'
 
+                # Connect to the db
+                db = db_handler.db_connect("crowd.db")
+
+                # Get the id of who creating the task
+                creator_id: int = session['user_id']
+
+                # Get the id of the worker
+                worker_id = db_handler.query(db, "SELECT id FROM users WHERE username = ?", worker)
+
+                # TODO
+                # Create the task
+                # Assign the task to worker
+                # Commit changes
+                # Close the connection
+                # /TODO
+
                 # Show the success flash
                 flash("Task successfully created.", "success")
                 return redirect("/tasks")
