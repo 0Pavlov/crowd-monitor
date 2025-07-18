@@ -73,6 +73,7 @@ def create_database(filename: str) -> bool:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_id INTEGER NOT NULL,
                 user_id INTEGER NOT NULL,
+                assigned_by_id INTEGER NOT NULL,
                 status TEXT NOT NULL DEFAULT 'assigned' CHECK(status IN ('assigned', 'in_progress', 'awaiting_review', 'revision_requested', 'closed')),
                 score INTEGER,
                 ai_score INTEGER,
@@ -80,6 +81,7 @@ def create_database(filename: str) -> bool:
                 assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (task_id) REFERENCES tasks (id),
                 FOREIGN KEY (user_id) REFERENCES users (id),
+                FOREIGN KEY (assigned_by_id) REFERENCES users (id),
                 UNIQUE (task_id, user_id)
                 );
         """)
