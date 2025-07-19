@@ -267,11 +267,11 @@ def tasks():
             session_role_is_admin: bool = session.get("role") == 'admin'
             if session_role_is_admin:
                 # Retrieve the data from the forms
-                content = request.form.get('content')
-                task_type = request.form.get('task_type')
-                gsa = request.form.get('gsa')
+                content: str = request.form.get('content')
+                task_type: str = request.form.get('task_type')
+                gsa: str = request.form.get('gsa')
                 deadline = request.form.get('deadline')
-                worker = request.form.get('worker')
+                worker: str = request.form.get('worker')
 
                 # Check the data
                 if content == None or content.strip() == '':
@@ -290,6 +290,9 @@ def tasks():
                     flash("The deadline isn't specified.", "danger")
                     return redirect("/tasks")
 
+                # Convert the task type to lowercase
+                task_type: str = task_type.lower()
+
                 # Convert the deadline to the SQL DATETIME
                 deadline = deadline.replace('T', ' ') + ':00'
 
@@ -302,12 +305,32 @@ def tasks():
                 # Get the id of the worker
                 worker_id: int = db_handler.query(db, "SELECT id FROM users WHERE username = ?", worker)[0]['id']
 
-                # TODO
                 # Create the task
+                try:
+                    db_handler.query(db, "INSERT INTO tasks (creator_id, task_type, content, gold_standard_answer, deadline) VALUES (?, ?, ?, ?, ?)", creator_id, task_type, content, gsa, deadline)
+                    print("Successfully created task")
+                except:
+                    print("ERROOOOOOOOOOORRRRRRR")
+                    db.rollback()
+
+                # Find out the task id
+                task_id = db_handler.query(db, "SELECT id FROM tasks WHERE (content == ? AND creator_id == ?)", content, creator_id)[0]['id']
+
                 # Assign the task to worker
+                try:
+                    db_handler.query(db, "INSERT INTO assignments (task_id, user_id, assigned_by_id) VALUES (?, ?, ?)", task_id, worker_id, creator_id)
+                    print("SUCCEEEESSSSSSSSS")
+                except:
+                    # Delete the task
+                    db_handler.query(db, "DELETE FROM task WHERE id = ?", task_id)
+                    print("LOOOOOOOOOOL")
+                    db.rollback()
+
                 # Commit changes
+                db.commit()
+
                 # Close the connection
-                # /TODO
+                db.close()
 
                 # Show the success flash
                 flash("Task successfully created.", "success")
