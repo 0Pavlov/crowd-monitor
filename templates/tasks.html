@@ -190,18 +190,53 @@
                             
                             // Inject the form HTML into our placeholder container
                             createTaskContainer.innerHTML = html;
-                            
-                            // Make the main panel visible
+
+                            // Make the main panel visible (triggering the transition)
                             taskContainer.classList.remove('collapsed');
-                            task.classList.remove('hidden');
-                            // Hide the expand button
-                            expandBtn.classList.add('hidden')
 
-                            // Hide the 'NoSelectedTask' div
-                            noSelectedTask.classList.add('hidden');
+                            // Scenario when the createTaskContainer is visible but collapsed
+                            if (!expandBtn.classList.contains('hidden') && !createTaskContainer.classList.contains('hidden')) {
+                                // Hide the container and then unhide it after the transition
+                                createTaskContainer.classList.add('hidden');
 
-                            // Unhide the create task container
-                            createTaskContainer.classList.remove('hidden');
+                                // Listen for the transition to finish
+                                taskContainer.addEventListener('transitionend', () => {
+                                    task.classList.remove('hidden');
+                                    // Hide the expand button
+                                    expandBtn.classList.add('hidden');
+                                    // Hide the 'NoSelectedTask' div
+                                    noSelectedTask.classList.add('hidden');
+                                    // Unhide the create task container
+                                    createTaskContainer.classList.remove('hidden');
+                                }, {once: true});
+                            }
+
+                            // Scenario when the container isn't visible and collapsed
+                            if (!expandBtn.classList.contains('hidden') && createTaskContainer.classList.contains('hidden')) {
+                                // Listen for the transition to finish
+                                taskContainer.addEventListener('transitionend', () => {
+                                    task.classList.remove('hidden');
+                                    console.log('transitioned');
+                                    // Hide the expand button
+                                    expandBtn.classList.add('hidden');
+                                    // Hide the 'NoSelectedTask' div
+                                    noSelectedTask.classList.add('hidden');
+                                    // Unhide the create task container
+                                    createTaskContainer.classList.remove('hidden');
+                            
+                                }, {once: true});
+                            }
+                            else {
+                                task.classList.remove('hidden');
+                                // Hide the expand button
+                                expandBtn.classList.add('hidden');
+
+                                // Hide the 'NoSelectedTask' div
+                                noSelectedTask.classList.add('hidden');
+
+                                // Unhide the create task container
+                                createTaskContainer.classList.remove('hidden');
+                            }
                         })
                         .catch(error => {
                             // This block will run if the fetch fails (network error)
