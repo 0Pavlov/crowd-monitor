@@ -259,7 +259,24 @@ def logout():
 def tasks():
     """Tasks"""
     if request.method == "GET":
-        render_template("tasks.html")
+        if session.get("role") == 'admin':
+            # Connect to the db
+            db = db_handler.db_connect("crowd.db")
+
+            # Retrieve the tasks
+
+            # Get the table schema
+            table_info = db_handler.query(db, "PRAGMA table_info(tasks)")
+            # Get the column names
+            column_names = [info[1] for info in table_info]
+            # Get the list of sql objects
+            tasks = db_handler.query(db, "SELECT * FROM tasks")
+            # Combine the column names with values to get the list of dicts
+            tasks: list[dict] = [dict(zip(column_names, row)) for row in tasks]
+
+            # Close the connection
+            db.close()
+            return render_template("tasks.html", tasks=tasks)
     if request.method == "POST":
         # Create task section
         if request.form.get("task_creation_form") == "create_task":
