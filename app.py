@@ -388,3 +388,12 @@ def get_create_task():
     else:
         db.close()
         return apology("You don't have permission to perform this action.", code=403)
+
+
+# AJAX part for the assignment
+@app.route("/assignment")
+@login_required
+@validate_session
+def get_assignment_details():
+    """Fetch and return HTML for a single assignment."""
+    return render_template("assignment.html")
