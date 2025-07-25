@@ -164,6 +164,7 @@
             const hideBtn = document.querySelector('.TaskContainer .TaskNav button');
             const task = document.querySelector('.Task');
             const noSelectedTask = document.querySelector('.NoSelectedTask');
+            const selectedTaskContainer = document.querySelector('.SelectedTask');
 
             // Elements for the AJAX part
             // Append the HTML if the user has permission
@@ -257,7 +258,45 @@
 
             for (const task_row of task_rows) {
                 task_row.addEventListener('click', () => {
-                    console.log(task_row.id);
+                    // Get the task ID from the clicked row
+                    const taskId = task_row.id;
+
+                    // Perform the fetch request to the /assignment route
+                    // Pass the task ID as a query parameter in the URL
+                    fetch(`/assignment?id=${taskId}`)
+                        .then(response => {
+                            // Check if the request was successful
+                            if (response.ok) {
+                                // Get the HTML response
+                                return response.text();
+                            } else {
+                                // Handle errors
+                                throw new Error(`Failed to fetch assignment. ${response.status}`);
+                            }
+                        })
+                        .then(html => {
+                            // Update the UI
+
+                            // Place the HTML into .SelectedTask container
+                            selectedTaskContainer.innerHTML = html;
+
+                            // Hide the other views inside the panel
+                            noSelectedTask.classList.add('hidden');
+                            createTaskContainer.classList.add('hidden');
+
+                            // Show the container for the fetched assignment
+                            selectedTaskContainer.classList.remove('hidden');
+
+                            // Expand the side panel
+                            taskContainer.classList.remove('collapsed');
+                            task.classList.remove('hidden');
+                            expandBtn.classList.add('hidden');
+                        })
+                        .catch(error => {
+                            // Log and display any errors that occured during the fetch
+                            console.error('Error fetching assignment:', error);
+                            alert(error.message);
+                        });
                 });
             }
 
