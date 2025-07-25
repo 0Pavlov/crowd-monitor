@@ -156,6 +156,8 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // CREATE TASK BLOCK
+
             // Select the elements from the page
             const taskContainer = document.querySelector('.TaskContainer');
             const expandBtn = document.querySelector('.TaskExpandBtn');
@@ -245,6 +247,21 @@
                         });
                 });
             }
+
+            // END OF THE CREATE TASK BLOCK
+
+            // TASKS BLOCK
+
+            // Get the tasks
+            const task_rows = document.getElementsByClassName("TaskRow");
+
+            for (const task_row of task_rows) {
+                task_row.addEventListener('click', () => {
+                    console.log(task_row.id);
+                });
+            }
+
+            // END OF THE TASKS BLOCK
 
             // HIDE
             // When the 'hide' button is clicked
