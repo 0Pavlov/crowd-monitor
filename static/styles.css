@@ -42,3 +42,8 @@ body, html {
 .Tasks {
     flex: 2; /* Make it grow by a factor of 2 */
 }
+
+.TaskRow:hover {
+    background-color: gray;
+    transition: all 0.4s ease-in-out;
+}
