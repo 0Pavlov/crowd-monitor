@@ -112,7 +112,7 @@
                         <tbody>
                             <!-- Loop through each task dictionary in the 'tasks' list -->
                             {% for task in tasks %}
-                            <tr>
+                            <tr class="TaskRow" id='{{ task.id }}'>
                                 <!-- Access the data using dot notation, e.g., task.id -->
                                 <!-- <td>{{ task.id }}</td> -->
                                 <!-- <td>{{ task.creator_id }}</td> -->
