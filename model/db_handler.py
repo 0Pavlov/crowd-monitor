@@ -94,7 +94,9 @@ def create_database(filename: str) -> bool:
                 assignment_id INTEGER NOT NULL,
                 submitted_answer TEXT NOT NULL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (assignment_id) REFERENCES assignments (id) ON DELETE CASCADE
+                submitted_by_id INTEGER NOT NULL,
+                FOREIGN KEY (assignment_id) REFERENCES assignments (id) ON DELETE CASCADE,
+                FOREIGN KEY (submitted_by_id) REFERENCES users (id)
             );
         """)
         print(f"{GREEN}        Table 'submissions' checked/created.{RESET}")
