@@ -15,6 +15,11 @@ body, html {
 }
 
 .TaskContainer {
+    /* Make it a flexbox */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+
     flex: 1; /* Make it grow by a factor of 1 */
     position: relative;
     transition: all 0.4s ease-in-out;
@@ -24,6 +29,12 @@ body, html {
 .TaskContainer.collapsed {
     flex: 0 0 0px;
     min-width: 0px;
+}
+
+.Task {
+    /* Make the content scrollable if overflows */
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .TaskExpandBtn {
