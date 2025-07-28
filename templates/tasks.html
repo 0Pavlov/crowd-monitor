@@ -293,7 +293,6 @@
                             if (!expandBtn.classList.contains('hidden') && task.classList.contains('hidden')) {
                                 // Listen for the transition to finish
                                 taskContainer.addEventListener('transitionend', () => {
-                                    console.log('TRANSITIONED');
                                     // Hide the other views inside the panel
                                     noSelectedTask.classList.add('hidden');
                                     createTaskContainer.classList.add('hidden');
