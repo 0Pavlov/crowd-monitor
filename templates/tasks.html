@@ -146,7 +146,7 @@
                     <h1>NO selected task</h1>
                 </div>
                 <div class="SelectedTask hidden">
-                    <!-- TODO -->
+                    <!-- Appended with html via AJAX when the TaskRow is clicked -->
                 </div>
                 <div class="CreateTask hidden" id="create-task-container">
                     <!-- Appended only if the user has permission -->
@@ -286,17 +286,34 @@
                             // Place the HTML into .SelectedTask container
                             selectedTaskContainer.innerHTML = html;
 
-                            // Hide the other views inside the panel
-                            noSelectedTask.classList.add('hidden');
-                            createTaskContainer.classList.add('hidden');
-
-                            // Show the container for the fetched assignment
-                            selectedTaskContainer.classList.remove('hidden');
-
                             // Expand the side panel
                             taskContainer.classList.remove('collapsed');
-                            task.classList.remove('hidden');
-                            expandBtn.classList.add('hidden');
+
+                            // Case when the task container is hidden
+                            if (!expandBtn.classList.contains('hidden') && task.classList.contains('hidden')) {
+                                // Listen for the transition to finish
+                                taskContainer.addEventListener('transitionend', () => {
+                                    console.log('TRANSITIONED');
+                                    // Hide the other views inside the panel
+                                    noSelectedTask.classList.add('hidden');
+                                    createTaskContainer.classList.add('hidden');
+                                    // Show the container for the fetched assignment
+                                    selectedTaskContainer.classList.remove('hidden');
+                                    // Unhide the main task container
+                                    task.classList.remove('hidden');
+                                    // Hide the expand button
+                                    expandBtn.classList.add('hidden');
+                                }, {once: true});
+                            } else {
+                                // Don't wait for transition to end
+                                // Hide the other views inside the panel
+                                noSelectedTask.classList.add('hidden');
+                                createTaskContainer.classList.add('hidden');
+                                // Show the container for the fetched assignment
+                                selectedTaskContainer.classList.remove('hidden');
+                                task.classList.remove('hidden');
+                                expandBtn.classList.add('hidden');
+                            }
                         })
                         .catch(error => {
                             // Log and display any errors that occured during the fetch
