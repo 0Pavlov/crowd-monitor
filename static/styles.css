@@ -37,6 +37,16 @@ body, html {
     overflow-y: auto;
 }
 
+.TaskNav {
+    /* Makes the 'Hide' button stay ontop of the container while scrolling */
+    position: sticky;
+    top: 0;
+    /* Use the same background as the container to hide content scrolling underneath */
+    background-color: #f6f1f9; 
+    /* Ensures the nav bar stays on top of the scrolling content */
+    z-index: 1; 
+}
+
 .TaskExpandBtn {
     /* Position the button at the top left corner */
     position: absolute;
