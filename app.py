@@ -396,4 +396,11 @@ def get_create_task():
 @validate_session
 def get_assignment_details():
     """Fetch and return HTML for a single assignment."""
-    return render_template("assignment.html", task_id=request.args.get('id'))
+    if request.method == "GET":
+        if session.get("role") == 'admin':
+            # Connect to the db
+            db = db_handler.db_connect("crowd.db")
+
+            # Close the connection
+            db.close()
+            return render_template("assignment.html", task_id=request.args.get('id'))
