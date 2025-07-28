@@ -396,4 +396,4 @@ def get_create_task():
 @validate_session
 def get_assignment_details():
     """Fetch and return HTML for a single assignment."""
-    return render_template("assignment.html")
+    return render_template("assignment.html", task_id=request.args.get('id'))
