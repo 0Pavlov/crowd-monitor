@@ -105,7 +105,9 @@ to this particular worker.
                 assignment_id INTEGER NOT NULL,
                 submitted_answer TEXT NOT NULL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (assignment_id) REFERENCES assignments (id) ON DELETE CASCADE
+                submitted_by_id INTEGER NOT NULL,
+                FOREIGN KEY (assignment_id) REFERENCES assignments (id) ON DELETE CASCADE,
+                FOREIGN KEY (submitted_by_id) REFERENCES users (id)
             );
 ```
 
@@ -115,6 +117,7 @@ to this particular worker.
 this submission is related.
 - (submitted_answer) is the submission itself.
 - (timestamp) is the time of the submission.
+- (submitted_by_id) is the id of who made this submission.
 
 ## Metrics Cache
     TODO
