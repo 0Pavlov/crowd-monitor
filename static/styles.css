@@ -63,6 +63,8 @@ body, html {
 .Tasks {
     flex: 2; /* Make it grow by a factor of 2 */
     min-width: 0px;
+    /* Uncomment it later for the PC users */
+    /*min-width: calc(100vw * 2 / 3);*/
 }
 
 .TaskRow:hover {
