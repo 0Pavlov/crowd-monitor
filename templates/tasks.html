@@ -95,41 +95,37 @@
                     <button id="show-create-task-btn">create task</button>
                 </div>
                 <h1>All tasks:</h1>
-                    {% if tasks %}
-                        {% if len(tasks) != 0 %}
-                        <table>
-                            <thead>
-                                <tr>
-                                    <!-- <th>ID</th> -->
-                                    <!-- <th>Creator ID</th> -->
-                                    <th>Type</th>
-                                    <th>Content</th>
-                                    <th>Gold Standard</th>
-                                    <th>Created At</th>
-                                    <th>Deadline</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Loop through each task dictionary in the 'tasks' list -->
-                                {% for task in tasks %}
-                                <tr class="TaskRow" id='{{ task.id }}'>
-                                    <!-- Access the data using dot notation, e.g., task.id -->
-                                    <!-- <td>{{ task.id }}</td> -->
-                                    <!-- <td>{{ task.creator_id }}</td> -->
-                                    <td>{{ task.task_type }}</td>
-                                    <td>{{ task.content }}</td>
-                                    <td>{{ task.gold_standard_answer }}</td>
-                                    <td>{{ task.creation_timestamp }}</td>
-                                    <td>{{ task.deadline }}</td>
-                                    <td>{{ task.status }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% else %}
-                        <p> NO TASKS </p>
-                        {% endif %}
+                    {% if tasks or len(tasks) != 0 %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <!-- <th>ID</th> -->
+                                <!-- <th>Creator ID</th> -->
+                                <th>Type</th>
+                                <th>Content</th>
+                                <th>Gold Standard</th>
+                                <th>Created At</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Loop through each task dictionary in the 'tasks' list -->
+                            {% for task in tasks %}
+                            <tr class="TaskRow" id='{{ task.id }}'>
+                                <!-- Access the data using dot notation, e.g., task.id -->
+                                <!-- <td>{{ task.id }}</td> -->
+                                <!-- <td>{{ task.creator_id }}</td> -->
+                                <td>{{ task.task_type }}</td>
+                                <td>{{ task.content }}</td>
+                                <td>{{ task.gold_standard_answer }}</td>
+                                <td>{{ task.creation_timestamp }}</td>
+                                <td>{{ task.deadline }}</td>
+                                <td>{{ task.status }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     {% else %}
                     <p> NO TASKS </p
                     {% endif %}
