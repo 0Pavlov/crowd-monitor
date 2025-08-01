@@ -412,8 +412,10 @@ def get_assignment_details():
 
             # Get the info about the task with this id
 
-            # Get the id
-            task_id: int = request.args.get('id')
+            # Get the id's
+            task_id: int = request.args.get('task_id')
+            assignment_id: int = request.args.get('assignment_id')
+            print(assignment_id)
 
             # Fetch the db for task
             task: dict = db_handler.query(db, "SELECT * FROM tasks WHERE id = ?", task_id)[0]
@@ -431,4 +433,4 @@ def get_assignment_details():
 
             # Close the connection
             db.close()
-            return render_template("assignment.html", task_id=task_id)
+            return render_template("assignment.html", task_id=task_id, assignment_id=assignment_id)
