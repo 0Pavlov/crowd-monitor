@@ -102,17 +102,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // TASKS BLOCK
 
-    // Get the tasks
-    const task_rows = document.getElementsByClassName("TaskRow");
+    // Get the assignments
+    const assignments_rows = document.getElementsByClassName("AssignmentRow");
 
-    for (const task_row of task_rows) {
-        task_row.addEventListener('click', () => {
+    for (const assignment_row of assignments_rows) {
+        assignment_row.addEventListener('click', () => {
             // Get the task ID from the clicked row
-            const taskId = task_row.id;
+            const taskId = assignment_row.dataset.taskId;
+            const assignmentId = assignment_row.dataset.assignmentId;
 
             // Perform the fetch request to the /assignment route
-            // Pass the task ID as a query parameter in the URL
-            fetch(`/assignment?id=${taskId}`)
+            // Pass the taskId and assignmentId as a query parameter in the URL
+            fetch(`/assignment?task_id=${taskId}&assignment_id=${assignmentId}`)
                 .then(response => {
                     // Check if the request was successful
                     if (response.ok) {
