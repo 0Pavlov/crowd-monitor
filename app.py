@@ -401,6 +401,25 @@ def get_assignment_details():
             # Connect to the db
             db = db_handler.db_connect("crowd.db")
 
+            # Get the info about the task with this id
+
+            # Get the id
+            task_id: int = request.args.get('id')
+
+            # Fetch the db for task
+            task: dict = db_handler.query(db, "SELECT * FROM tasks WHERE id = ?", task_id)[0]
+
+            task_id: int = task['id']
+            creator_id: int = task['creator_id']
+            task_type: str = task['task_type']
+            task_content: str = task['content']
+            gsa: str = task['gold_standard_answer']
+            task_creation_timestamp: str = task['creation_timestamp']
+            task_deadline: str = task['deadline']
+            task_status: str = task['status']
+
+            # Fetch the db for an assignment for this task for this user
+
             # Close the connection
             db.close()
-            return render_template("assignment.html", task_id=request.args.get('id'))
+            return render_template("assignment.html", task_id=task_id)
