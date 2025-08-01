@@ -111,7 +111,7 @@
                         </thead>
                         <tbody id="taskAccordion">
                         {% for task in tasks %}
-                        <tr class="TaskRow accordion-toggle" id="{{ task.id }}" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
+                        <tr class="TaskRow accordion-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
                             <td>{{ task.task_type }}</td>
                             <td>{{ task.content }}</td>
                             <td>{{ task.gold_standard_answer }}</td>
@@ -125,13 +125,13 @@
                                     <table class="table mb-0">
                                         <thead>
                                             <tr>
-                                                <th>Assignment ID</th>
+                                                <th>Assignments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for assignment in task.assignments_ids %}
-                                            <tr>
-                                                <td>{{ assignment }}</td>
+                                            {% for assignment_id in task.assignments_ids %}
+                                            <tr class="AssignmentRow" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
+                                                <td class="AssignmentRowHover">{{ assignment_id }}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
