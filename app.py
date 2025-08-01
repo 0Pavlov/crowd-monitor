@@ -415,13 +415,13 @@ def get_assignment_details():
             # Get the id's
             task_id: int = request.args.get('task_id')
             assignment_id: int = request.args.get('assignment_id')
-            print(assignment_id)
 
             # Fetch the db for task
             task: dict = db_handler.query(db, "SELECT * FROM tasks WHERE id = ?", task_id)[0]
 
             task_id: int = task['id']
             creator_id: int = task['creator_id']
+            task_creator_username: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", creator_id)[0]['username']
             task_type: str = task['task_type']
             task_content: str = task['content']
             gsa: str = task['gold_standard_answer']
@@ -429,8 +429,55 @@ def get_assignment_details():
             task_deadline: str = task['deadline']
             task_status: str = task['status']
 
-            # Fetch the db for an assignment for this task for this user
+            # Fetch the db for an assignment
+            assignment: dict = db_handler.query(db, "SELECT * FROM assignments WHERE id = ?", assignment_id)[0]
+
+            user_id: int = assignment['user_id']
+            assigned_to_name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", user_id)[0]['username']
+            assigned_by_id: int = assignment['assigned_by_id']
+            assigned_by_name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", assigned_by_id)[0]['username']
+            assignment_status: str = assignment['status']
+            score: int = assignment['score']
+            ai_score: int = assignment['ai_score']
+            feedback: str = assignment['feedback']
+            assigned_at: str = assignment['assigned_at']
+
+            # Fetch all of the submissions
+            submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? ORDER BY timestamp ASC", assignment_id)
+            # Convert to a list of dicts
+            submissions: list[dict] = []
+            for submission in submissions_db:
+                submissions.append(dict(submission))
+            # Replace the submitted_by_id with the name
+            if len(submissions) > 0:
+                for submission in submissions:
+                    id: int = submission['submitted_by_id']
+                    name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", id)[0]['username']
+                    # Delete the key-value pair from the dict
+                    del submission['submitted_by_id']
+                    # Create a new one with the name
+                    submission['submitted_by_name'] = name
+
+            # Calculate at which time the last submission was made
+            last_submission: str = "None"
+            if len(submissions) > 0:
+                last_submission: str = submissions[-1]['timestamp']
 
             # Close the connection
             db.close()
-            return render_template("assignment.html", task_id=task_id, assignment_id=assignment_id)
+            return render_template(
+                "assignment.html",
+                task_id=task_id,
+                assignment_id=assignment_id,
+                task_creation_timestamp=task_creation_timestamp,
+                last_submission=last_submission,
+                assigned_at=assigned_at,
+                task_status=task_status,
+                assignment_status=assignment_status,
+                task_creator_username=task_creator_username,
+                task_type=task_type,
+                task_deadline=task_deadline,
+                task_content=task_content,
+                assigned_by_name=assigned_by_name,
+                submissions=submissions
+            )
