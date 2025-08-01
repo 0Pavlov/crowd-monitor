@@ -95,8 +95,8 @@
                     <button id="show-create-task-btn">create task</button>
                 </div>
                 <h1>All tasks:</h1>
-                    {% if tasks or len(tasks) != 0 %}
-                    <table>
+                    {% if tasks %}
+                    <table style="min-width:100%;">
                         <thead>
                             <tr>
                                 <!-- <th>ID</th> -->
