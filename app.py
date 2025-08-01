@@ -274,6 +274,15 @@ def tasks():
             # Combine the column names with values to get the list of dicts
             tasks: list[dict] = [dict(zip(column_names, row)) for row in tasks]
 
+            # Now for each task construct a list of assignments ids
+            for task in tasks:
+                assignments_ids_from_db: list = db_handler.query(db, "SELECT id FROM assignments WHERE task_id = ?", task['id'])
+                assignments_ids: list = []
+                for assigned_id in assignments_ids_from_db:
+                    assignments_ids.append(assigned_id['id'])
+                # Add this list to the task dict
+                task['assignments_ids'] = assignments_ids
+
             # Close the connection
             db.close()
             return render_template("tasks.html", tasks=tasks)
