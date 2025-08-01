@@ -69,3 +69,8 @@ body, html {
     background-color: gray;
     transition: all 0.4s ease-in-out;
 }
+
+.AssignmentRowHover:hover {
+    background-color: gray;
+    transition: all 0.4s ease-in-out;
+}
