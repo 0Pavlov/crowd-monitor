@@ -23,19 +23,27 @@
 <h1 style="color:green;">task_id: {{ task_id }}</h1>
 <h1 style="color:green;">assignment_id: {{ assignment_id }}</h1>
 
-<p>Task created at: TODO</p>
-<p>Updated at: TODO</p>
-<p>Assigned at: TODO</p>
-<p>Task status: TODO</p>
-<p>Assignment status: TODO</p>
-<p>Task author: TODO</p>
-<p>Task type: TODO</p>
-<p>Deadline: TODO</p>
-<p>Task Content TODO</p>
-<p>Assigned by: TODO</p>
+<p>Task created at: {{ task_creation_timestamp }}</p>
+<p>Updated at: {{ last_submission }}</p>
+<p>Assigned at: {{ assigned_at }}</p>
+<p>Task status: {{ task_status }}</p>
+<p>Assignment status: {{ assignment_status }}</p>
+<p>Task author: {{ task_creator_username }}</p>
+<p>Task type: {{ task_type }}</p>
+<p>Deadline: {{ task_deadline }}</p>
+<p>Task Content {{ task_content }}</p>
+<p>Assigned by: {{ assigned_by_name }}</p>
 <div>
-    <p>Chat: TODO</p>
+    <p>Chat:</p>
     <p>Messages</p>
+    {% if submissions %}
+        {% for submission in submissions %}
+            <p>From: {{ submission['submitted_by_name'] }}</p>
+            <p>Message: {{ submission['submitted_answer'] }}</p>
+        {% endfor %}
+    {% else %}
+        <p>NO MESSAGES</p>
+    {% endif %}
 </div>
 <div>
     <p>Text input</p>
