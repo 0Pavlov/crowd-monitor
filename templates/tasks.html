@@ -109,23 +109,38 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Loop through each task dictionary in the 'tasks' list -->
-                            {% for task in tasks %}
-                            <tr class="TaskRow" id='{{ task.id }}'>
-                                <!-- Access the data using dot notation, e.g., task.id -->
-                                <!-- <td>{{ task.id }}</td> -->
-                                <!-- <td>{{ task.creator_id }}</td> -->
-                                <td>{{ task.task_type }}</td>
-                                <td>{{ task.content }}</td>
-                                <td>{{ task.gold_standard_answer }}</td>
-                                <td>{{ task.creation_timestamp }}</td>
-                                <td>{{ task.deadline }}</td>
-                                <td>{{ task.status }}</td>
-                                <td>{{ task.assignments_ids }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
+                        <tbody id="taskAccordion">
+                        {% for task in tasks %}
+                        <tr class="TaskRow accordion-toggle" id="{{ task.id }}" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
+                            <td>{{ task.task_type }}</td>
+                            <td>{{ task.content }}</td>
+                            <td>{{ task.gold_standard_answer }}</td>
+                            <td>{{ task.creation_timestamp }}</td>
+                            <td>{{ task.deadline }}</td>
+                            <td>{{ task.status }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="p-0">
+                                <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Assignment ID</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for assignment in task.assignments_ids %}
+                                            <tr>
+                                                <td>{{ assignment }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                     </table>
                     {% else %}
                     <p> NO TASKS </p
