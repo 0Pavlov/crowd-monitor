@@ -130,6 +130,80 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Place the HTML into .SelectedTask container
                     selectedTaskContainer.innerHTML = html;
 
+                    // --- START OF THE CHAT MESSAGING BLOCK ---
+
+                    // Now that the HTML is on the page, find the new chat form and its elements.
+                    const submissionForm = document.getElementById('submission-form');
+                    const messagesContainer = document.getElementById('messages-container');
+                    const messageInput = submissionForm.querySelector('input[name="submitted_answer"]');
+
+                    // Add an event listener specifically for this newly created form.
+                    submissionForm.addEventListener('submit', function(event) {
+                        // Prevent the default form submission which causes a page reload.
+                        event.preventDefault();
+
+                        // Get the message text and the assignment ID from the form's data attribute.
+                        const messageText = messageInput.value.trim();
+                        const assignmentId = submissionForm.dataset.assignmentId;
+
+                        // Do not proceed if the message is empty.
+                        if (messageText === '') {
+                            return; 
+                        }
+
+                        // Use fetch to send the data to the API endpoint.
+                        fetch('/create-submission', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json' // Essential for request.get_json().
+                            },
+                            // Convert the JavaScript data into a JSON string to send in the request body.
+                            body: JSON.stringify({
+                                submitted_answer: messageText,
+                                assignment_id: assignmentId
+                            })
+                        })
+                        .then(response => response.json()) // Parse the JSON response from the Flask server.
+                        .then(data => {
+                            // Check the 'status' field from the Flask jsonify response.
+                            if (data.status === 'success') {
+                                // If there's a "NO MESSAGES" placeholder, remove it.
+                                const noMessagesPlaceholder = document.getElementById('no-messages-placeholder');
+                                if (noMessagesPlaceholder) {
+                                    noMessagesPlaceholder.remove();
+                                }
+
+                                // Create the HTML for the new message using data from the server response.
+                                const newMessageHTML = `
+                                    <div class="message-group">
+                                        <p><strong>From:</strong> ${data.new_submission.submitted_by_name}</p>
+                                        <p><strong>Message:</strong> ${data.new_submission.submitted_answer}</p>
+                                        <p><strong>At:</strong> ${data.new_submission.timestamp}</p>
+                                    </div>
+                                `;
+
+                                // Add the new message HTML to the end of the messages container.
+                                messagesContainer.insertAdjacentHTML('beforeend', newMessageHTML);
+                                
+                                // Clear the input field and put the cursor back in it.
+                                messageInput.value = '';
+                                messageInput.focus();
+
+                            } else {
+                                // If Flask returned an error, show it to the user.
+                                console.error('Submission failed:', data.message);
+                                alert('Error: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            // Handle network-level errors (e.g., server is down).
+                            console.error('Network error:', error);
+                            alert('A network error occurred. Please try again.');
+                        });
+                    });
+                    
+                    // --- END OF CHAT MESSAGING BLOCK ---
+
                     // Expand the side panel
                     taskContainer.classList.remove('collapsed');
 
