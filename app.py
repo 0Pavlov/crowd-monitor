@@ -481,3 +481,83 @@ def get_assignment_details():
                 assigned_by_name=assigned_by_name,
                 submissions=submissions
             )
+
+
+# API route to handle the chat messages within assignments
+@app.route("/create-submission", methods=["POST"])
+@login_required
+@validate_session
+def create_submission():
+    """Handles AJAX request to create a new submission.
+    
+    Creates the submission, and displays it to the user as the new chat message,
+    without reloading the entire page.
+    """
+
+    # Expect JSON data, not form date
+    if not request.is_json:
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Invalid request: missing JSON"
+            }
+        ), 400
+    
+    data = request.get_json()
+
+    # Get the data sent by the JavaScript
+    assignment_id = data.get('assignment_id')
+    submitted_answer = data.get('submitted_answer')
+
+    # Validate the data
+    if not assignment_id or not submitted_answer or submitted_answer.strip() == '':
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Missing or empty data"
+            }
+        ), 400
+
+    # Create the submission
+    db = db_handler.db_connect("crowd.db")
+    try:
+        submitted_by_id = session['user_id']
+
+        # Create new submission
+        db_handler.query(db, "INSERT INTO submissions (assignment_id, submitted_by_id, submitted_answer) VALUES (?, ?, ?)", assignment_id, submitted_by_id, submitted_answer)
+
+        # Commit changes
+        db.commit()
+
+        # Username to send back to the client for message displaying
+        submitted_by_name = session['username']
+
+        # Get the timestamp
+        timestamp: str = db_handler.query(db, "SELECT timestamp FROM submissions WHERE submitted_by_id == ? AND assignment_id == ? ORDER BY timestamp DESC LIMIT 1", session['user_id'], assignment_id)[0]['timestamp'] 
+    except Exception as e:
+        # Rollback the changes
+        db.rollback()
+        print(f"{RED}DATABASE ERROR in /create-submission: {e}{RESET}")
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Could not save message to database."
+            }
+        ), 400
+    finally:
+        # Close the connection
+        db.close()
+
+    # Instead of redirecting, return a JSON response
+    # with data JavaScript needs to update the UI
+    return jsonify(
+        {
+            "status": "success",
+            "message": "Submission created",
+            "new_submission": {
+                "submitted_answer": submitted_answer,
+                "submitted_by_name": submitted_by_name,
+                "timestamp": timestamp
+            }
+        }
+    )
