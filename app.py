@@ -561,3 +561,60 @@ def create_submission():
             }
         }
     )
+
+
+# API route to poll for new messages
+@app.route("/get-updates")
+@login_required
+@validate_session
+def get_updates():
+    """Handles polling requests from clients to check for new submissions."""
+    try:
+        # Get assignment_id and the last timestamp the client knows about
+        assignment_id = request.args.get('assignment_id')
+        last_timestamp = request.args.get('last_timestamp')
+
+        if not assignment_id or not last_timestamp:
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Missing parameters"
+                }
+            ), 400
+        
+        # Connect to the db
+        db = db_handler.db_connect("crowd.db")
+
+        # Query for submissions newer than the last one the client has
+        new_submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? AND timestamp > ? ORDER BY timestamp ASC", assignment_id, last_timestamp)
+
+        new_submissions: list = []
+        if new_submissions_db:
+            for submission in new_submissions_db:
+                submission_dict = dict(submission)
+
+                # Get the username for the Id to display it on the client
+                user_id: int = submission_dict['submitted_by_id']
+                name = db_handler.query(db, "SELECT username FROM users WHERE id = ?", user_id)[0]['username']
+
+                submission_dict['submitted_by_name'] = name
+                del submission_dict['submitted_by_id']
+                new_submissions.append(submission_dict)
+    except Exception as e:
+        db.rollback()
+        print(f"{RED}DATABASE ERROR in /get-updates: {e}{RESET}")
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Database error"
+            }
+        ), 400
+    finally:
+        db.close()
+
+    return jsonify(
+        {
+            "status": "success",
+            "new_submissions": new_submissions
+        }
+    )
