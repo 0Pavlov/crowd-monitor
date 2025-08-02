@@ -33,19 +33,24 @@
 <p>Deadline: {{ task_deadline }}</p>
 <p>Task Content {{ task_content }}</p>
 <p>Assigned by: {{ assigned_by_name }}</p>
-<div>
-    <p>Chat:</p>
-    <p>Messages</p>
+<p>Chat:</p>
+<p>Messages</p>
+<div id="messages-container">
     {% if submissions %}
         {% for submission in submissions %}
-            <p>From: {{ submission['submitted_by_name'] }}</p>
-            <p>Message: {{ submission['submitted_answer'] }}</p>
+            <div class="message-group">
+                <p>From: {{ submission['submitted_by_name'] }}</p>
+                <p>Message: {{ submission['submitted_answer'] }}</p>
+                <p>Timestamp: {{ submission['timestamp'] }}
+            </div>
         {% endfor %}
     {% else %}
-        <p>NO MESSAGES</p>
+        <p id="no-messages-placeholder">NO MESSAGES</p>
     {% endif %}
 </div>
 <div>
-    <p>Text input</p>
-    <p>Submit button</p>
+    <form id="submission-form" data-assignment-id="{{ assignment_id }}">
+        <input name="submitted_answer" type="text" placeholder="Type your message..." autocomplete="off">
+        <button type="submit">Submit</button>
+    </form>
 </div>
