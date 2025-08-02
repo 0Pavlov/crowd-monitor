@@ -132,76 +132,105 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // --- START OF THE CHAT MESSAGING BLOCK ---
 
-                    // Now that the HTML is on the page, find the new chat form and its elements.
+                    // If a polling timer from a previous chat is running, stop
+                    if (window.chatPollingInterval) {
+                        clearInterval(window.chatPollingInterval);
+                    }
+
+                    // Now that the HTML is on the page, find the new chat form and its elements
                     const submissionForm = document.getElementById('submission-form');
                     const messagesContainer = document.getElementById('messages-container');
                     const messageInput = submissionForm.querySelector('input[name="submitted_answer"]');
+                    const currentAssignmentId = submissionForm.dataset.assignmentId;
 
-                    // Add an event listener specifically for this newly created form.
+                    // Helper function to create HTML for a new message and append it
+                    function appendMessage(messageData) {
+                        const noMessagesPlaceholder = document.getElementById('no-messages-placeholder');
+                        if (noMessagesPlaceholder) {
+                            noMessagesPlaceholder.remove();
+                        }
+
+                        const newMessageHTML = `
+                            <div class="message-group" data-timestamp="${messageData.timestamp}">
+                                <p><strong>From: </strong>${messageData.submitted_by_name}</p>
+                                <p><strong>Message: </strong>${messageData.submitted_answer}</p>
+                                <p><strong>At: </strong>${messageData.timestamp}</p>
+                            </div>
+                        `;
+                        messagesContainer.insertAdjacentHTML('beforeend', newMessageHTML);
+                    }
+
+                    // Add an event listener specifically for this newly created form
                     submissionForm.addEventListener('submit', function(event) {
-                        // Prevent the default form submission which causes a page reload.
+                        // Prevent the default form submission which causes a page reload
                         event.preventDefault();
 
-                        // Get the message text and the assignment ID from the form's data attribute.
+                        // Get the message text and the assignment ID from the form's data attribute
                         const messageText = messageInput.value.trim();
-                        const assignmentId = submissionForm.dataset.assignmentId;
 
-                        // Do not proceed if the message is empty.
+                        // Do not proceed if the message is empty
                         if (messageText === '') {
                             return; 
                         }
 
-                        // Use fetch to send the data to the API endpoint.
+                        // Use fetch to send the data to the API endpoint
                         fetch('/create-submission', {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json' // Essential for request.get_json().
+                                'Content-Type': 'application/json' // Essential for request.get_json()
                             },
-                            // Convert the JavaScript data into a JSON string to send in the request body.
+                            // Convert the JavaScript data into a JSON string to send in the request body
                             body: JSON.stringify({
                                 submitted_answer: messageText,
-                                assignment_id: assignmentId
+                                assignment_id: currentAssignmentId
                             })
                         })
-                        .then(response => response.json()) // Parse the JSON response from the Flask server.
+                        .then(response => response.json()) // Parse the JSON response from the Flask server
                         .then(data => {
-                            // Check the 'status' field from the Flask jsonify response.
+                            // Check the 'status' field from the Flask jsonify response
                             if (data.status === 'success') {
-                                // If there's a "NO MESSAGES" placeholder, remove it.
-                                const noMessagesPlaceholder = document.getElementById('no-messages-placeholder');
-                                if (noMessagesPlaceholder) {
-                                    noMessagesPlaceholder.remove();
-                                }
-
-                                // Create the HTML for the new message using data from the server response.
-                                const newMessageHTML = `
-                                    <div class="message-group">
-                                        <p><strong>From:</strong> ${data.new_submission.submitted_by_name}</p>
-                                        <p><strong>Message:</strong> ${data.new_submission.submitted_answer}</p>
-                                        <p><strong>At:</strong> ${data.new_submission.timestamp}</p>
-                                    </div>
-                                `;
-
-                                // Add the new message HTML to the end of the messages container.
-                                messagesContainer.insertAdjacentHTML('beforeend', newMessageHTML);
-                                
-                                // Clear the input field and put the cursor back in it.
+                                // Clear the input field and put the cursor back in it
                                 messageInput.value = '';
                                 messageInput.focus();
 
                             } else {
-                                // If Flask returned an error, show it to the user.
+                                // If Flask returned an error, show it to the user
                                 console.error('Submission failed:', data.message);
                                 alert('Error: ' + data.message);
                             }
                         })
                         .catch(error => {
-                            // Handle network-level errors (e.g., server is down).
+                            // Handle network-level errors (e.g., server is down)
                             console.error('Network error:', error);
                             alert('A network error occurred. Please try again.');
                         });
                     });
                     
+                    // --- POLLING FUNCTION ---
+                    function pollForNewMessages() {
+                        const lastMessage = messagesContainer.querySelector('.message-group:last-of-type');
+                        // Get the timestamp of the last message
+                        // If there are no messages, use a default past date
+                        let lastTimestamp = lastMessage ? lastMessage.dataset.timestamp : '1970-01-01 00:00:00';
+
+                        fetch(`/get-updates?assignment_id=${currentAssignmentId}&last_timestamp=${lastTimestamp}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success' && data.new_submissions.length > 0) {
+                                // If the server sent new messages, add each one
+                                data.new_submissions.forEach(submission => {
+                                    appendMessage(submission);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Polling error:', error);
+                        });
+                    }
+
+                    // Start polling for new messages every 1 second
+                    window.chatPollingInterval = setInterval(pollForNewMessages, 1000);
+
                     // --- END OF CHAT MESSAGING BLOCK ---
 
                     // Expand the side panel
