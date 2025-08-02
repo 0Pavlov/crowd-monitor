@@ -38,7 +38,7 @@
 <div id="messages-container">
     {% if submissions %}
         {% for submission in submissions %}
-            <div class="message-group">
+        <div class="message-group" data-timestamp="{{ submission['timestamp'] }}">
                 <p>From: {{ submission['submitted_by_name'] }}</p>
                 <p>Message: {{ submission['submitted_answer'] }}</p>
                 <p>Timestamp: {{ submission['timestamp'] }}
