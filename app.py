@@ -617,6 +617,7 @@ def get_updates():
                 submission_dict['submitted_by_name'] = name
                 del submission_dict['submitted_by_id']
                 new_submissions.append(submission_dict)
+        db.close()
     except Exception as e:
         db.rollback()
         print(f"{RED}DATABASE ERROR in /get-updates: {e}{RESET}")
@@ -626,7 +627,6 @@ def get_updates():
                 "message": "Database error"
             }
         ), 400
-    finally:
         db.close()
 
     return jsonify(
