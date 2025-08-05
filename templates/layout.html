@@ -12,6 +12,9 @@
 
         <!-- Link the styles -->
         <link href="/static/styles.css" rel="stylesheet">
+        <!-- Link the additional styles per page -->
+        {% block styles %}
+        {% endblock %}
 
         <title>CMonitor: {% block title %}{% endblock %}</title>
     </head>
