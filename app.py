@@ -298,6 +298,12 @@ def tasks():
                     # Add username of the person to it
                     worker_username: str = db_handler.query(db, "SELECT u.username FROM users u JOIN assignments a ON u.id = a.user_id WHERE a.id = ?", assigned_id['id'])[0]['username']
                     temp_assignment['assigned_worker'] = worker_username
+                    # Add the name of the person last submitted
+                    try:
+                        who_submitted: str = db_handler.query(db, "SELECT u.username FROM users u JOIN submissions a ON u.id = a.submitted_by_id WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['username']
+                    except:
+                        who_submitted = "Error"
+                    temp_assignment['who_last_submitted'] = who_submitted
                     # Append the assigments_info
                     assignments_info[assigned_id['id']] = temp_assignment
                 # Add this list to the task dict
