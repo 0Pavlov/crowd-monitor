@@ -138,11 +138,12 @@ def create_database(filename: str) -> bool:
             conn.close()
             print(f"{GREEN}Database connection closed.{RESET}")
 
-def db_connect(filename: str, use_row_factory=True):
+def db_connect(filename: str, use_row_factory=True, silent=False):
     """Connects to the database.
 
     Args:
         filename (str): The filename of the database to connect to.
+        silent (bool): The flag that turns on/off the console messages.
 
     Returns:
         connection: A database connection.
@@ -158,7 +159,8 @@ def db_connect(filename: str, use_row_factory=True):
         if use_row_factory:
             connection.row_factory = sqlite3.Row
 
-        print(f"{GREEN}    Database '{filename}' connected successfully.{RESET}")
+        if not silent:
+            print(f"{GREEN}    Database '{filename}' connected successfully.{RESET}")
     except sqlite3.Error as e:
         print(f"{RED}SQLite error: {e}{RESET}")
         return None
@@ -166,19 +168,21 @@ def db_connect(filename: str, use_row_factory=True):
     # return
     return connection
 
-def query(connection, query: str, *args):
+def query(connection, query: str, *args, silent=False):
     """Executes the query on the db.
 
     Args:
         connection: The db connection, to execute on.
         query (str): The query to execute.
         *args: Other arguments (mostly for ? placeholders).
+        silent (bool): The flag that turns on/off the console messages.
     """
     try:
         # Ececute a query
         result = connection.execute(query, args)
-        # Success output in console
-        print(f"{GREEN}{query}{RESET}")
+        if not silent:
+            # Success output in console
+            print(f"{GREEN}{query}{RESET}")
         # Return the result to the caller
         return result.fetchall()
     except sqlite3.Error as e:
