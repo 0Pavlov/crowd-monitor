@@ -122,15 +122,20 @@
                             <td colspan="6" class="p-0">
                                 <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
                                     <table class="table mb-0">
+                                        <h1>Assignments:</h1>
                                         <thead>
                                             <tr>
-                                                <th>Assignments</th>
+                                                <th>id</th>
+                                                <th>id test</th>
+                                                <th>last sub</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for assignment_id in task.assignments_ids %}
-                                            <tr class="AssignmentRow" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
-                                                <td class="AssignmentRowHover">{{ assignment_id }}</td>
+                                            <tr class="AssignmentRowHover" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
+                                                <td>{{ assignment_id }}</td>
+                                                <td>Test:{{ assignments_info[assignment_id]['id'] }}</td>
+                                                <td id="last-sub-for-assignment-{{ assignment_id }}">Last sub: {{ assignments_info[assignment_id]['last_submission']}}
                                             </tr>
                                             {% endfor %}
                                         </tbody>
