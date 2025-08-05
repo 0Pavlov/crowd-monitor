@@ -101,22 +101,21 @@
                             <tr>
                                 <!-- <th>ID</th> -->
                                 <!-- <th>Creator ID</th> -->
-                                <th>Type</th>
                                 <th>Content</th>
-                                <th>Gold Standard</th>
+                                <!-- <th>Gold Standard</th> -->
                                 <th>Created At</th>
                                 <th>Deadline</th>
+                                <th>Type</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="taskAccordion">
                         {% for task in tasks %}
                         <tr class="TaskRow accordion-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
-                            <td>{{ task.task_type }}</td>
                             <td>{{ task.content }}</td>
-                            <td>{{ task.gold_standard_answer }}</td>
                             <td>{{ task.creation_timestamp }}</td>
                             <td>{{ task.deadline }}</td>
+                            <td>{{ task.task_type }}</td>
                             <td>{{ task.status }}</td>
                         </tr>
                         <tr>
