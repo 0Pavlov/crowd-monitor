@@ -58,11 +58,11 @@ def validate_session(f):
         # Compare it to the data from the users table
 
         # Connect to the db
-        db = db_handler.db_connect("crowd.db")
+        db = db_handler.db_connect("crowd.db", silent=True)
 
         # Get the data for this username
         try:
-            data = db_handler.query(db, "SELECT username, id, role FROM users WHERE id = ?", user_id)
+            data = db_handler.query(db, "SELECT username, id, role FROM users WHERE id = ?", user_id, silent=True)
         except:
             db.close()
             return apology("Invalid session. User no longer exists or the session is corrupted.", code=400)
@@ -583,10 +583,10 @@ def get_updates():
             ), 400
         
         # Connect to the db
-        db = db_handler.db_connect("crowd.db")
+        db = db_handler.db_connect("crowd.db", silent=True)
 
         # Query for submissions newer than the last one the client has
-        new_submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? AND timestamp > ? ORDER BY timestamp ASC", assignment_id, last_timestamp)
+        new_submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? AND timestamp > ? ORDER BY timestamp ASC", assignment_id, last_timestamp, silent=True)
 
         new_submissions: list = []
         if new_submissions_db:
@@ -595,7 +595,7 @@ def get_updates():
 
                 # Get the username for the Id to display it on the client
                 user_id: int = submission_dict['submitted_by_id']
-                name = db_handler.query(db, "SELECT username FROM users WHERE id = ?", user_id)[0]['username']
+                name = db_handler.query(db, "SELECT username FROM users WHERE id = ?", user_id, silent=True)[0]['username']
 
                 submission_dict['submitted_by_name'] = name
                 del submission_dict['submitted_by_id']
