@@ -125,19 +125,21 @@
                                         <h1>Assignments:</h1>
                                         <thead>
                                             <tr>
+                                                <th>assigned worker</th>
                                                 <th>id</th>
                                                 <th>id test</th>
                                                 <th>last sub</th>
-                                                <th>assigned worker</th>
+                                                <th>status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for assignment_id in task.assignments_ids %}
                                             <tr class="AssignmentRowHover" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
+                                                <td>{{ assignments_info[assignment_id]['assigned_worker'] }}</td>
                                                 <td>{{ assignment_id }}</td>
                                                 <td>Test:{{ assignments_info[assignment_id]['id'] }}</td>
                                                 <td id="last-sub-for-assignment-{{ assignment_id }}">From: {{ assignments_info[assignment_id]['last_submission']}}
-                                                <td>{{ assignments_info[assignment_id]['assigned_worker'] }}</td>
+                                                <td>{{ assignments_info[assignment_id]['status'] }}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
