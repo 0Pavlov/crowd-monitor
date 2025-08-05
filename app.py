@@ -274,18 +274,32 @@ def tasks():
             # Combine the column names with values to get the list of dicts
             tasks: list[dict] = [dict(zip(column_names, row)) for row in tasks]
 
+            # This dict stores the full info on each assignment mapped to it's id
+            # HIGHLY inefficient (will result in double querying the same table)
+            # was added after the template layout was done
+            # didn't wanted to refactor the template
+            assignments_info: dict[dict] = {}
+
             # Now for each task construct a list of assignments ids
             for task in tasks:
                 assignments_ids_from_db: list = db_handler.query(db, "SELECT id FROM assignments WHERE task_id = ?", task['id'])
                 assignments_ids: list = []
                 for assigned_id in assignments_ids_from_db:
                     assignments_ids.append(assigned_id['id'])
+
+                    # Query the db for an assignment with this id
+                    temp_assignment: dict = dict(db_handler.query(db, "SELECT * FROM assignments WHERE id = ?", assigned_id['id'])[0])
+                    # Add last submission info to it
+                    last_submission: str = db_handler.query(db, "SELECT submitted_answer FROM submissions WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['submitted_answer']
+                    temp_assignment['last_submission'] = last_submission
+                    # Append the assigments_info
+                    assignments_info[assigned_id['id']] = temp_assignment
                 # Add this list to the task dict
                 task['assignments_ids'] = assignments_ids
 
             # Close the connection
             db.close()
-            return render_template("tasks.html", tasks=tasks)
+            return render_template("tasks.html", tasks=tasks, assignments_info=assignments_info)
     if request.method == "POST":
         # Create task section
         if request.form.get("task_creation_form") == "create_task":
