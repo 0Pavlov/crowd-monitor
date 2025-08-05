@@ -128,6 +128,7 @@
                                                 <th>id</th>
                                                 <th>id test</th>
                                                 <th>last sub</th>
+                                                <th>assigned worker</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -136,6 +137,7 @@
                                                 <td>{{ assignment_id }}</td>
                                                 <td>Test:{{ assignments_info[assignment_id]['id'] }}</td>
                                                 <td id="last-sub-for-assignment-{{ assignment_id }}">Last sub: {{ assignments_info[assignment_id]['last_submission']}}
+                                                <td>{{ assignments_info[assignment_id]['assigned_worker'] }}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
