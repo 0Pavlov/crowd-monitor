@@ -290,8 +290,11 @@ def tasks():
                     # Query the db for an assignment with this id
                     temp_assignment: dict = dict(db_handler.query(db, "SELECT * FROM assignments WHERE id = ?", assigned_id['id'])[0])
                     # Add last submission info to it
-                    last_submission: str = db_handler.query(db, "SELECT submitted_answer FROM submissions WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['submitted_answer']
-                    temp_assignment['last_submission'] = last_submission
+                    try:
+                        last_submission: str = db_handler.query(db, "SELECT submitted_answer FROM submissions WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['submitted_answer']
+                        temp_assignment['last_submission'] = last_submission
+                    except:
+                        temp_assignment['last_submission'] = 'No sumbissions yet'
                     # Add username of the person to it
                     worker_username: str = db_handler.query(db, "SELECT u.username FROM users u JOIN assignments a ON u.id = a.user_id WHERE a.id = ?", assigned_id['id'])[0]['username']
                     temp_assignment['assigned_worker'] = worker_username
