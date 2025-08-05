@@ -72,7 +72,7 @@ body, html {
     transition: all 0.4s ease-in-out;
 }
 
-.AssignmentRowHover:hover {
+#taskAccordion .table tbody tr.AssignmentRowHover:hover td{
     background-color: gray;
     transition: all 0.4s ease-in-out;
 }
