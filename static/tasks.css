@@ -5,6 +5,13 @@ body, html {
     height: 100%;
 }
 
+.TaskContent {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100vw / 3);
+}
+
 /* Make the main container fill the entire viewport. */
 .TasksMain {
     width: 100vw; /* 100% of the viewport width */
