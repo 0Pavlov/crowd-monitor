@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // TASKS BLOCK
 
     // Get the assignments
-    const assignments_rows = document.getElementsByClassName("AssignmentRow");
+    const assignments_rows = document.getElementsByClassName("AssignmentRowHover");
 
     for (const assignment_row of assignments_rows) {
         assignment_row.addEventListener('click', () => {
@@ -142,6 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const messagesContainer = document.getElementById('messages-container');
                     const messageInput = submissionForm.querySelector('input[name="submitted_answer"]');
                     const currentAssignmentId = submissionForm.dataset.assignmentId;
+                    // the last submission visible in the assignments overview
+                    const last_sub_from_tasks = document.getElementById(`last-sub-for-assignment-${currentAssignmentId}`);
 
                     // Helper function to create HTML for a new message and append it
                     function appendMessage(messageData) {
@@ -158,6 +160,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                         `;
                         messagesContainer.insertAdjacentHTML('beforeend', newMessageHTML);
+
+                        // Also update the last sub
+                        last_sub_from_tasks.textContent = `Last sub: ${messageData.submitted_answer}`;
                     }
 
                     // Add an event listener specifically for this newly created form
