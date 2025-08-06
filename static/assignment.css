@@ -70,6 +70,7 @@
     color: var(--m3-on-surface);
     font-size: 1rem;
     line-height: 1.5;
+    overflow-wrap: break-word;
 }
 
 

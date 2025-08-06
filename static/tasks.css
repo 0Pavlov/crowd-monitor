@@ -41,6 +41,7 @@ main {
     min-height: 0;
 
     flex: 1; /* Make it grow by a factor of 1 */
+    min-width: 0;
     position: relative;
     transition: all 0.4s ease-in-out;
     background-color: var(--m3-surface-container-low);
