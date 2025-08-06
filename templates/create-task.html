@@ -4,47 +4,44 @@ content (text),
 gold_standart_answer (text),
 deadline (datetime)-->
 <!-- Task creation form -->
-{% for username in users %}
-    <h1>{{username}}</h1>
-{% endfor %}
-<h1 style="color:green;">Hello from create-task</h1>
+<h1 class="CreateTaskHeader">Create a New Task</h1>
 <form action="/tasks" method="post">
     <!-- Form identifier -->
     <input type="hidden" name="task_creation_form" value="create_task">
 
-    <div>
-        <span>Task content:</span>
-        <input name="content" type="text" autocomplete="off">
+    <div class="form-field">
+        <label for="task-content">Task content:</label>
+        <input id="task-content" name="content" type="text" autocomplete="off">
     </div>
-    <div>
-        <span>Gold Standard Answer:</span>
-        <input name="gsa" type="text" autocomplete="off">
+    <div class="form-field">
+        <label for="task-gsa">Gold Standard Answer:</label>
+        <input id="task-gsa" name="gsa" type="text" autocomplete="off">
     </div>
-    <div>
-        <span>Task type:</span>
-        <select name="task_type">
-            <option disabled selected>None</option>
+    <div class="form-field">
+        <label for="task-type-select">Task type:</label>
+        <select id="task-type-select" name="task_type">
+            <option disabled selected>Select a type</option>
             <option>Classification</option>
             <option>Ranking</option>
             <option>Code</option>
             <option>Free</option>
         </select>
     </div>
-    <div>
-        <span>Worker:</span>
-        <select name="worker">
+    <div class="form-field">
+        <label for="task-worker-select">Worker:</label>
+        <select id="task-worker-select" name="worker">
             <option disabled selected>None</option>
             {% for username in users %}
                 <option>{{username}}</option>
             {% endfor %}
         </select>
     </div>
-    <div>
-        <span>Deadline:</span>
-        <input type="datetime-local" name="deadline">
+    <div class="form-field">
+        <label for="task-deadline">Deadline:</label>
+        <input id="task-deadline" type="datetime-local" name="deadline">
     </div>
-    <div>
-        <button type="submit">Create</button>
+    <div class="form-actions">
+        <button type="submit" class="m3-button-filled">Create Task</button>
     </div>
 </form>
 

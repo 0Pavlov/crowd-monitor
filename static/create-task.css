@@ -1,0 +1,81 @@
+/* Style for the form's main heading */
+.CreateTask h1 {
+    font-size: 1.75rem; /* 28px */
+    font-weight: 500;
+    line-height: 2.25rem;
+    margin-bottom: 24px;
+}
+
+/* A wrapper for each label-input pair to manage spacing */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+/* Styling for form labels */
+.form-field label {
+    color: var(--m3-on-surface-variant);
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+/* Common styles for all text inputs and select dropdowns (M3 Text Fields) */
+.form-field input,
+.form-field select {
+    font-family: 'Roboto Flex', sans-serif;
+    background-color: var(--m3-surface-container-highest);
+    color: var(--m3-on-surface);
+    border: 1px solid var(--m3-outline);
+    border-radius: 8px; /* Softer, more expressive corners */
+    padding: 16px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Custom dropdown arrow for <select> to match M3 style */
+.form-field select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Using an inline SVG for the dropdown icon, colored with our palette */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z' fill='%23757780'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+}
+
+/* Focus state to provide clear user feedback */
+.form-field input:focus,
+.form-field select:focus {
+    outline: none;
+    border-color: var(--m3-primary);
+    /* A subtle glow effect for the focused element */
+    box-shadow: 0 0 0 2px var(--m3-primary-container); 
+}
+
+/* A container for form action buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Align button to the right */
+    margin-top: 16px;
+}
+
+/* Style the submit button as a Material 3 Filled Button */
+.m3-button-filled {
+    background-color: var(--m3-primary);
+    color: var(--m3-on-primary);
+    border: none;
+    border-radius: 24px; /* Expressive pill shape */
+    padding: 12px 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.m3-button-filled:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
