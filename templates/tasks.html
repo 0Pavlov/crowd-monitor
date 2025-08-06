@@ -24,42 +24,6 @@
         {% endif %}
     {% endwith %}
 
-    <!-- This styles the messages and adds the fade-out animation -->
-    <style>
-        /* A container to hold the messages in the top right corner */
-        .flash-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1050; /* Ensures it's on top of other content */
-        }
-
-        /* Styling for all flash messages */
-        .flash-message {
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            min-width: 250px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: opacity 0.5s ease;
-        }
-
-        /* Style for 'success' messages */
-        .flash-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-        }
-
-        /* Style for 'danger' or 'error' messages */
-        .flash-danger, .flash-error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
-    </style>
-
     <!-- This finds the messages and makes them disappear -->
     <script>
         // Wait until the entire page is loaded before running the script

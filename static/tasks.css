@@ -87,11 +87,62 @@ main {
     min-width: 0px;
     /* Uncomment it later for the PC users */
     /*min-width: calc(100vw * 2 / 3);*/
+    background-color: var(--m3-surface-container-low);
+    border-radius: 16px; /* Expressive style loves rounded corners */
+    padding: 16px;
+    margin: 16px;
+}
+
+.TaskRow {
+    background-color: var(--m3-surface-container);
+    border-bottom: 1px solid var(--m3-outline-variant);
+    transition: background-color 0.2s ease-in-out;
 }
 
 .TaskRow:hover {
-    background-color: gray;
+    background-color: var(--m3-surface-container-high);
+    cursor: pointer;
     transition: all 0.4s ease-in-out;
+}
+
+/* Style for the text inside all table cells */
+.TaskRow td, .AssignmentRowHover td {
+    color: var(--m3-on-surface);
+    padding: 16px;
+}
+
+/* Style for the collapsed assignment area */
+.collapse {
+    background-color: var(--m3-surface-container-lowest);
+}
+
+/* Distinguish the nested assignments table heading */
+.collapse h1 {
+    color: var(--m3-on-surface-variant);
+    font-size: 1.2rem;
+    padding: 8px 16px;
+}
+
+.AssignmentRowHover td {
+     border-bottom: 1px solid var(--m3-outline-variant);
+}
+
+/* Style the "create task" button as a filled button */
+#show-create-task-btn {
+    background-color: var(--m3-primary);
+    color: var(--m3-on-primary);
+    border: none;
+    border-radius: 24px; /* Fully rounded for a FAB-like feel */
+    padding: 12px 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+#show-create-task-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 #taskAccordion .table tbody tr.AssignmentRowHover:hover td{
@@ -102,4 +153,38 @@ main {
 .TasksRowsContainer {
     overflow-y: auto;
     flex-grow: 1;
+}
+
+/* Remove default table lines; we'll add our own dividers */
+table, thead, tbody, tr, td {
+    border: none;
+    background-color: transparent;
+}
+
+/* Replace the existing .flash-message styles */
+.flash-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.flash-message {
+    padding: 16px;
+    margin-bottom: 10px;
+    border-radius: 12px; /* Softer, more modern corners */
+    min-width: 250px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-weight: 500;
+    transition: opacity 0.5s ease;
+}
+
+.flash-success {
+    color: var(--m3-on-tertiary-container);
+    background-color: var(--m3-tertiary-container);
+}
+
+.flash-danger, .flash-error {
+    color: var(--m3-on-error-container);
+    background-color: var(--m3-error-container);
 }
