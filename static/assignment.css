@@ -1,0 +1,209 @@
+/* Main container for the selected task, which holds details and chat */
+.SelectedTask {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure it fills the parent .Task container */
+    padding: 24px;
+    gap: 24px; /* Space between the details card and the chat */
+}
+
+/* 1. Task Details Card */
+.task-details-card {
+    background-color: var(--m3-surface-container);
+    border: 1px solid var(--m3-outline-variant);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.task-details-card h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--m3-primary);
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+/* Grid layout for neatly aligned details */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-item .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--m3-on-surface-variant);
+}
+
+.detail-item p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--m3-on-surface);
+}
+
+.detail-item .label {
+    color: var(--m3-on-surface-variant);
+}
+
+/* Special styling for the task content to make it stand out */
+.task-content-container {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: var(--m3-surface-container-low);
+    border-radius: 12px;
+}
+.task-content-container .label {
+    display: block;
+    color: var(--m3-on-surface-variant);
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+.task-content-container p {
+    margin: 0;
+    color: var(--m3-on-surface);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+
+/* 2. Chat & Messages Area */
+/* The container that holds all the message groups */
+#messages-container {
+    flex-grow: 1; /* Allows this area to fill the available vertical space */
+    overflow-y: auto; /* Enables scrolling for long conversations */
+    display: flex;
+    flex-direction: column; /* Stack message groups vertically */
+    gap: 16px; /* Space between each message group */
+    padding: 8px 16px; /* Add some padding on the sides */
+}
+
+/* The container for a single message (bubble + metadata) */
+.message-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%; /* Prevents messages from spanning the entire width */
+    width: fit-content; /* Ensures the group is only as wide as its content */
+}
+
+/* The actual colored message bubble holding the text */
+.message-bubble {
+    padding: 12px 16px;
+    border-radius: 20px; /* Expressive, rounded corners */
+    line-height: 1.5;
+}
+
+.message-bubble p {
+    margin: 0;
+    font-size: 1rem;
+    /* This helps in breaking long words to prevent overflow */
+    word-wrap: break-word; 
+}
+
+/* The metadata (sender name and time) displayed below the bubble */
+.message-meta {
+    font-size: 0.75rem; /* 12px */
+    color: var(--m3-on-surface-variant);
+    padding: 0 8px;
+    margin-top: 4px;
+}
+
+/* --- Incoming & Outgoing Alignment --- */
+
+/* Styles for INCOMING messages (from the other user) */
+.message-incoming {
+    align-self: flex-start; /* This is the key: aligns the whole group to the LEFT */
+    align-items: flex-start; /* Aligns the bubble and meta within the group to the left */
+}
+
+.message-incoming .message-bubble {
+    background-color: var(--m3-surface-container-high);
+    color: var(--m3-on-surface);
+    /* The "tail" effect on the bottom-left corner gives it the classic chat look */
+    border-bottom-left-radius: 4px; 
+}
+
+.message-incoming .message-meta {
+    text-align: left;
+}
+
+/* Styles for OUTGOING messages (from the current user) */
+.message-outgoing {
+    align-self: flex-end;   /* This is the key: aligns the whole group to the RIGHT */
+    align-items: flex-end; /* Aligns the bubble and meta within the group to the right */
+}
+
+.message-outgoing .message-bubble {
+    background-color: var(--m3-primary-container);
+    color: var(--m3-on-primary-container);
+    /* The "tail" effect on the opposite corner for visual distinction */
+    border-bottom-right-radius: 4px;
+}
+
+.message-outgoing .message-meta {
+    text-align: right;
+}
+
+/* Placeholder text when the chat is empty */
+#no-messages-placeholder {
+    margin: auto; /* Centers the text vertically and horizontally */
+    color: var(--m3-on-surface-variant);
+    font-style: italic;
+}
+
+/* 3. Submission Form Area */
+#submission-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--m3-outline-variant);
+}
+
+#submission-form input[name="submitted_answer"] {
+    flex-grow: 1;
+    background-color: var(--m3-surface-container-high);
+    color: var(--m3-on-surface);
+    border: 1px solid var(--m3-outline);
+    border-radius: 28px; /* Fully rounded pill shape */
+    padding: 14px 20px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#submission-form input[name="submitted_answer"]:focus {
+    outline: none;
+    border-color: var(--m3-primary);
+    box-shadow: 0 0 0 2px var(--m3-primary-container);
+}
+
+/* Material 3 Icon Button for 'Submit' */
+#submission-form button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--m3-primary);
+    color: var(--m3-on-primary);
+    border: none;
+    border-radius: 50%; /* Perfect circle */
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#submission-form button:hover {
+    background-color: #0B57D0; /* A slightly darker primary for hover */
+    box-shadow: 0 1px 3px 1px rgba(0,0,0,.15);
+}
+
+#submission-form button .material-symbols-outlined {
+    font-size: 24px;
+    font-variation-settings: 'FILL' 1;
+}

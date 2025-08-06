@@ -18,39 +18,72 @@
 <!-- submitted_answer -->
 <!-- timestamp (when the submission is submitted )-->
 <!-- submitted_by_id (an author of the submission) -->
+<div class="task-details-card">
+    <h2>Task Details</h2>
+    <div class="details-grid">
+        <div class="detail-item">
+            <span class="material-symbols-outlined">badge</span>
+            <p><span class="label">Assigned to:</span> {{ assigned_worker_name }} by {{ assigned_by_name }}</p>
+        </div>
+        <div class="detail-item">
+            <span class="material-symbols-outlined">label</span>
+            <p><span class="label">Type:</span> {{ task_type }}</p>
+        </div>
+        <div class="detail-item">
+            <span class="material-symbols-outlined">schedule</span>
+            <p><span class="label">Deadline:</span> {{ task_deadline }}</p>
+        </div>
+        <div class="detail-item">
+            <span class="material-symbols-outlined">task_alt</span>
+            <p><span class="label">Status:</span> {{ assignment_status }}</p>
+        </div>
+        <div class="detail-item">
+            <span class="material-symbols-outlined">update</span>
+            <p><span class="label">Last Update:</span> {{ last_submission }}</p>
+        </div>
+        <div class="detail-item">
+            <span class="material-symbols-outlined">person_add</span>
+            <p><span class="label">Author:</span> {{ task_creator_username }}</p>
+        </div>
+    </div>
+    <div class="task-content-container">
+        <span class="label">Task Content</span>
+        <p>{{ task_content }}</p>
+    </div>
+</div>
 
-<h1 style="color:green;">Hello from assignment.html</h1>
-<h1 style="color:green;">task_id: {{ task_id }}</h1>
-<h1 style="color:green;">assignment_id: {{ assignment_id }}</h1>
-
-<p>Task created at: {{ task_creation_timestamp }}</p>
-<p>Updated at: {{ last_submission }}</p>
-<p>Assigned at: {{ assigned_at }}</p>
-<p>Task status: {{ task_status }}</p>
-<p>Assignment status: {{ assignment_status }}</p>
-<p>Task author: {{ task_creator_username }}</p>
-<p>Task type: {{ task_type }}</p>
-<p>Deadline: {{ task_deadline }}</p>
-<p>Task Content {{ task_content }}</p>
-<p>Assigned by: {{ assigned_by_name }}</p>
-<p>Chat:</p>
-<p>Messages</p>
+<!-- 2. CHAT AREA: For displaying submissions -->
 <div id="messages-container">
     {% if submissions %}
         {% for submission in submissions %}
-        <div class="message-group" data-timestamp="{{ submission['timestamp'] }}">
-                <p>From: {{ submission['submitted_by_name'] }}</p>
-                <p>Message: {{ submission['submitted_answer'] }}</p>
-                <p>Timestamp: {{ submission['timestamp'] }}
+            <!-- The alignment and styling is now fully handled by tasks.js -->
+            <div class="message-group" data-sender-name="{{ submission['submitted_by_name'] }}" data-timestamp="{{ submission['timestamp'] }}">
+                <div class="message-bubble">
+                    <p>{{ submission['submitted_answer'] }}</p>
+                </div>
+                <div class="message-meta">
+                    <span class="sender-name">{{- submission['submitted_by_name'] }}</span> at 
+                    <span class="dynamic-timestamp" data-timestamp="{{ submission['timestamp'] }}">
+                        {{- submission['timestamp'] -}}
+                    </span>
+                </div>
             </div>
         {% endfor %}
     {% else %}
-        <p id="no-messages-placeholder">NO MESSAGES</p>
+        <p id="no-messages-placeholder">No submissions yet. Start the conversation!</p>
     {% endif %}
 </div>
-<div>
-    <form id="submission-form" data-assignment-id="{{ assignment_id }}">
-        <input name="submitted_answer" type="text" placeholder="Type your message..." autocomplete="off">
-        <button type="submit">Submit</button>
+
+<!-- 3. SUBMISSION FORM: The message composition area -->
+<div id="submission-form-container">
+    <!-- 
+      THE KEY CHANGE: Storing the logged-in user's name directly in the HTML,
+      so tasks.js can read it.
+    -->
+    <form id="submission-form" data-assignment-id="{{ assignment_id }}" data-current-user-name="{{ current_username }}">
+        <input name="submitted_answer" type="text" placeholder="Type a message..." autocomplete="off" required>
+        <button type="submit" aria-label="Send message">
+            <span class="material-symbols-outlined">send</span>
+        </button>
     </form>
 </div>

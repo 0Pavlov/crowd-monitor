@@ -505,7 +505,8 @@ def get_assignment_details():
                 task_deadline=task_deadline,
                 task_content=task_content,
                 assigned_by_name=assigned_by_name,
-                submissions=submissions
+                submissions=submissions,
+                current_username=session.get('username')
             )
 
 

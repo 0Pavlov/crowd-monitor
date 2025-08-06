@@ -3,6 +3,7 @@
 {% block styles %}
         <link href="/static/tasks.css" rel="stylesheet">
         <link href="/static/create-task.css" rel="stylesheet">
+        <link href="/static/assignment.css" rel="stylesheet">
 {% endblock %}
 
 {% block title %}
@@ -126,7 +127,7 @@
             <button class="TaskExpandBtn">expand</button>
             <div class="Task hidden">
                 <div class="TaskNav">
-                    <button>hide</button>
+                    <button class="TaskHideButton">hide</button>
                 </div>
                 <!-- Task details -->
                 <div class="NoSelectedTask">
