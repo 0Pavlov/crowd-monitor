@@ -189,3 +189,88 @@ table, thead, tbody, tr, td {
     color: var(--m3-on-error-container);
     background-color: var(--m3-error-container);
 }
+
+/* --- Task Panel Control Buttons (Pure CSS Icons) --- */
+
+/* Base styles for BOTH buttons */
+.TaskExpandBtn,
+.TaskHideButton {
+    /* This hides the original "expand" and "hide" text */
+    font-size: 0; 
+    border: none;
+    cursor: pointer;
+    position: relative; /* Crucial for positioning the ::before pseudo-element */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Common style for the icons we are creating */
+.TaskExpandBtn::before,
+.TaskHideButton::before {
+    content: ''; /* Required to generate the pseudo-element */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
+/*
+ * The "Expand" button
+ * Styled as a Floating Action Button (FAB).
+*/
+.TaskExpandBtn {
+    /* POSITIONING: Unchanged, respects your original layout */
+    position: absolute;
+    top: 16px;
+    left: 0;
+    transform: translateX(-100%);
+    z-index: 10;
+    
+    /* MATERIAL 3 FAB AESTHETICS */
+    background-color: var(--m3-primary);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+
+/* This creates the LEFT-pointing chevron icon */
+.TaskExpandBtn::before {
+    background-color: var(--m3-on-primary);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'%3E%3Cpath d='M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z'/%3E%3C/svg%3E");
+}
+
+.TaskExpandBtn:hover {
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+}
+
+/*
+ * The "Hide" button
+ * Styled as a standard, transparent Icon Button.
+*/
+.TaskNav {
+    display: flex;
+    padding: 8px;
+    height: 56px;
+}
+
+.TaskHideButton {
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* This creates the RIGHT-pointing chevron icon */
+.TaskHideButton::before {
+    background-color: var(--m3-on-surface-variant);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'%3E%3Cpath d='M400-240 344-296l184-184-184-184 56-56 240 240-240 240Z'/%3E%3C/svg%3E");
+}
+
+.TaskHideButton:hover {
+    background-color: var(--m3-surface-container-high);
+}
