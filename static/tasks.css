@@ -1,8 +1,21 @@
-/* Reset default browser margin/padding for a true full-screen. */
-body, html {
-    margin: 0;
-    padding: 0;
+html {
     height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* Fixes the view height calculation on mobile */
+    height: 100dvh;
+    margin: 0;
+    overflow: hidden;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    min-height: 0;
 }
 
 .TaskContent {
@@ -14,8 +27,8 @@ body, html {
 
 /* Make the main container fill the entire viewport. */
 .TasksMain {
-    width: 100vw; /* 100% of the viewport width */
-    height: 100vh; /* 100% of the viewport height */
+    width: 100%; /* 100% of the viewport width */
+    height: 100%; /* 100% of the viewport height */
     display: flex; /* Activate Flexbox */
     flex-direction: row; /* Horizontal alignment */
     background-color: #f0f2f5; /* A light background to see the container */
@@ -68,6 +81,8 @@ body, html {
 }
 
 .Tasks {
+    display: flex;
+    flex-direction: column;
     flex: 2; /* Make it grow by a factor of 2 */
     min-width: 0px;
     /* Uncomment it later for the PC users */
@@ -82,4 +97,9 @@ body, html {
 #taskAccordion .table tbody tr.AssignmentRowHover:hover td{
     background-color: gray;
     transition: all 0.4s ease-in-out;
+}
+
+.TasksRowsContainer {
+    overflow-y: auto;
+    flex-grow: 1;
 }
