@@ -40,9 +40,9 @@
 <div id="messages-container">
     {% if submissions %}
         {% for submission in submissions %}
-            <div class="message-group" data-sender-name="{{ submissions['submitted_by_name'] }}" data-timestamp="{{ submission['timestamp'] }}">
+            <div class="message-group" data-sender-name="{{ submission['submitted_by_name'] }}" data-timestamp="{{ submission['timestamp'] }}">
                 <div class="message-bubble">
-                    <p>Message: {{ submission['submitted_answer'] }}</p>
+                    <p>{{ submission['submitted_answer'] }}</p>
                 </div>
                 <div class="message-meta">
                     <span class="sender-name">{{- submission['submitted_by_name'] }}</span> at
