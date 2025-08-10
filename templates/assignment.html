@@ -35,13 +35,21 @@
 <p>Assigned by: {{ assigned_by_name }}</p>
 <p>Chat:</p>
 <p>Messages</p>
+
+<!-- CHAT AREA -->
 <div id="messages-container">
     {% if submissions %}
         {% for submission in submissions %}
-        <div class="message-group" data-timestamp="{{ submission['timestamp'] }}">
-                <p>From: {{ submission['submitted_by_name'] }}</p>
-                <p>Message: {{ submission['submitted_answer'] }}</p>
-                <p>Timestamp: {{ submission['timestamp'] }}
+            <div class="message-group" data-sender-name="{{ submissions['submitted_by_name'] }}" data-timestamp="{{ submission['timestamp'] }}">
+                <div class="message-bubble">
+                    <p>Message: {{ submission['submitted_answer'] }}</p>
+                </div>
+                <div class="message-meta">
+                    <span class="sender-name">{{- submission['submitted_by_name'] }}</span> at
+                    <span class="dynamic-timestamp" data-timestamp="{{ submission['timestamp'] }}">
+                        {{- submission['timestamp'] -}}
+                    </span>
+                </div>
             </div>
         {% endfor %}
     {% else %}
