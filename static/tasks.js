@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         // Create the new message HTML with the right styling applied
                         const newMessageHTML = `
-                            <div class="message-group ${allignmentClass}" data-sender-name="${messageData.submitted_by_name}" data-timestamp="${messageData.timestamp}">
+                            <div class="message-group ${alignmentClass}" data-sender-name="${messageData.submitted_by_name}" data-timestamp="${messageData.timestamp}">
                                 <div class="message-bubble">
                                     <p>${messageData.submitted_answer}</p>
                                 </div>
