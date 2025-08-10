@@ -1,0 +1,76 @@
+/* Chat & Messages Area */
+/* The container that holds all the message groups */
+#messages-container {
+    flex-grow: 1; /* Allows this area to fill the available vertical space */
+    overflow-y: auto; /* Enables scrolling for long chats */
+    display: flex;
+    flex-direction: column; /* Stack message groups vertically */
+    gap: 16px; /* Space between each message group */
+    padding: 8px 16px; /* Add some padding on the sides */
+}
+
+/* The container for a single message (bubble + metadata) */
+.message-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%; /* Prevents messages from spanning the entire width */
+    width: fit-content; /* Ensures the group is only as wide as its content */
+}
+
+/* The actual colored message bubble holding the text */
+.message-bubble {
+    padding: 12px 16px;
+    border-radius: 20px; /* Rounded corners */
+    line-height: 1.5;
+}
+
+.message-bubble p {
+    margin: 0;
+    font-size: 1rem;
+    /* This helps in breaking long words to prevent overflow */
+    word-wrap: break-word; 
+}
+
+/* The metadata (sender name and time) displayed below the bubble */
+.message-meta {
+    font-size: 0.75rem; /* 12px */
+    color: var(--m3-on-surface-variant);
+    padding: 0 8px;
+    margin-top: 4px;
+}
+
+/* --- Incoming & Outgoing Alignment --- */
+
+/* Styles for INCOMING messages (from the other user) */
+.message-incoming {
+    align-self: flex-start; /* Aligns the whole group to the LEFT */
+    align-items: flex-start; /* Aligns the bubble and meta within the group to the left */
+}
+
+.message-incoming .message-bubble {
+    background-color: var(--m3-surface-container-high);
+    color: var(--m3-on-surface);
+    /* The "tail" effect on the bottom-left corner */
+    border-bottom-left-radius: 4px; 
+}
+
+.message-incoming .message-meta {
+    text-align: left;
+}
+
+/* Styles for OUTGOING messages (from the current user) */
+.message-outgoing {
+    align-self: flex-end;   /* Aligns the whole group to the RIGHT */
+    align-items: flex-end; /* Aligns the bubble and meta within the group to the right */
+}
+
+.message-outgoing .message-bubble {
+    background-color: var(--m3-primary-container);
+    color: var(--m3-on-primary-container);
+    /* The "tail" effect on the opposite corner */
+    border-bottom-right-radius: 4px;
+}
+
+.message-outgoing .message-meta {
+    text-align: right;
+}
