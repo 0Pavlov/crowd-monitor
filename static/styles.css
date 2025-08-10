@@ -1,0 +1,48 @@
+/* DEFINE THE MATERIAL 3 COLOR PALETTE */
+:root {
+  /* Base Source Color */
+  --source-color: #3478f5;
+
+  /* Primary Palette (for key components and actions) */
+  --m3-primary: #3478f5;
+  --m3-on-primary: #ffffff;
+  --m3-primary-container: #dce1ff;
+  --m3-on-primary-container: #001550;
+
+  /* Secondary Palette (for less prominent components) */
+  --m3-secondary: #585e71;
+  --m3-on-secondary: #ffffff;
+  --m3-secondary-container: #dde2f9;
+  --m3-on-secondary-container: #151b2c;
+
+  /* Tertiary Palette (for contrasting accents and positive feedback) */
+  --m3-tertiary: #735471;
+  --m3-on-tertiary: #ffffff;
+  --m3-tertiary-container: #fdd7f8;
+  --m3-on-tertiary-container: #2b122b;
+
+  /* Error Palette */
+  --m3-error: #ba1a1a;
+  --m3-on-error: #ffffff;
+  --m3-error-container: #ffdad6;
+  --m3-on-error-container: #410002;
+
+  /* Surface & Background Palette (the "canvas" of the app) */
+  --m3-background: #fefbff;
+  --m3-on-background: #1b1b1f;
+  --m3-surface: #fefbff;
+  --m3-on-surface: #1b1b1f;
+  --m3-surface-variant: #e1e2ec;
+  --m3-on-surface-variant: #44474f;
+  
+  /* Elevated Surface Tones */
+  --m3-surface-container-lowest: #ffffff;
+  --m3-surface-container-low: #f8f9ff;
+  --m3-surface-container: #f2f3fa;
+  --m3-surface-container-high: #eceef4;
+  --m3-surface-container-highest: #e6e8ee;
+
+  /* Outlines & Dividers */
+  --m3-outline: #757780;
+  --m3-outline-variant: #c5c6d0;
+}
