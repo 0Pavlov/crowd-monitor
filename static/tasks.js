@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
         assignment_row.addEventListener('click', () => {
             // Get the task ID from the clicked row
             const taskId = assignment_row.dataset.taskId;
+            // Get the assignment ID from the clicked row
             const assignmentId = assignment_row.dataset.assignmentId;
 
             // Perform the fetch request to the /assignment route
@@ -144,26 +145,64 @@ document.addEventListener('DOMContentLoaded', function() {
                     const currentAssignmentId = submissionForm.dataset.assignmentId;
                     // the last submission visible in the assignments overview
                     const last_sub_from_tasks = document.getElementById(`last-sub-for-assignment-${currentAssignmentId}`);
+                    // Get the username of the current user who observing the form in the moment
+                    const currentUserName = submissionForm.dataset.currentUserName;
+
+                    // Function to style a single message group (bubble and meta)
+                    function styleMessage(messageGroup) {
+                        // Get the sender name
+                        const senderName = messageGroup.dataset.senderName;
+
+                        // Align the message bubble left or right
+                        if (senderName === currentUserName) {
+                            // Align to the right
+                            messageGroup.classList.add('message-outgoing');
+                        } else {
+                            // Align to the left
+                            messageGroup.classList.add('message-incoming');
+                        }
+                    }
 
                     // Helper function to create HTML for a new message and append it
                     function appendMessage(messageData) {
+                        // Remove the "No messages" placeholder if it exists
                         const noMessagesPlaceholder = document.getElementById('no-messages-placeholder');
                         if (noMessagesPlaceholder) {
                             noMessagesPlaceholder.remove();
                         }
 
+                        // Determine alignment class based on sender
+                        const alignmentClass = (messageData.submitted_by_name === currentUserName) ? 'message-outgoing' : 'message-incoming';
+
+                        // Create the new message HTML with the right styling applied
                         const newMessageHTML = `
-                            <div class="message-group" data-timestamp="${messageData.timestamp}">
-                                <p><strong>From: </strong>${messageData.submitted_by_name}</p>
-                                <p><strong>Message: </strong>${messageData.submitted_answer}</p>
-                                <p><strong>At: </strong>${messageData.timestamp}</p>
+                            <div class="message-group ${allignmentClass}" data-sender-name="${messageData.submitted_by_name}" data-timestamp="${messageData.timestamp}">
+                                <div class="message-bubble">
+                                    <p>${messageData.submitted_answer}</p>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="sender-name">${messageData.submitted_by_name}</span> at
+                                    <span class="dynamic-timestamp" data-timestamp="${messageData.timestamp}">
+                                        ${messageData.timestamp}
+                                    </span>
+                                </div>
                             </div>
                         `;
+                        // Append the chat with the new message on the bottom
                         messagesContainer.insertAdjacentHTML('beforeend', newMessageHTML);
+                        // Scroll to the bottom to show the new message
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-                        // Also update the last sub
-                        last_sub_from_tasks.textContent = `${messageData.submitted_by_name}: ${messageData.submitted_answer}`;
+                        // Also update the last sub in the main tasks table
+                        if (last_sub_from_tasks) {
+                            last_sub_from_tasks.textContent = `${messageData.submitted_by_name}: ${messageData.submitted_answer}`;
+                        }
                     }
+
+                    // Style all messages that were loaded initially with the template
+                    messagesContainer.querySelectorAll('.message-group').forEach(styleMessage);
+                    // Scroll to the bottom on initial load
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
                     // Add an event listener specifically for this newly created form
                     submissionForm.addEventListener('submit', function(event) {
