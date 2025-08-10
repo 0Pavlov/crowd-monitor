@@ -57,7 +57,7 @@
     {% endif %}
 </div>
 <div>
-    <form id="submission-form" data-assignment-id="{{ assignment_id }}">
+    <form id="submission-form" data-assignment-id="{{ assignment_id }}" data-current-user-name="{{ current-username }}">
         <input name="submitted_answer" type="text" placeholder="Type your message..." autocomplete="off">
         <button type="submit">Submit</button>
     </form>
