@@ -493,6 +493,7 @@ def get_assignment_details():
 
             # Calculate at which time the last submission was made
             last_submission: str = "None"
+            last_submission_formatted: str = "None"
             if len(submissions) > 0:
                 last_submission_formatted: str = submissions[-1]['formatted_timestamp']
 
