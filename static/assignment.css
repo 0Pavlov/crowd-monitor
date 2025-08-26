@@ -2,7 +2,6 @@
 .task-container {
   padding: 16px;
   background-color: var(--m3-background);
-  font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -105,6 +104,7 @@
   font-size: 16px;
   line-height: 1.6;
   margin: 0;
+  word-wrap: break-word; 
 }
 /* --- Task Description END --- */
 
