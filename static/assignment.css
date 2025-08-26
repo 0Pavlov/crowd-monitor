@@ -184,3 +184,101 @@
 .message-outgoing .message-meta {
     text-align: right;
 }
+
+/* --- Chat Input Form START (AI Generated CSS) --- */
+
+/* 
+  The main container for the input form.
+  It uses a slightly elevated surface color and a top border 
+  to visually separate it from the message list above.
+*/
+.chat-input-container {
+  padding: 8px 16px;
+  background-color: var(--m3-surface-container);
+  border-top: 1px solid var(--m3-outline-variant);
+  /* Use box-shadow for a softer separation if preferred */
+  /*box-shadow: 0 -1px 2px rgba(0,0,0,0.05);*/
+}
+
+/* 
+  The form itself uses flexbox to align the text input and send button.
+*/
+#submission-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 
+  The text input is styled to look like a Material 3 "Filled" text field.
+  - It grows to fill available space.
+  - It has a high border-radius for a modern, pill-like shape.
+  - It uses distinct colors for the background, text, and placeholder.
+  - A clear focus state is added using the primary color.
+*/
+#submission-form input[name="submitted_answer"] {
+  flex-grow: 1; /* Allows the input to take up all available space */
+  border: 2px solid transparent; /* Used for a smooth focus transition */
+  border-radius: 24px; /* Creates the pill shape */
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: var(--m3-surface-container-high);
+  color: var(--m3-on-surface);
+  outline: none; /* We handle focus with the border */
+  transition: border-color 0.2s ease-in-out;
+}
+
+#submission-form input[name="submitted_answer"]::placeholder {
+  color: var(--m3-on-surface-variant);
+  opacity: 1; /* Ensures consistency across browsers */
+}
+
+#submission-form input[name="submitted_answer"]:focus {
+  border-color: var(--m3-primary);
+}
+
+
+/* 
+  The submit button is an Icon Button.
+  - It's a circle for a friendly, modern look.
+  - It uses the primary color to signify a key action.
+  - It includes hover, active, and disabled states for user feedback.
+*/
+#submission-form button[type="submit"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0; /* Prevents the button from shrinking */
+  border-radius: 50%; /* Makes it a circle */
+  border: none;
+  background-color: var(--m3-primary);
+  color: var(--m3-on-primary); /* The SVG icon will inherit this color */
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#submission-form button[type="submit"]:hover {
+  /* A common pattern for hover is to apply a state layer.
+     A simple brightness filter works well as a proxy. */
+  filter: brightness(0.9);
+}
+
+#submission-form button[type="submit"]:active {
+  transform: scale(0.9); /* Provides a "press" effect */
+}
+
+/* 
+  A disabled state is crucial for usability, preventing empty messages.
+  It uses muted colors to indicate it's not interactive.
+  You'll need a small bit of JS to add/remove the 'disabled' attribute.
+*/
+#submission-form button[type="submit"]:disabled {
+  background-color: var(--m3-surface-variant);
+  color: var(--m3-on-surface-variant);
+  cursor: not-allowed;
+  filter: none;
+  transform: none;
+}
+/* --- Chat Input Form END --- */
