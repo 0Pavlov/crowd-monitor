@@ -1,3 +1,113 @@
+/* --- Task Description START --- */
+.task-container {
+  padding: 16px;
+  background-color: var(--m3-background);
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-header h1 {
+  color: var(--m3-on-background);
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.task-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.details-card {
+  background-color: var(--m3-surface-container-low);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--m3-outline-variant);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--m3-on-surface-variant);
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metadata-label {
+  font-size: 12px;
+  color: var(--m3-on-surface-variant);
+  font-weight: 400;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--m3-secondary-container);
+  color: var(--m3-on-secondary-container);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.chip-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.chip-error {
+  background-color: var(--m3-error-container);
+  color: var(--m3-on-error-container);
+}
+
+.details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.metadata-value {
+    font-size: 14px;
+    color: var(--m3-on-surface);
+    font-weight: 500;
+}
+
+.task-content-text {
+  color: var(--m3-on-surface);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+/* --- Task Description END --- */
+
 /* Chat & Messages Area */
 /* The container that holds all the message groups */
 #messages-container {
