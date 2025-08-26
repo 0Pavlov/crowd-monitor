@@ -456,8 +456,8 @@ def get_assignment_details():
             task_type: str = task['task_type']
             task_content: str = task['content']
             gsa: str = task['gold_standard_answer']
-            task_creation_timestamp: str = task['creation_timestamp']
-            task_deadline: str = task['deadline']
+            task_creation_timestamp: str = format_sqlite_datetime(task['creation_timestamp'])
+            task_deadline: str = format_sqlite_datetime(task['deadline'])
             task_status: str = task['status']
 
             # Fetch the db for an assignment
@@ -471,7 +471,7 @@ def get_assignment_details():
             score: int = assignment['score']
             ai_score: int = assignment['ai_score']
             feedback: str = assignment['feedback']
-            assigned_at: str = assignment['assigned_at']
+            assigned_at: str = format_sqlite_datetime(assignment['assigned_at'])
 
             # Fetch all of the submissions
             submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? ORDER BY timestamp ASC", assignment_id)
