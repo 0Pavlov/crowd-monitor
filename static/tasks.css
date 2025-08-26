@@ -43,7 +43,7 @@ main {
     flex: 1; /* Make it grow by a factor of 1 */
     position: relative;
     transition: all 0.4s ease-in-out;
-    background-color: #f6f1f9;
+    background-color: var(--m3-background);
 }
 
 .TaskContainer.collapsed {
@@ -117,6 +117,6 @@ main {
 
         position: relative;
         transition: all 0.4s ease-in-out;
-        background-color: #f6f1f9;
+        background-color: var(--m3-background);
     }
 }
