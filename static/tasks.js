@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="message-meta">
                                     <span class="sender-name">${messageData.submitted_by_name}</span> at
                                     <span class="dynamic-timestamp" data-timestamp="${messageData.timestamp}">
-                                        ${messageData.timestamp}
+                                        ${messageData.formatted_timestamp}
                                     </span>
                                 </div>
                             </div>
