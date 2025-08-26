@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, request, session, jsonify, flash
 from flask_session import Session
 from model import db_handler
-from helpers import apology, login_required
+from helpers import apology, login_required, format_sqlite_datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
@@ -308,6 +308,11 @@ def tasks():
                     assignments_info[assigned_id['id']] = temp_assignment
                 # Add this list to the task dict
                 task['assignments_ids'] = assignments_ids
+
+            # Format the datetimes
+            for task in tasks:
+                task['creation_timestamp'] = format_sqlite_datetime(task['creation_timestamp'])
+                task['deadline'] = format_sqlite_datetime(task['deadline'])
 
             # Close the connection
             db.close()
