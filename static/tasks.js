@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Append the chat with the new message on the bottom
                         messagesContainer.insertAdjacentHTML('beforeend', newMessageHTML);
                         // Scroll to the bottom to show the new message
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        task.scrollTop = task.scrollHeight;
 
                         // Also update the last sub in the main tasks table
                         if (last_sub_from_tasks) {
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Style all messages that were loaded initially with the template
                     messagesContainer.querySelectorAll('.message-group').forEach(styleMessage);
                     // Scroll to the bottom on initial load
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    //messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
                     // Add an event listener specifically for this newly created form
                     submissionForm.addEventListener('submit', function(event) {
