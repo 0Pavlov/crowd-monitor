@@ -488,11 +488,13 @@ def get_assignment_details():
                     del submission['submitted_by_id']
                     # Create a new one with the name
                     submission['submitted_by_name'] = name
+                    # Add the formatted timestamp
+                    submission['formatted_timestamp'] = format_sqlite_datetime(submission['timestamp'])
 
             # Calculate at which time the last submission was made
             last_submission: str = "None"
             if len(submissions) > 0:
-                last_submission: str = submissions[-1]['timestamp']
+                last_submission_formatted: str = submissions[-1]['formatted_timestamp']
 
             # Close the connection
             db.close()
@@ -501,7 +503,7 @@ def get_assignment_details():
                 task_id=task_id,
                 assignment_id=assignment_id,
                 task_creation_timestamp=task_creation_timestamp,
-                last_submission=last_submission,
+                last_submission=last_submission_formatted,
                 assigned_at=assigned_at,
                 task_status=task_status,
                 assignment_status=assignment_status,
@@ -566,6 +568,9 @@ def create_submission():
 
         # Get the timestamp
         timestamp: str = db_handler.query(db, "SELECT timestamp FROM submissions WHERE submitted_by_id == ? AND assignment_id == ? ORDER BY timestamp DESC LIMIT 1", session['user_id'], assignment_id)[0]['timestamp'] 
+
+        # Format the timestamp for the response
+        formatted_timestamp = format_sqlite_datetime(timestamp)
     except Exception as e:
         # Rollback the changes
         db.rollback()
@@ -589,7 +594,8 @@ def create_submission():
             "new_submission": {
                 "submitted_answer": submitted_answer,
                 "submitted_by_name": submitted_by_name,
-                "timestamp": timestamp
+                "timestamp": timestamp,
+                "formatted_timestamp": formatted_timestamp
             }
         }
     )
@@ -631,6 +637,9 @@ def get_updates():
 
                 submission_dict['submitted_by_name'] = name
                 del submission_dict['submitted_by_id']
+
+                # Add the formatted timestamp
+                submission_dict['formatted_timestamp'] = format_sqlite_datetime(submission_dict['timestamp'])
                 new_submissions.append(submission_dict)
         db.close()
     except Exception as e:
