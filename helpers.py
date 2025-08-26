@@ -27,11 +27,12 @@ def login_required(f):
 
 def format_sqlite_datetime(datetime_str: str) -> str:
     """
-    Converts a SQLite DATETIME string to a more readable and relative format.
+    Converts a SQLite DATETIME string to a short, relative format with time.
 
-    If the date is today, it returns the time in AM/PM format (e.g., "02:30 PM").
-    If the date is in the current year but not today, it returns the month and day (e.g., "August 26").
-    If the date is in a past year, it returns the month, day, and year (e.g., "August 26, 2024").
+    Uses abbreviated month names (e.g., "Aug").
+    If the date is today, it returns only the time in AM/PM format (e.g., "2:30 PM").
+    If the date is in the current year, it returns the abbreviated month, day, and time (e.g., "Aug 26, 2:30 PM").
+    If the date is in a past year, it returns the abbreviated month, day, year, and time (e.g., "Aug 26, 2024, 2:30 PM").
 
     Args:
         datetime_str: The DATETIME string from SQLite (e.g., '2025-08-26 14:30:00').
@@ -41,25 +42,26 @@ def format_sqlite_datetime(datetime_str: str) -> str:
         Returns an error message if the input string is not in the expected format.
     """
     try:
-        # The current date and time
         now = datetime.now()
-        # The input string converted to a datetime object
         input_datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
 
-        # Check if the date is today
+        # Create the formatted time string. 
+        # .lstrip('0') removes a leading zero from the hour (e.g., "02:30 PM" -> "2:30 PM")
+        time_str = input_datetime.strftime('%I:%M %p').lstrip('0').replace(' 0', ' ')
+
+        # If the date is today, return only the time
         if input_datetime.date() == now.date():
-            # Format for time only
-            return input_datetime.strftime('%I:%M %p').lstrip('0').replace(' 0', ' ')
-        
-        # Check if the date is in the current year (but not today)
+            return time_str
+
+        # If the date is in the current year
         elif input_datetime.year == now.year:
-            # Format for month and day
-            return input_datetime.strftime('%B %d')
+            # Format with abbreviated month (%b), day, and the time
+            return input_datetime.strftime(f'%b %d, {time_str}')
         
         # Otherwise, the date is in a past year
         else:
-            # Format for month, day, and year
-            return input_datetime.strftime('%B %d, %Y')
+            # Format with abbreviated month (%b), day, year, and the time
+            return input_datetime.strftime(f'%b %d, %Y, {time_str}')
 
     except (ValueError, TypeError):
         return "Invalid DATETIME format"
