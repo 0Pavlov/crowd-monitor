@@ -90,8 +90,37 @@ main {
     /*min-width: calc(100vw * 2 / 3);*/
 }
 
+/* Task 'Table' styles block START */
+#taskAccordion > .task-header,
+#taskAccordion > .TaskRow {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 15px;
+}
+
+/* Styling for the header row */
+.task-header {
+    font-weight: bold;
+    color: #555;
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 10px;
+}
+
+/* Card styling */
+.TaskRow {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
 .TaskRow:hover {
-    background-color: gray;
+    background-color: #f1f1f1;
     transition: all 0.4s ease-in-out;
 }
 
@@ -104,6 +133,7 @@ main {
     overflow-y: auto;
     flex-grow: 1;
 }
+/* Tasks 'Table' style Block END */
 
 /* for mobile */
 @media only screen and (max-width: 768px) {
