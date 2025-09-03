@@ -170,7 +170,7 @@ main {
     .mobile-header {
         display: block;
         font-weight: 500;
-        color: #6c757d;
+        color: var(--m3-on-surface-variant);
         margin-bottom: 0.25rem;
     }
 
@@ -189,12 +189,13 @@ main {
         grid-template-rows: auto; /* Let rows size themselves based on content */
         gap: 1rem; /* Creates space between all grid items */
         padding: 1.25rem;
-        border: 1px solid #e9ecef;
+        border: 1px solid var(--m3-outline-variant);
         border-radius: 12px;
         margin-bottom: 1rem;
-        background-color: #ffffff;
+        background-color: var(--m3-surface-container-low);
         box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         font-size: 0.95rem;
+        color: var(--m3-on-surface);
     }
 
     /* Assign each element to its correct grid position */
@@ -202,28 +203,33 @@ main {
     .TaskType {
         grid-column: 1 / 2; /* Start at column line 1, end at 2 */
         grid-row: 1;
+        color: var(--m3-primary);
     }
 
     .TaskStatus {
         grid-column: 2 / 3; /* Start at column line 2, end at 3 */
         grid-row: 1;
         text-align: right; /* Align text to the right */
+        color: var(--m3-secondary);
     }
 
     .TaskContent {
         grid-column: 1 / 3; /* Span from column line 1 to 3 (full width) */
         grid-row: 2;
         min-width: 100%;
+        color: var(--m3-on-surface-variant);
     }
 
     .TaskCreationTimestamp {
         grid-column: 1 / 2;
         grid-row: 3;
+        color: var(--m3-on-surface-variant);
     }
 
     .TaskDeadlineTimestamp {
         grid-column: 2 / 3;
         grid-row: 3;
         text-align: right; /* Align text to the right */
+        color: var(--m3-error);
     }
 }
