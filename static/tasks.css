@@ -95,6 +95,11 @@ main {
     display: none;
 }
 
+/* Hide the mobile-header */
+.mobile-header {
+    display: none;
+}
+
 /* Return the header on desktop */
 @media only screen and (min-width: 1000px) {
     /* Task 'Table' styles block START */
