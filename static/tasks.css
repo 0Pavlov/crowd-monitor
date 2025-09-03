@@ -90,22 +90,34 @@ main {
     /*min-width: calc(100vw * 2 / 3);*/
 }
 
-/* Task 'Table' styles block START */
-#taskAccordion > .task-header,
-#taskAccordion > .TaskRow {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    align-items: center;
-    gap: 15px;
-    padding: 10px 15px;
+/* Hide the header on mobile */
+.header-item {
+    display: none;
 }
 
-/* Styling for the header row */
-.task-header {
-    font-weight: bold;
-    color: #555;
-    border-bottom: 2px solid #dee2e6;
-    margin-bottom: 10px;
+/* Return the header on desktop */
+@media only screen and (min-width: 1000px) {
+    /* Task 'Table' styles block START */
+    #taskAccordion > .task-header,
+    #taskAccordion > .TaskRow {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 15px;
+    }
+
+    /* Styling for the header row */
+    .task-header {
+        font-weight: bold;
+        color: #555;
+        border-bottom: 2px solid #dee2e6;
+        margin-bottom: 10px;
+    }
+
+    .header-item {
+        display: block;
+    }
 }
 
 /* Card styling */
@@ -148,5 +160,13 @@ main {
         position: relative;
         transition: all 0.4s ease-in-out;
         background-color: var(--m3-background);
+    }
+
+    .TaskRow {
+        font-size: 0.5rem;
+    }
+
+    .task-header {
+        font-size: 0.5rem;
     }
 }
