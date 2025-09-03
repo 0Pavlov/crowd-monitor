@@ -101,7 +101,7 @@ main {
 }
 
 /* Return the header on desktop */
-@media only screen and (min-width: 1000px) {
+@media only screen and (min-width: 769px) {
     /* Task 'Table' styles block START */
     #taskAccordion > .task-header,
     #taskAccordion > .TaskRow {
@@ -169,13 +169,61 @@ main {
     
     .mobile-header {
         display: block;
+        font-weight: 500;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+
+    /* Hide desktop headers */
+    .task-header {
+        display: none;
+    }
+
+    .header-item {
+        displey: none;
     }
 
     .TaskRow {
-        font-size: 0.9rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Create two equal-width columns */
+        grid-template-rows: auto; /* Let rows size themselves based on content */
+        gap: 1rem; /* Creates space between all grid items */
+        padding: 1.25rem;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        font-size: 0.95rem;
     }
 
-    .task-header {
-        display: none;
+    /* Assign each element to its correct grid position */
+
+    .TaskType {
+        grid-column: 1 / 2; /* Start at column line 1, end at 2 */
+        grid-row: 1;
+    }
+
+    .TaskStatus {
+        grid-column: 2 / 3; /* Start at column line 2, end at 3 */
+        grid-row: 1;
+        text-align: right; /* Align text to the right */
+    }
+
+    .TaskContent {
+        grid-column: 1 / 3; /* Span from column line 1 to 3 (full width) */
+        grid-row: 2;
+        min-width: 100%;
+    }
+
+    .TaskCreationTimestamp {
+        grid-column: 1 / 2;
+        grid-row: 3;
+    }
+
+    .TaskDeadlineTimestamp {
+        grid-column: 2 / 3;
+        grid-row: 3;
+        text-align: right; /* Align text to the right */
     }
 }
