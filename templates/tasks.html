@@ -114,11 +114,26 @@
                         {% for task in tasks %}
                         <!-- Task Card -->
                         <div class="TaskRow accordion-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
-                            <div class="TaskContent">{{ task.content }}</div>
-                            <div>{{ task.creation_timestamp }}</div>
-                            <div>{{ task.deadline }}</div>
-                            <div>{{ task.task_type }}</div>
-                            <div>{{ task.status }}</div>
+                            <div class="TaskContent">
+                                <span class="mobile-header">Content:</span>
+                                {{ task.content }}
+                            </div>
+                            <div>
+                                <span class="mobile-header">Created:</span>
+                                {{ task.creation_timestamp }}
+                            </div>
+                            <div>
+                                <span class="mobile-header">Deadline:</span>
+                                {{ task.deadline }}
+                            </div>
+                            <div>
+                                <span class="mobile-header">Type:</span>
+                                {{ task.task_type }}
+                            </div>
+                            <div>
+                                <span class="mobile-header">Status:</span>
+                                {{ task.status }}
+                            </div>
                         </div>
                         <!-- Accordion item expands into the table of assignments for this task -->
                         <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
