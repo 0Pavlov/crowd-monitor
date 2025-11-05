@@ -61,7 +61,7 @@ def create_database(filename: str) -> bool:
                 gold_standard_answer TEXT,
                 creation_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 deadline DATETIME,
-                status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_review', 'completed')),
+                status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'closed')),
                 FOREIGN KEY (creator_id) REFERENCES users (id)
             );
         """)
