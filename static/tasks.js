@@ -13,6 +13,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // Append the HTML if the user has permission
     const showCreateTaskBtn = document.querySelector('#show-create-task-btn');
     const createTaskContainer = document.querySelector('#create-task-container');
+    // Close task buttons
+    const closeTaskBtnList = document.querySelectorAll('#close-task-button');
+    // For each button
+    closeTaskBtnList.forEach((button) => {
+        // Add event listener for a click
+        button.addEventListener('click', () => {
+            // Extract task Id from dataset
+            const taskId = button.dataset.taskId;
+            // Data we will send to the server
+            const data = {task_id: taskId};
+            // Fetch the route
+            fetch('/close-task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                    //console.log(data);
+                })
+            .catch((error) => {
+                    console.error('Error', error);
+                });
+        });
+    })
     
     // Check if the button exists (it won't for workers)
     if (showCreateTaskBtn) {
