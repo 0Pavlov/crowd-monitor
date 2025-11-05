@@ -164,6 +164,66 @@
                     {% endif %}
             {% else %}
                 <h1>My tasks:</h1>
+                {% if tasks %}
+                <!-- The 'Table' -->
+                <!-- Each 'row' is an accordion item -->
+                <div class="TasksRowsContainer" id="taskAccordion">
+                    <!-- The Header -->
+                    <div class="task-header">
+                        <div class="header-item">Content</div>
+                        <div class="header-item">Created At</div>
+                        <div class="header-item">Deadline</div>
+                        <div class="header-item">Type</div>
+                        <div class="header-item">Status</div>
+                    </div>
+                    {% for task in tasks %}
+                    <!-- Task Card -->
+                    <div class="TaskRow accordion-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
+                        <div class="TaskContent">
+                            <span class="mobile-header">Content:</span>
+                            {{ task.content }}
+                        </div>
+                        <div class="TaskCreationTimestamp">
+                            <span class="mobile-header">Created:</span>
+                            {{ task.creation_timestamp }}
+                        </div>
+                        <div class="TaskDeadlineTimestamp">
+                            <span class="mobile-header">Deadline:</span>
+                            {{ task.deadline }}
+                        </div>
+                        <div class="TaskType">
+                            <span class="mobile-header">Type:</span>
+                            {{ task.task_type }}
+                        </div>
+                        <div class="TaskStatus">
+                            <span class="mobile-header">Status:</span>
+                            {{ task.status }}
+                        </div>
+                    </div>
+                    <!-- Accordion item expands into the table of assignments for this task -->
+                    <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>last sub</th>
+                                    <th>status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for assignment_id in task.assignments_ids %}
+                                <tr class="AssignmentRowHover" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
+                                    <td id="last-sub-for-assignment-{{ assignment_id }}">{{ assignments_info[assignment_id]['who_last_submitted'] }}: {{ assignments_info[assignment_id]['last_submission']}}
+                                    <td>{{ assignments_info[assignment_id]['status'] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p> NO TASKS </p
+                {% endif %}
             {% endif %}
         </div>
         <!-- Task container -->
