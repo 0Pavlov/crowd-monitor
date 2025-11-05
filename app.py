@@ -797,3 +797,38 @@ def get_updates():
             "new_submissions": new_submissions
         }
     )
+
+
+@app.route('/close-task', methods=['POST'])
+@login_required
+@validate_session
+def close_task():
+    if request.is_json and session['role'] == 'admin':
+        data = request.get_json()
+        task_id = data.get('task_id')
+        print(task_id)
+        db = db_handler.db_connect("crowd.db")
+        try:
+            # Change task status to closed
+            db_handler.query(db, "UPDATE tasks SET status = 'closed' WHERE id = ?", task_id)
+            # Change all assignments statuses to closed
+            db_handler.query(db, "UPDATE assignments SET status = 'closed' WHERE task_id = ?", task_id)
+            # Commit changes
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print(f"{RED}DATABASE ERROR in /close-task: {e}{RESET}")
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Database error"
+                }
+            ), 400
+        finally:
+            db.close()
+        return jsonify({
+            'status':'success',
+            'message': f'Task {task_id} processed'
+        })
+    else:
+        return jsonify({'status': 'error', 'message': 'request not json'}), 400
