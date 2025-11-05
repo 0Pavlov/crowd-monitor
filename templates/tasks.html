@@ -138,6 +138,9 @@
                         <!-- Accordion item expands into the table of assignments for this task -->
                         <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
                             <table class="table mb-0">
+                                <div class="TaskManager">
+                                    <button id="close-task-button" data-task-id="{{task.id}}">Close Task</button>
+                                </div>
                                 <h1>Assignments:</h1>
                                 <thead>
                                     <tr>
