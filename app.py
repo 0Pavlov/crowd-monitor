@@ -692,23 +692,29 @@ def create_submission():
 
     # Create the submission
     db = db_handler.db_connect("crowd.db")
+    # Check if assignment is closed
+    is_closed = False
     try:
         submitted_by_id = session['user_id']
 
-        # Create new submission
-        db_handler.query(db, "INSERT INTO submissions (assignment_id, submitted_by_id, submitted_answer) VALUES (?, ?, ?)", assignment_id, submitted_by_id, submitted_answer)
+        is_closed = db_handler.query(db, "SELECT status FROM assignments WHERE id = ?", assignment_id)[0]['status'] == 'closed'
+        if is_closed:
+            print("LOLLOLOL")
 
-        # Commit changes
-        db.commit()
+        if not is_closed:
+            # Create new submission
+            db_handler.query(db, "INSERT INTO submissions (assignment_id, submitted_by_id, submitted_answer) VALUES (?, ?, ?)", assignment_id, submitted_by_id, submitted_answer)
 
-        # Username to send back to the client for message displaying
-        submitted_by_name = session['username']
+            # Commit changes
+            db.commit()
+            # Username to send back to the client for message displaying
+            submitted_by_name = session['username']
 
-        # Get the timestamp
-        timestamp: str = db_handler.query(db, "SELECT timestamp FROM submissions WHERE submitted_by_id == ? AND assignment_id == ? ORDER BY timestamp DESC LIMIT 1", session['user_id'], assignment_id)[0]['timestamp'] 
+            # Get the timestamp
+            timestamp: str = db_handler.query(db, "SELECT timestamp FROM submissions WHERE submitted_by_id == ? AND assignment_id == ? ORDER BY timestamp DESC LIMIT 1", session['user_id'], assignment_id)[0]['timestamp'] 
 
-        # Format the timestamp for the response
-        formatted_timestamp = format_sqlite_datetime(timestamp)
+            # Format the timestamp for the response
+            formatted_timestamp = format_sqlite_datetime(timestamp)
     except Exception as e:
         # Rollback the changes
         db.rollback()
@@ -723,6 +729,13 @@ def create_submission():
         # Close the connection
         db.close()
 
+    if is_closed:
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Assignment is closed."
+            }
+        ), 400
     # Instead of redirecting, return a JSON response
     # with data JavaScript needs to update the UI
     return jsonify(
@@ -761,6 +774,12 @@ def get_updates():
         # Connect to the db
         db = db_handler.db_connect("crowd.db", silent=True)
 
+        assignment_is_closed: bool = db_handler.query(db, "SELECT status FROM assignments WHERE id = ?", assignment_id)[0]['status'] == 'closed'
+        if assignment_is_closed:
+            assignment_is_closed = "closed"
+        else:
+            assignment_is_closed = "not_closed"
+
         # Query for submissions newer than the last one the client has
         new_submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? AND timestamp > ? ORDER BY timestamp ASC", assignment_id, last_timestamp, silent=True)
 
@@ -794,7 +813,8 @@ def get_updates():
     return jsonify(
         {
             "status": "success",
-            "new_submissions": new_submissions
+            "new_submissions": new_submissions,
+            "assignment_status": assignment_is_closed
         }
     )
 
