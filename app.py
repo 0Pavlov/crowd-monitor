@@ -698,8 +698,6 @@ def create_submission():
         submitted_by_id = session['user_id']
 
         is_closed = db_handler.query(db, "SELECT status FROM assignments WHERE id = ?", assignment_id)[0]['status'] == 'closed'
-        if is_closed:
-            print("LOLLOLOL")
 
         if not is_closed:
             # Create new submission
