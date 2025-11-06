@@ -284,9 +284,36 @@ document.addEventListener('DOMContentLoaded', function() {
                         // If there are no messages, use a default past date
                         let lastTimestamp = lastMessage ? lastMessage.dataset.timestamp : '1970-01-01 00:00:00';
 
+                        // Chat info for closing the chat if assignment is closed
+                        const chatInputContainer = document.querySelector('.chat-input-container');
+                        const submissionForm = document.getElementById('submission-form');
+                        const chatInput = submissionForm.querySelector('input[name="submitted_answer"]');
+                        const chatButton = submissionForm.querySelector('button');
+
                         fetch(`/get-updates?assignment_id=${currentAssignmentId}&last_timestamp=${lastTimestamp}`)
                         .then(response => response.json())
                         .then(data => {
+                            // CHAT CLOSING BLOCK START
+                            if (data.assignment_status === 'closed') {
+                                // Check if it's already disabled to avoid redundant DOM manipulation
+                                if (!chatInput.disabled) {
+                                    chatInput.placeholder = 'Assignment is closed';
+                                    chatInput.disabled = true;
+                                    chatButton.disabled = true;
+
+                                    // Add a class for styling the disabled state
+                                    submissionForm.classList.add('deactivated');
+                                }
+                            } else if (data.assignment_status === 'not_closed') {
+                                // Re-enable the form if the status is not 'closed'
+                                if (chatInput.disabled) {
+                                    chatInput.placeholder = 'Type your message...';
+                                    chatInput.disabled = false;
+                                    chatButton.disabled = false;
+                                    submissionForm.classList.remove('deactivated');
+                                }
+                            }
+                            // CHAT CLOSING BLOCK END
                             if (data.status === 'success' && data.new_submissions.length > 0) {
                                 // If the server sent new messages, add each one
                                 data.new_submissions.forEach(submission => {
