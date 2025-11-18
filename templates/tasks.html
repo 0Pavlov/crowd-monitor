@@ -98,7 +98,7 @@
                 <div class="TasksNav">
                     <button id="show-create-task-btn">create task</button>
                 </div>
-                <h1>All tasks:</h1>
+                <h1 style="padding-top: 0.5rem;">All tasks:</h1>
                     {% if tasks %}
                     <!-- The 'Table' -->
                     <!-- Each 'row' is an accordion item -->
@@ -232,10 +232,10 @@
         <!-- Task container -->
         <!-- The particular task area if one is chosen -->
         <div class="TaskContainer collapsed">
-            <button class="TaskExpandBtn">expand</button>
+            <button class="TaskExpandBtn">&lt;&lt;</button>
             <div class="Task hidden">
                 <div class="TaskNav">
-                    <button>hide</button>
+                    <button class="TaskHideBtn">&gt;&gt;</button>
                 </div>
                 <!-- Task details -->
                 <div class="NoSelectedTask">
