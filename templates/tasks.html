@@ -98,7 +98,9 @@
                 <div class="TasksNav">
                     <button id="show-create-task-btn">create task</button>
                 </div>
-                <h1 style="padding-top: 0.5rem;">All tasks:</h1>
+                <div class="tasks-header-card">
+                    <h1 class="tasks-title">All tasks:</h1>
+                </div>
                     {% if tasks %}
                     <!-- The 'Table' -->
                     <!-- Each 'row' is an accordion item -->
@@ -166,7 +168,9 @@
                     <p> NO TASKS </p
                     {% endif %}
             {% else %}
-                <h1>My tasks:</h1>
+                <div class="tasks-header-card">
+                    <h1 class="tasks-title">My tasks:</h1>
+                </div>
                 {% if tasks %}
                 <!-- The 'Table' -->
                 <!-- Each 'row' is an accordion item -->
