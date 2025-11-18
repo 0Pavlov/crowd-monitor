@@ -72,9 +72,92 @@ main {
     /* Position the button at the top left corner */
     position: absolute;
     top: 0;
-    left: 0;
     /* Move it hang out of the parent container */
-    transform: translate(-100%, 0%);
+    transform: translate(-110%, 10%);
+    /* Shape & Size */
+    width: 36px;
+    height: 36px;
+    border-radius: 30%;
+    
+    /* Colors & Appearance */
+    background-color: var(--m3-surface-container-high);
+    color: var(--m3-on-surface-variant);
+    border: 1px solid var(--m3-outline-variant);
+    
+    /* Icon Centering */
+    display: grid;
+    place-items: center;
+    font-size: 1.2rem;
+    padding-bottom: 2px;
+    
+    /* Effects */
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08); /* A subtle shadow */
+    transition: all 0.2s ease-in-out; /* Smooth transitions for all effects */
+}
+
+.TaskHideBtn {
+    /* Shape & Size */
+    width: 36px;
+    height: 36px;
+    border-radius: 30%;
+    z-index: 2;
+    
+    /* Colors & Appearance */
+    background-color: var(--m3-surface-container-high);
+    color: var(--m3-on-surface-variant);
+    border: 1px solid var(--m3-outline-variant);
+    
+    /* Icon Centering */
+    display: grid;
+    place-items: center;
+    font-size: 1.2rem;
+    padding-bottom: 2px;
+    
+    /* Effects */
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    transition: all 0.2s ease-in-out; /* Smooth transitions for all effects */
+    transform: translate(10%, 10%);
+}
+
+#show-create-task-btn {
+    /* Shape & Size */
+    height: 36px;
+    border-radius: 8px;
+    z-index: 1;
+    
+    /* Colors & Appearance */
+    background-color: var(--m3-surface-container-high);
+    color: var(--m3-on-surface-variant);
+    border: 1px solid var(--m3-outline-variant);
+    
+    /* Icon Centering */
+    display: grid;
+    place-items: center;
+    font-size: 1.2rem;
+    padding-bottom: 2px;
+    
+    /* Effects */
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    transition: all 0.2s ease-in-out; /* Smooth transitions for all effects */
+    transform: translate(3%, 10%);
+}
+
+@media (hover: hover) {
+    .TaskExpandBtn:hover,
+    .TaskHideBtn:hover,
+    #show-create-task-btn:hover {
+        background-color: var(--m3-primary-container);
+        color: var(--m3-primary);
+        border-color: var(--m3-primary);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    #show-create-task-btn:active {
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Reduce shadow on click */
+    }
 }
 
 .hidden {
