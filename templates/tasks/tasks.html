@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block styles %}
-        <link href="/static/tasks.css" rel="stylesheet">
-        <link href="/static/assignment.css" rel="stylesheet">
+        <link href="/static/css/pages/tasks.css" rel="stylesheet">
+        <link href="/static/css/pages/assignment.css" rel="stylesheet">
 {% endblock %}
 
 {% block title %}
@@ -254,5 +254,10 @@
             </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='tasks.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/pages/tasks/sidebar-navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/tasks/table-poller.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/tasks/create-task.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/tasks/assignment-and-chat-logic.js') }}"></script>
+    <!-- Main init must be last so the functions above are defined -->
+    <script src="{{ url_for('static', filename='js/pages/tasks/main-init.js') }}"></script>
 {% endblock %}

@@ -107,7 +107,7 @@ def login():
 
     # User reached route via GET
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("/auth/login.html")
     # User reached route via POST
     elif request.method == "POST":
 
@@ -118,7 +118,7 @@ def login():
         # Check if blank
         bl: str = ""
         if username == bl or password == bl:
-            return render_template("login.html", message="You must fill in all of the forms.", color="red")
+            return render_template("/auth/login.html", message="You must fill in all of the forms.", color="red")
         # Set of the unappropriate chars in the name
         chars: str = "!?*$#@%^&()-+=`~\"\'.<>/,"
         name_has_chars: bool = False
@@ -129,7 +129,7 @@ def login():
         space: str = " "
 
         if name_has_chars or space in username:
-            return render_template("login.html", message=f"Do not submit name which contains spaces or special characters: {chars}", color="red")
+            return render_template("/auth/login.html", message=f"Do not submit name which contains spaces or special characters: {chars}", color="red")
 
         # Connect to the db
         db = db_handler.db_connect("crowd.db")
@@ -139,13 +139,13 @@ def login():
 
         # Check if not found
         if len(user) == 0:
-            return render_template("login.html", message=f"No user with the name: \"{username}\".", color="red")
+            return render_template("/auth/login.html", message=f"No user with the name: \"{username}\".", color="red")
 
         # Check the password
         password_is_correct: bool = check_password_hash(user[0]["password_hash"], password)
         
         if not password_is_correct:
-            return render_template("login.html", message="Incorrect password.", color="red")
+            return render_template("/auth/login.html", message="Incorrect password.", color="red")
 
         # Remember the user in the session
         session["user_id"] = user[0]["id"]
@@ -173,7 +173,7 @@ def register():
     # When the user just visits the page
     if request.method == "GET":
         # Return the page
-        return render_template("register.html", color="red")
+        return render_template("/auth/register.html", color="red")
     # When the user tries to submit the form
     elif request.method == "POST":
 
@@ -188,7 +188,7 @@ def register():
         # Check if inputs are blank
         bl: str = ""
         if new_username == bl or new_password == bl or new_password_confirmation == bl:
-            return render_template("register.html", message=f"You should fill in all of the forms.", color="red")
+            return render_template("/auth/register.html", message=f"You should fill in all of the forms.", color="red")
 
         # Set of the unappropriate chars in the name
         chars: str = "!?*$#@%^&()-+=`~\"\'.<>/,"
@@ -202,23 +202,23 @@ def register():
         # Check
         if name_has_chars or space in new_username:
             # Notify user
-            return render_template("register.html", message=f"Your name contains spaces or {chars}.", color="red")
+            return render_template("/auth/register.html", message=f"Your name contains spaces or {chars}.", color="red")
 
         # Check if the user with this name already exists
         query = db_handler.query(db, "SELECT username FROM users WHERE username = ?", new_username)
         # Check if returned the empty list
         if query != []:
             # Notify user
-            return render_template("register.html", message=f"This username is taken.", color="red")
+            return render_template("/auth/register.html", message=f"This username is taken.", color="red")
 
         # Compare the passwords
         passwords_match: bool = new_password == new_password_confirmation
         if not passwords_match:
-            return render_template("register.html", message=f"Passwords don't match.", color="red")
+            return render_template("/auth/register.html", message=f"Passwords don't match.", color="red")
 
         # Disallow spaces in the password
         if space in new_password:
-            return render_template("register.html", message="Password shouldn't containd spaces.", color="red")
+            return render_template("/auth/register.html", message="Password shouldn't containd spaces.", color="red")
 
         # Generate password hash
         password_hash: str = generate_password_hash(new_password)
@@ -236,7 +236,7 @@ def register():
         # Close the db connection
         db.close()
 
-        return render_template("register.html", message="Successfully registered.", color="green")
+        return render_template("/auth/register.html", message="Successfully registered.", color="green")
 
 
 @app.route("/logout", methods=["GET", "POST"])
@@ -316,7 +316,7 @@ def tasks():
 
             # Close the connection
             db.close()
-            return render_template("tasks.html", tasks=tasks, assignments_info=assignments_info)
+            return render_template("/tasks/tasks.html", tasks=tasks, assignments_info=assignments_info)
         elif session.get("role") == 'worker':
             # Connect to the db
             db = db_handler.db_connect("crowd.db")
@@ -374,7 +374,7 @@ def tasks():
 
             # Close the connection
             db.close()
-            return render_template("tasks.html", tasks=tasks, assignments_info=assignments_info)
+            return render_template("/tasks/tasks.html", tasks=tasks, assignments_info=assignments_info)
     if request.method == "POST":
         # Create task section
         if request.form.get("task_creation_form") == "create_task":
@@ -453,7 +453,7 @@ def tasks():
             else:
                 return apology("You don't have permission to perform this action.", code=403)
 
-    return render_template("tasks.html")
+    return render_template("/tasks/tasks.html")
 
 
 # TEST TEST TEST #
@@ -481,7 +481,7 @@ def get_create_task():
 
         # Render the template and return it
         # This sends the HTML back to the JavaScript fetch() call
-        return render_template("create-task.html", users=users, color="green")
+        return render_template("/tasks/create-task.html", users=users, color="green")
         db.close()
     else:
         db.close()
@@ -558,7 +558,7 @@ def get_assignment_details():
             # Close the connection
             db.close()
             return render_template(
-                "assignment.html",
+                "/tasks/assignment.html",
                 task_id=task_id,
                 assignment_id=assignment_id,
                 task_creation_timestamp=task_creation_timestamp,
@@ -637,7 +637,7 @@ def get_assignment_details():
             # Close the connection
             db.close()
             return render_template(
-                "assignment.html",
+                "/tasks/assignment.html",
                 task_id=task_id,
                 assignment_id=assignment_id,
                 task_creation_timestamp=task_creation_timestamp,
