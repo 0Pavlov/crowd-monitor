@@ -1,0 +1,603 @@
+from flask import Blueprint, render_template, request, session, redirect, flash, jsonify
+from model import db_handler
+from helpers import login_required, validate_session, format_sqlite_datetime, apology, RED, RESET
+
+tasks_bp = Blueprint('tasks', __name__)
+
+@tasks_bp.route("/tasks", methods=["GET", "POST"])
+@login_required
+@validate_session
+def tasks():
+    """Tasks"""
+    if request.method == "GET":
+        if session.get("role") == 'admin':
+            # Connect to the db
+            db = db_handler.db_connect("crowd.db")
+
+            # Retrieve the tasks
+
+            # Get the table schema
+            table_info = db_handler.query(db, "PRAGMA table_info(tasks)")
+            # Get the column names
+            column_names = [info[1] for info in table_info]
+            # Get the list of sql objects
+            tasks = db_handler.query(db, "SELECT * FROM tasks ORDER BY creation_timestamp DESC")
+            # Combine the column names with values to get the list of dicts
+            tasks: list[dict] = [dict(zip(column_names, row)) for row in tasks]
+
+            # This dict stores the full info on each assignment mapped to it's id
+            # HIGHLY inefficient (will result in double querying the same table)
+            # was added after the template layout was done
+            # didn't wanted to refactor the template
+            assignments_info: dict[dict] = {}
+
+            # Now for each task construct a list of assignments ids
+            for task in tasks:
+                assignments_ids_from_db: list = db_handler.query(db, "SELECT id FROM assignments WHERE task_id = ?", task['id'])
+                assignments_ids: list = []
+                for assigned_id in assignments_ids_from_db:
+                    assignments_ids.append(assigned_id['id'])
+
+                    # Query the db for an assignment with this id
+                    temp_assignment: dict = dict(db_handler.query(db, "SELECT * FROM assignments WHERE id = ?", assigned_id['id'])[0])
+                    # Add last submission info to it
+                    try:
+                        last_submission: str = db_handler.query(db, "SELECT submitted_answer FROM submissions WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['submitted_answer']
+                        temp_assignment['last_submission'] = last_submission
+                    except:
+                        temp_assignment['last_submission'] = 'No sumbissions yet'
+                    # Add username of the person to it
+                    worker_username: str = db_handler.query(db, "SELECT u.username FROM users u JOIN assignments a ON u.id = a.user_id WHERE a.id = ?", assigned_id['id'])[0]['username']
+                    temp_assignment['assigned_worker'] = worker_username
+                    # Add the name of the person last submitted
+                    try:
+                        who_submitted: str = db_handler.query(db, "SELECT u.username FROM users u JOIN submissions a ON u.id = a.submitted_by_id WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['username']
+                    except:
+                        who_submitted = "Error"
+                    temp_assignment['who_last_submitted'] = who_submitted
+                    # Append the assigments_info
+                    assignments_info[assigned_id['id']] = temp_assignment
+                # Add this list to the task dict
+                task['assignments_ids'] = assignments_ids
+
+            # Format the datetimes
+            for task in tasks:
+                task['creation_timestamp'] = format_sqlite_datetime(task['creation_timestamp'])
+                task['deadline'] = format_sqlite_datetime(task['deadline'])
+
+            # Close the connection
+            db.close()
+            return render_template("/tasks/tasks.html", tasks=tasks, assignments_info=assignments_info)
+        elif session.get("role") == 'worker':
+            # Connect to the db
+            db = db_handler.db_connect("crowd.db")
+
+            # Retrieve the tasks
+
+            # Get the table schema
+            table_info = db_handler.query(db, "PRAGMA table_info(tasks)")
+            # Get the column names
+            column_names = [info[1] for info in table_info]
+            # Get the list of sql objects
+            tasks = db_handler.query(db, "SELECT * FROM tasks WHERE id IN (SELECT task_id FROM assignments WHERE user_id = ?) ORDER BY creation_timestamp DESC", session.get("user_id"))
+            # Combine the column names with values to get the list of dicts
+            tasks: list[dict] = [dict(zip(column_names, row)) for row in tasks]
+
+            # This dict stores the full info on each assignment mapped to it's id
+            # HIGHLY inefficient (will result in double querying the same table)
+            # was added after the template layout was done
+            # didn't wanted to refactor the template
+            assignments_info: dict[dict] = {}
+
+            # Now for each task construct a list of assignments ids
+            for task in tasks:
+                assignments_ids_from_db: list = db_handler.query(db, "SELECT id FROM assignments WHERE task_id = ? and user_id = ?", task['id'], session.get("user_id"))
+                assignments_ids: list = []
+                for assigned_id in assignments_ids_from_db:
+                    assignments_ids.append(assigned_id['id'])
+
+                    # Query the db for an assignment with this id
+                    temp_assignment: dict = dict(db_handler.query(db, "SELECT * FROM assignments WHERE id = ?", assigned_id['id'])[0])
+                    # Add last submission info to it
+                    try:
+                        last_submission: str = db_handler.query(db, "SELECT submitted_answer FROM submissions WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['submitted_answer']
+                        temp_assignment['last_submission'] = last_submission
+                    except:
+                        temp_assignment['last_submission'] = 'No sumbissions yet'
+                    # Add username of the person to it
+                    worker_username: str = db_handler.query(db, "SELECT u.username FROM users u JOIN assignments a ON u.id = a.user_id WHERE a.id = ?", assigned_id['id'])[0]['username']
+                    temp_assignment['assigned_worker'] = worker_username
+                    # Add the name of the person last submitted
+                    try:
+                        who_submitted: str = db_handler.query(db, "SELECT u.username FROM users u JOIN submissions a ON u.id = a.submitted_by_id WHERE assignment_id = ? ORDER BY timestamp DESC LIMIT 1", assigned_id['id'])[0]['username']
+                    except:
+                        who_submitted = "Error"
+                    temp_assignment['who_last_submitted'] = who_submitted
+                    # Append the assigments_info
+                    assignments_info[assigned_id['id']] = temp_assignment
+                # Add this list to the task dict
+                task['assignments_ids'] = assignments_ids
+
+            # Format the datetimes
+            for task in tasks:
+                task['creation_timestamp'] = format_sqlite_datetime(task['creation_timestamp'])
+                task['deadline'] = format_sqlite_datetime(task['deadline'])
+
+            # Close the connection
+            db.close()
+            return render_template("/tasks/tasks.html", tasks=tasks, assignments_info=assignments_info)
+    if request.method == "POST":
+        # Create task section
+        if request.form.get("task_creation_form") == "create_task":
+            # Check the roles
+            session_role_is_admin: bool = session.get("role") == 'admin'
+            if session_role_is_admin:
+                # Retrieve the data from the forms
+                content: str = request.form.get('content')
+                task_type: str = request.form.get('task_type')
+                gsa: str = request.form.get('gsa')
+                deadline = request.form.get('deadline')
+                worker: str = request.form.get('worker')
+
+                # Check the data
+                if content == None or content.strip() == '':
+                    flash("The content field is empty.", "danger")
+                    return redirect("/tasks")
+                if gsa == None or gsa.strip() == '':
+                    flash("The gsa isn't specified.", "danger")
+                    return redirect("/tasks")
+                if task_type == None or task_type.strip() == '':
+                    flash("The task type isn't specified.", "danger")
+                    return redirect("/tasks")
+                if worker == None or worker.strip() == '':
+                    flash("The worker isn't specified.", "danger")
+                    return redirect("/tasks")
+                if deadline == None or deadline.strip() == '':
+                    flash("The deadline isn't specified.", "danger")
+                    return redirect("/tasks")
+
+                # Convert the task type to lowercase
+                task_type: str = task_type.lower()
+
+                # Convert the deadline to the SQL DATETIME
+                deadline = deadline.replace('T', ' ') + ':00'
+
+                # Connect to the db
+                db = db_handler.db_connect("crowd.db")
+
+                # Get the id of who creating the task
+                creator_id: int = session['user_id']
+
+                # Get the id of the worker
+                worker_id: int = db_handler.query(db, "SELECT id FROM users WHERE username = ?", worker)[0]['id']
+
+                # Create the task
+                try:
+                    db_handler.query(db, "INSERT INTO tasks (creator_id, task_type, content, gold_standard_answer, deadline) VALUES (?, ?, ?, ?, ?)", creator_id, task_type, content, gsa, deadline)
+                    print("Successfully created task")
+                except:
+                    print("ERROOOOOOOOOOORRRRRRR")
+                    db.rollback()
+
+                # Find out the task id
+                task_id = db_handler.query(db, "SELECT id FROM tasks WHERE (content == ? AND creator_id == ?)", content, creator_id)[0]['id']
+
+                # Assign the task to worker
+                try:
+                    db_handler.query(db, "INSERT INTO assignments (task_id, user_id, assigned_by_id) VALUES (?, ?, ?)", task_id, worker_id, creator_id)
+                    print("SUCCEEEESSSSSSSSS")
+                except:
+                    # Delete the task
+                    db_handler.query(db, "DELETE FROM task WHERE id = ?", task_id)
+                    print("LOOOOOOOOOOL")
+                    db.rollback()
+
+                # Commit changes
+                db.commit()
+
+                # Close the connection
+                db.close()
+
+                # Show the success flash
+                flash("Task successfully created.", "success")
+                return redirect("/tasks")
+            else:
+                return apology("You don't have permission to perform this action.", code=403)
+
+    return render_template("/tasks/tasks.html")
+
+
+# TEST TEST TEST #
+# Try to use AJAX for the dynamic HTML return
+# Called by the JavaScript from the tasks.html
+# It only returns the HTML for the create-task
+@tasks_bp.route("/get-create-task")
+@login_required
+@validate_session
+def get_create_task():
+    # Check the roles
+    session_role_is_admin: bool = session.get("role") == 'admin'
+
+    if session_role_is_admin:
+        # Connect to the db
+        db = db_handler.db_connect("crowd.db")
+
+        # Query the db for the usernames
+        db_users: str = db_handler.query(db, "SELECT username FROM users")
+        # Initialize users list
+        users: list = []
+        # Populate the users list with usernames
+        for user in db_users:
+            users.append(user['username'])
+
+        # Render the template and return it
+        # This sends the HTML back to the JavaScript fetch() call
+        return render_template("/tasks/create-task.html", users=users, color="green")
+        db.close()
+    else:
+        db.close()
+        return apology("You don't have permission to perform this action.", code=403)
+
+
+# AJAX part for the assignment
+@tasks_bp.route("/assignment")
+@login_required
+@validate_session
+def get_assignment_details():
+    """Fetch and return HTML for a single assignment."""
+    if request.method == "GET":
+        if session.get("role") == 'admin':
+            # Connect to the db
+            db = db_handler.db_connect("crowd.db")
+
+            # Get the info about the task with this id
+
+            # Get the id's
+            task_id: int = request.args.get('task_id')
+            assignment_id: int = request.args.get('assignment_id')
+
+            # Fetch the db for task
+            task: dict = db_handler.query(db, "SELECT * FROM tasks WHERE id = ?", task_id)[0]
+
+            task_id: int = task['id']
+            creator_id: int = task['creator_id']
+            task_creator_username: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", creator_id)[0]['username']
+            task_type: str = task['task_type']
+            task_content: str = task['content']
+            gsa: str = task['gold_standard_answer']
+            task_creation_timestamp: str = format_sqlite_datetime(task['creation_timestamp'])
+            task_deadline: str = format_sqlite_datetime(task['deadline'])
+            task_status: str = task['status']
+
+            # Fetch the db for an assignment
+            assignment: dict = db_handler.query(db, "SELECT * FROM assignments WHERE id = ?", assignment_id)[0]
+
+            user_id: int = assignment['user_id']
+            assigned_to_name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", user_id)[0]['username']
+            assigned_by_id: int = assignment['assigned_by_id']
+            assigned_by_name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", assigned_by_id)[0]['username']
+            assignment_status: str = assignment['status']
+            score: int = assignment['score']
+            ai_score: int = assignment['ai_score']
+            feedback: str = assignment['feedback']
+            assigned_at: str = format_sqlite_datetime(assignment['assigned_at'])
+
+            # Fetch all of the submissions
+            submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? ORDER BY timestamp ASC", assignment_id)
+            # Convert to a list of dicts
+            submissions: list[dict] = []
+            for submission in submissions_db:
+                submissions.append(dict(submission))
+            # Replace the submitted_by_id with the name
+            if len(submissions) > 0:
+                for submission in submissions:
+                    id: int = submission['submitted_by_id']
+                    name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", id)[0]['username']
+                    # Delete the key-value pair from the dict
+                    del submission['submitted_by_id']
+                    # Create a new one with the name
+                    submission['submitted_by_name'] = name
+                    # Add the formatted timestamp
+                    submission['formatted_timestamp'] = format_sqlite_datetime(submission['timestamp'])
+
+            # Calculate at which time the last submission was made
+            last_submission: str = "None"
+            last_submission_formatted: str = "None"
+            if len(submissions) > 0:
+                last_submission_formatted: str = submissions[-1]['formatted_timestamp']
+
+            # Close the connection
+            db.close()
+            return render_template(
+                "/tasks/assignment.html",
+                task_id=task_id,
+                assignment_id=assignment_id,
+                task_creation_timestamp=task_creation_timestamp,
+                last_submission=last_submission_formatted,
+                assigned_at=assigned_at,
+                task_status=task_status,
+                assignment_status=assignment_status,
+                task_creator_username=task_creator_username,
+                task_type=task_type,
+                task_deadline=task_deadline,
+                task_content=task_content,
+                assigned_by_name=assigned_by_name,
+                submissions=submissions,
+                current_username=session.get('username')
+            )
+        elif session.get("role") == "worker":
+            # Connect to the db
+            db = db_handler.db_connect("crowd.db")
+
+            # Get the info about the task with this id
+
+            # Get the id's
+            task_id: int = request.args.get('task_id')
+            assignment_id: int = request.args.get('assignment_id')
+
+            # Fetch the db for task
+            task: dict = db_handler.query(db, "SELECT * FROM tasks WHERE id = ?", task_id)[0]
+
+            task_id: int = task['id']
+            creator_id: int = task['creator_id']
+            task_creator_username: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", creator_id)[0]['username']
+            task_type: str = task['task_type']
+            task_content: str = task['content']
+            gsa: str = task['gold_standard_answer']
+            task_creation_timestamp: str = format_sqlite_datetime(task['creation_timestamp'])
+            task_deadline: str = format_sqlite_datetime(task['deadline'])
+            task_status: str = task['status']
+
+            # Fetch the db for an assignment
+            assignment: dict = db_handler.query(db, "SELECT * FROM assignments WHERE id = ?", assignment_id)[0]
+
+            user_id: int = assignment['user_id']
+            assigned_to_name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", user_id)[0]['username']
+            assigned_by_id: int = assignment['assigned_by_id']
+            assigned_by_name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", assigned_by_id)[0]['username']
+            assignment_status: str = assignment['status']
+            score: int = assignment['score']
+            ai_score: int = assignment['ai_score']
+            feedback: str = assignment['feedback']
+            assigned_at: str = format_sqlite_datetime(assignment['assigned_at'])
+
+            # Fetch all of the submissions
+            submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? ORDER BY timestamp ASC", assignment_id)
+            # Convert to a list of dicts
+            submissions: list[dict] = []
+            for submission in submissions_db:
+                submissions.append(dict(submission))
+            # Replace the submitted_by_id with the name
+            if len(submissions) > 0:
+                for submission in submissions:
+                    id: int = submission['submitted_by_id']
+                    name: str = db_handler.query(db, "SELECT username FROM users WHERE id = ?", id)[0]['username']
+                    # Delete the key-value pair from the dict
+                    del submission['submitted_by_id']
+                    # Create a new one with the name
+                    submission['submitted_by_name'] = name
+                    # Add the formatted timestamp
+                    submission['formatted_timestamp'] = format_sqlite_datetime(submission['timestamp'])
+
+            # Calculate at which time the last submission was made
+            last_submission: str = "None"
+            last_submission_formatted: str = "None"
+            if len(submissions) > 0:
+                last_submission_formatted: str = submissions[-1]['formatted_timestamp']
+
+            # Close the connection
+            db.close()
+            return render_template(
+                "/tasks/assignment.html",
+                task_id=task_id,
+                assignment_id=assignment_id,
+                task_creation_timestamp=task_creation_timestamp,
+                last_submission=last_submission_formatted,
+                assigned_at=assigned_at,
+                task_status=task_status,
+                assignment_status=assignment_status,
+                task_creator_username=task_creator_username,
+                task_type=task_type,
+                task_deadline=task_deadline,
+                task_content=task_content,
+                assigned_by_name=assigned_by_name,
+                submissions=submissions,
+                current_username=session.get('username')
+            )
+
+
+# API route to handle the chat messages within assignments
+@tasks_bp.route("/create-submission", methods=["POST"])
+@login_required
+@validate_session
+def create_submission():
+    """Handles AJAX request to create a new submission.
+    
+    Creates the submission, and displays it to the user as the new chat message,
+    without reloading the entire page.
+    """
+
+    # Expect JSON data, not form date
+    if not request.is_json:
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Invalid request: missing JSON"
+            }
+        ), 400
+    
+    data = request.get_json()
+
+    # Get the data sent by the JavaScript
+    assignment_id = data.get('assignment_id')
+    submitted_answer = data.get('submitted_answer')
+
+    # Validate the data
+    if not assignment_id or not submitted_answer or submitted_answer.strip() == '':
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Missing or empty data"
+            }
+        ), 400
+
+    # Create the submission
+    db = db_handler.db_connect("crowd.db")
+    # Check if assignment is closed
+    is_closed = False
+    try:
+        submitted_by_id = session['user_id']
+
+        is_closed = db_handler.query(db, "SELECT status FROM assignments WHERE id = ?", assignment_id)[0]['status'] == 'closed'
+
+        if not is_closed:
+            # Create new submission
+            db_handler.query(db, "INSERT INTO submissions (assignment_id, submitted_by_id, submitted_answer) VALUES (?, ?, ?)", assignment_id, submitted_by_id, submitted_answer)
+
+            # Commit changes
+            db.commit()
+            # Username to send back to the client for message displaying
+            submitted_by_name = session['username']
+
+            # Get the timestamp
+            timestamp: str = db_handler.query(db, "SELECT timestamp FROM submissions WHERE submitted_by_id == ? AND assignment_id == ? ORDER BY timestamp DESC LIMIT 1", session['user_id'], assignment_id)[0]['timestamp'] 
+
+            # Format the timestamp for the response
+            formatted_timestamp = format_sqlite_datetime(timestamp)
+    except Exception as e:
+        # Rollback the changes
+        db.rollback()
+        print(f"{RED}DATABASE ERROR in /create-submission: {e}{RESET}")
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Could not save message to database."
+            }
+        ), 400
+    finally:
+        # Close the connection
+        db.close()
+
+    if is_closed:
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Assignment is closed."
+            }
+        ), 400
+    # Instead of redirecting, return a JSON response
+    # with data JavaScript needs to update the UI
+    return jsonify(
+        {
+            "status": "success",
+            "message": "Submission created",
+            "new_submission": {
+                "submitted_answer": submitted_answer,
+                "submitted_by_name": submitted_by_name,
+                "timestamp": timestamp,
+                "formatted_timestamp": formatted_timestamp
+            }
+        }
+    )
+
+
+# API route to poll for new messages
+@tasks_bp.route("/get-updates")
+@login_required
+@validate_session
+def get_updates():
+    """Handles polling requests from clients to check for new submissions."""
+    try:
+        # Get assignment_id and the last timestamp the client knows about
+        assignment_id = request.args.get('assignment_id')
+        last_timestamp = request.args.get('last_timestamp')
+
+        if not assignment_id or not last_timestamp:
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Missing parameters"
+                }
+            ), 400
+        
+        # Connect to the db
+        db = db_handler.db_connect("crowd.db", silent=True)
+
+        assignment_is_closed: bool = db_handler.query(db, "SELECT status FROM assignments WHERE id = ?", assignment_id)[0]['status'] == 'closed'
+        if assignment_is_closed:
+            assignment_is_closed = "closed"
+        else:
+            assignment_is_closed = "not_closed"
+
+        # Query for submissions newer than the last one the client has
+        new_submissions_db = db_handler.query(db, "SELECT submitted_answer, timestamp, submitted_by_id FROM submissions WHERE assignment_id = ? AND timestamp > ? ORDER BY timestamp ASC", assignment_id, last_timestamp, silent=True)
+
+        new_submissions: list = []
+        if new_submissions_db:
+            for submission in new_submissions_db:
+                submission_dict = dict(submission)
+
+                # Get the username for the Id to display it on the client
+                user_id: int = submission_dict['submitted_by_id']
+                name = db_handler.query(db, "SELECT username FROM users WHERE id = ?", user_id, silent=True)[0]['username']
+
+                submission_dict['submitted_by_name'] = name
+                del submission_dict['submitted_by_id']
+
+                # Add the formatted timestamp
+                submission_dict['formatted_timestamp'] = format_sqlite_datetime(submission_dict['timestamp'])
+                new_submissions.append(submission_dict)
+        db.close()
+    except Exception as e:
+        db.rollback()
+        print(f"{RED}DATABASE ERROR in /get-updates: {e}{RESET}")
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Database error"
+            }
+        ), 400
+        db.close()
+
+    return jsonify(
+        {
+            "status": "success",
+            "new_submissions": new_submissions,
+            "assignment_status": assignment_is_closed
+        }
+    )
+
+
+@tasks_bp.route('/close-task', methods=['POST'])
+@login_required
+@validate_session
+def close_task():
+    if request.is_json and session['role'] == 'admin':
+        data = request.get_json()
+        task_id = data.get('task_id')
+        print(task_id)
+        db = db_handler.db_connect("crowd.db")
+        try:
+            # Change task status to closed
+            db_handler.query(db, "UPDATE tasks SET status = 'closed' WHERE id = ?", task_id)
+            # Change all assignments statuses to closed
+            db_handler.query(db, "UPDATE assignments SET status = 'closed' WHERE task_id = ?", task_id)
+            # Commit changes
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print(f"{RED}DATABASE ERROR in /close-task: {e}{RESET}")
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Database error"
+                }
+            ), 400
+        finally:
+            db.close()
+        return jsonify({
+            'status':'success',
+            'message': f'Task {task_id} processed'
+        })
+    else:
+        return jsonify({'status': 'error', 'message': 'request not json'}), 400
