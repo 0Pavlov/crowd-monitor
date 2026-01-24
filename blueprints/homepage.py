@@ -8,5 +8,18 @@ homepage_bp = Blueprint('homepage', __name__)
 @validate_session
 def index():
     """Homepage"""
-    return render_template("index.html", username=session['username'], role=session['role'])
+    # User info that will be handed to the template
+    user: dict = {
+        'username' : session['username'],
+        'role' : session['role'],
+        'role_starts_with_vowel' : False
+    }
+    # The template will use it for defining which article
+    # to use while greeting the user
+    # I'm doing it on the server because I don't care
+    vowels: list = ['e','y','u','i','o','a',]
+    if user['role'].lower()[0] in vowels:
+        user['role_starts_with_vowel'] = True
+
+    return render_template("index.html", user=user)
 
