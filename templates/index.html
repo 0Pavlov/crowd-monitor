@@ -5,5 +5,25 @@
 {% endblock %}
 
 {% block main %}
-    <h1 style="color:green;">Success</h1>
+
+<div class="container py-5">
+    <div class="p-5 mb-4 bg-light rounded-3 border">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Welcome, {{ username }}!</h1>
+            <p class="col-md-8 fs-4">
+                You are logged in as a <strong>{{ role }}</strong>.
+            </p>
+            
+            <div class="mt-4">
+                {% if role == 'admin' %}
+                    <a class="btn btn-primary btn-lg" href="{{ url_for('tasks.tasks') }}">Manage Tasks</a>
+                    <button class="btn btn-outline-secondary btn-lg" disabled>View Analytics (Soon)</button>
+                {% else %}
+                    <a class="btn btn-primary btn-lg" href="{{ url_for('tasks.tasks') }}">View My Assignments</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
