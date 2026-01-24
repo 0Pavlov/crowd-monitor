@@ -18,7 +18,7 @@
             </div>
             <div>
                 <!-- Info message (empty by default) -->
-                <p class="alert" style="color:{{ color }}">{{ message }}</p>
+                <p style="color:{{ color }}">{{ message }}</p>
             </div>
             <div>
                 <button class="btn btn-primary w-100" type="submit">Log In</button>
@@ -26,25 +26,5 @@
         </div>
     </form>
 </div>
-<style>
-    .alert {
-        /* Box Styling */
-        background-color: #f8d7da; /* Light pink background */
-        border: 1px solid #f5c6cb; /* Slightly darker pink border */
-        border-radius: 5px;        /* Rounded corners */
-        
-        /* Spacing & Layout */
-        padding: 12px 20px;        /* Space inside the box */
-        margin-top: 10px;          /* Space above */
-        margin-bottom: 20px;       /* Space below */
-        width: 100%;               /* Full width */
-        box-sizing: border-box;    /* Ensures padding doesn't break width */
-        
-        /* Font Styles */
-        font-family: sans-serif;
-        font-size: 14px;
-        line-height: 1.5;
-    }
-</style>
 
 {% endblock %}
