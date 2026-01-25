@@ -10,6 +10,10 @@ body {
     height: 100dvh;
     margin: 0;
     overflow: hidden;
+
+    background-color: var(--m3-background);
+    color: var(--m3-on-surface);
+    font-family: var(--main-font);
 }
 
 main {
@@ -31,7 +35,7 @@ main {
     height: 100%; /* 100% of the viewport height */
     display: flex; /* Activate Flexbox */
     flex-direction: row; /* Horizontal alignment */
-    background-color: #f0f2f5; /* A light background to see the container */
+    background-color: var(--m3-background);
 }
 
 .TaskContainer {
@@ -78,10 +82,9 @@ main {
     width: 36px;
     height: 36px;
     border-radius: 30%;
-    
-    /* Colors & Appearance */
-    background-color: var(--m3-surface-container-low);
-    color: var(--m3-on-surface-variant);
+
+    background-color: var(--m3-button-background);
+    color: var(--m3-button-text);
     border: 1px solid var(--m3-outline-variant);
     
     /* Icon Centering */
@@ -92,7 +95,7 @@ main {
     
     /* Effects */
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08); /* A subtle shadow */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5); /* A subtle shadow */
     transition: all 0.2s ease-in-out; /* Smooth transitions for all effects */
 }
 
@@ -104,8 +107,8 @@ main {
     z-index: 2;
     
     /* Colors & Appearance */
-    background-color: var(--m3-surface-container-low);
-    color: var(--m3-on-surface-variant);
+    background-color: var(--m3-button-background);
+    color: var(--m3-button-text);
     border: 1px solid var(--m3-outline-variant);
     
     /* Icon Centering */
@@ -116,7 +119,7 @@ main {
     
     /* Effects */
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     transition: all 0.2s ease-in-out; /* Smooth transitions for all effects */
     transform: translate(10%, 10%);
 }
@@ -128,8 +131,8 @@ main {
     z-index: 1;
     
     /* Colors & Appearance */
-    background-color: var(--m3-surface-container-low);
-    color: var(--m3-on-surface-variant);
+    background-color: var(--m3-button-background);
+    color: var(--m3-button-text);
     border: 1px solid var(--m3-outline-variant);
     
     /* Icon Centering */
@@ -140,7 +143,7 @@ main {
     
     /* Effects */
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     transition: all 0.2s ease-in-out; /* Smooth transitions for all effects */
     transform: translate(3%, 10%);
 }
@@ -152,11 +155,11 @@ main {
         background-color: var(--m3-primary-container);
         color: var(--m3-primary);
         border-color: var(--m3-primary);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
 
     #show-create-task-btn:active {
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Reduce shadow on click */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4); /* Reduce shadow on click */
     }
 }
 
@@ -197,9 +200,9 @@ main {
 
     /* Styling for the header row */
     .task-header {
-        font-weight: bold;
-        color: #555;
-        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: var(--m3-header-color);
+        border-bottom: 1px solid var(--m3-outline-variant);
         margin-bottom: 10px;
     }
 
@@ -211,21 +214,22 @@ main {
 /* Card styling */
 .TaskRow {
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--m3-outline-variant);
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: var(--m3-surface-container-low);
+    color: var(--m3-card-text-color);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .TaskRow:hover {
-    background-color: #f1f1f1;
+    background-color: var(--m3-button-background);
     transition: all 0.4s ease-in-out;
 }
 
 #taskAccordion .table tbody tr.AssignmentRowHover:hover td{
-    background-color: gray;
+    background-color: var(--m3-table-row-hover);
     transition: all 0.4s ease-in-out;
 }
 
@@ -276,7 +280,7 @@ main {
         border-radius: 12px;
         margin-bottom: 1rem;
         background-color: var(--m3-surface-container-low);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         font-size: 0.95rem;
         color: var(--m3-on-surface);
     }
@@ -328,19 +332,19 @@ main {
 .tasks-header-card .tasks-title {
   font-size: 1.625rem;
   font-weight: 600;
-  color: var(--m3-on-surface-variant);
+  color: var(--m3-on-surface);
   margin: 0;
 }
 
 .assignment-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: var(--m3-on-surface-variant);
+  color: var(--m3-on-surface);
   margin: 0;
 }
 
 .assignment-header-item {
-    color: #555 !important;
+    color: var(--m3-header-color) !important;
 }
 
 .AssignmentsTable {
@@ -352,4 +356,37 @@ main {
 .assignments-table-header {
     border-radius: 20px 20px 0 0;
     background-color: var(--m3-surface-container-low);
+}
+
+/* Remove default bootstrap background and set text color */
+.assignments-table-theme {
+    background-color: var(--m3-surface-container-low);
+    color: var(--m3-on-surface);
+    /* Ensure bootstrap variables don't force white */
+    --bs-table-bg: transparent; 
+    --bs-table-color: var(--m3-on-surface);
+}
+
+/* Style the Table Header */
+.assignments-table-theme thead th {
+    background-color: var(--m3-surface-container-low);
+    color: var(--m3-on-surface-variant);
+    border-bottom: 2px solid var(--m3-outline-variant);
+    font-weight: 600;
+}
+
+/* Style the Table Body Cells */
+.assignments-table-theme tbody td {
+    background-color: var(--m3-surface-container-low); /* Dark background */
+    color: var(--m3-on-surface); /* Light text */
+    border-bottom: 1px solid var(--m3-outline-variant); /* Dark separator lines */
+    border-top: none; /* Remove double borders if present */
+}
+
+/* Improve the Hover Effect for this specific table */
+/* Using !important to ensure it overrides any default bootstrap hover specificity */
+.assignments-table-theme tbody tr:hover td {
+    background-color: var(--m3-table-row-hover) !important; 
+    color: var(--m3-on-surface);
+    transition: background-color 0.2s ease-in-out;
 }

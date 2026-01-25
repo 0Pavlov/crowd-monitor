@@ -4,13 +4,13 @@
   --source-color: #3478f5;
 
   /* Primary Palette (for key components and actions) */
-  --m3-primary: #3478f5;
+  --m3-primary: #a8c7fa;
   --m3-on-primary: #ffffff;
-  --m3-primary-container: #dce1ff;
+  --m3-primary-container: #20252b;
   --m3-on-primary-container: #001550;
 
   /* Secondary Palette (for less prominent components) */
-  --m3-secondary: #585e71;
+  --m3-secondary: #c4c7c5;
   --m3-on-secondary: #ffffff;
   --m3-secondary-container: #dde2f9;
   --m3-on-secondary-container: #151b2c;
@@ -22,27 +22,36 @@
   --m3-on-tertiary-container: #2b122b;
 
   /* Error Palette */
-  --m3-error: #ba1a1a;
+  --m3-error: #ffb4ab;
   --m3-on-error: #ffffff;
   --m3-error-container: #ffdad6;
   --m3-on-error-container: #410002;
 
   /* Surface & Background Palette (the "canvas" of the app) */
-  --m3-background: #fefbff;
+  --m3-background: #000000;
   --m3-on-background: #1b1b1f;
   --m3-surface: #fefbff;
-  --m3-on-surface: #1b1b1f;
+  --m3-on-surface: #ffffff;
   --m3-surface-variant: #e1e2ec;
-  --m3-on-surface-variant: #44474f;
+  --m3-on-surface-variant: #a0a0a0;
   
   /* Elevated Surface Tones */
   --m3-surface-container-lowest: #ffffff;
-  --m3-surface-container-low: #f8f9ff;
+  --m3-surface-container-low: #121212;
   --m3-surface-container: #f2f3fa;
   --m3-surface-container-high: #eceef4;
   --m3-surface-container-highest: #e6e8ee;
 
   /* Outlines & Dividers */
   --m3-outline: #757780;
-  --m3-outline-variant: #c5c6d0;
+  --m3-outline-variant: #333333;
+
+  --m3-button-background: #1e1e1e;
+  --m3-button-text: #e0e0e0;
+
+  --m3-header-color: #9aa0a6;
+  --m3-card-text-color: #e2e2e2;
+  --m3-table-row-hover: #2c2c2c;
+    
+  --main-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
