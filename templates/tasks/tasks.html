@@ -139,28 +139,38 @@
                         </div>
                         <!-- Accordion item expands into the table of assignments for this task -->
                         <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
-                            <table class="table mb-0">
-                                <div class="TaskManager">
-                                    <button id="close-task-button" data-task-id="{{task.id}}">Close Task</button>
+                            <div class="AssignmentsTable">
+                                <!-- HEADER SECTION: Flexbox container to separate Title and Button -->
+                                <div class="assignments-table-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                                    <div>
+                                        <h3 class="assignment-title m-0">Assignments:</h3>
+                                    </div>
+                                    <div class="TaskManager">
+                                        <!-- Button for closing the task-->
+                                        <button class='btn btn-danger btn-sm' id="close-task-button" data-task-id="{{task.id}}">
+                                            Close Task
+                                        </button>
+                                    </div>
                                 </div>
-                                <h1>Assignments:</h1>
-                                <thead>
-                                    <tr>
-                                        <th>assigned worker</th>
-                                        <th>last sub</th>
-                                        <th>status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for assignment_id in task.assignments_ids %}
-                                    <tr class="AssignmentRowHover" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
-                                        <td>{{ assignments_info[assignment_id]['assigned_worker'] }}</td>
-                                        <td id="last-sub-for-assignment-{{ assignment_id }}">{{ assignments_info[assignment_id]['who_last_submitted'] }}: {{ assignments_info[assignment_id]['last_submission']}}
-                                        <td id="assignment-status-{{ assignment_id }}">{{ assignments_info[assignment_id]['status'] }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='assignment-header-item'>Worker</th>
+                                            <th class='assignment-header-item'>Last Submission</th>
+                                            <th class='assignment-header-item'>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for assignment_id in task.assignments_ids %}
+                                        <tr class="AssignmentRowHover" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
+                                            <td>{{ assignments_info[assignment_id]['assigned_worker'] }}</td>
+                                            <td id="last-sub-for-assignment-{{ assignment_id }}">{{ assignments_info[assignment_id]['who_last_submitted'] }}: {{ assignments_info[assignment_id]['last_submission']}}
+                                            <td id="assignment-status-{{ assignment_id }}">{{ assignments_info[assignment_id]['status'] }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         {% endfor %}
                     </div>

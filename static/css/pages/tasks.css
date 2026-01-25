@@ -331,3 +331,25 @@ main {
   color: var(--m3-on-surface-variant);
   margin: 0;
 }
+
+.assignment-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--m3-on-surface-variant);
+  margin: 0;
+}
+
+.assignment-header-item {
+    color: #555 !important;
+}
+
+.AssignmentsTable {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+}
+
+.assignments-table-header {
+    border-radius: 20px 20px 0 0;
+    background-color: var(--m3-surface-container-low);
+}
