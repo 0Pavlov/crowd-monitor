@@ -1,3 +1,14 @@
+# How to use
+
+* **Clone:** ```git clone "https://github.com/0Pavlov/crowd-monitor/```.
+* **CD:** ```cd crowd-monitor```.
+* **Venv:** ```python -m venv venv```.
+* **Activate:** ```platform specific (research)```.
+* **Dependencies:** ```pip install -r requirements.txt```.
+* **Run:** ```Flask run```.
+* **Open:** Open the link in the browser and register a new user.
+* **Rights:** In the /model/ folder there is a script ```python change_role.py name admin\worker```.
+
 # Initial project plan
 
 Build an application, which purpose in life is to create/manage/evaluate tasks.
