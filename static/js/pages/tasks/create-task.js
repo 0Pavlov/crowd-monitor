@@ -19,6 +19,10 @@ function initializeCreateTaskLogic(elements) {
     closeTaskBtnList.forEach((button) => {
         // Add event listener for a click
         button.addEventListener('click', () => {
+            const originalText = button.innerHTML;
+            button.innerHTML = 'Evaluating...'; // Visual feedback for the AI Processing
+            button.disabled = true;
+
             // Extract task Id from dataset
             const taskId = button.dataset.taskId;
             // Data we will send to the server
@@ -33,11 +37,22 @@ function initializeCreateTaskLogic(elements) {
             })
             .then(response => response.json())
             .then(data => {
-                    //console.log(data);
-                })
+                if (data.status === 'success') {
+                    button.innerHTML = 'Closed';
+                    button.classList.replace('btn-danger', 'btn-secondary');
+                    // Reload to reflect changes in UI and Assignments tables
+                    location.reload(); 
+                } else {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    alert('Error: ' + data.message);
+                }
+            })
             .catch((error) => {
-                    console.error('Error', error);
-                });
+                console.error('Error', error);
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
         });
     })
     

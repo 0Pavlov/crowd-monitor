@@ -16,7 +16,6 @@
         {% if messages %}
             <div class="flash-container">
                 {% for category, message in messages %}
-                    <!-- Each message gets a 'flash-message' class so JavaScript can find it -->
                     <div class="flash-message flash-{{ category }}">
                         {{ message }}
                     </div>
@@ -25,17 +24,14 @@
         {% endif %}
     {% endwith %}
 
-    <!-- This styles the messages and adds the fade-out animation -->
     <style>
-        /* A container to hold the messages in the top right corner */
         .flash-container {
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 1050; /* Ensures it's on top of other content */
+            z-index: 1050; 
         }
 
-        /* Styling for all flash messages */
         .flash-message {
             padding: 15px;
             margin-bottom: 10px;
@@ -46,43 +42,61 @@
             transition: opacity 0.5s ease;
         }
 
-        /* Style for 'success' messages */
         .flash-success {
             color: #155724;
             background-color: #d4edda;
             border-color: #c3e6cb;
         }
 
-        /* Style for 'danger' or 'error' messages */
         .flash-danger, .flash-error {
             color: #721c24;
             background-color: #f8d7da;
             border-color: #f5c6cb;
         }
+
+        /* --- EMPTY STATE STYLES --- */
+        .empty-tasks-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 24px;
+            text-align: center;
+            background-color: var(--m3-surface-container-lowest);
+            border: 1px dashed var(--m3-outline-variant);
+            border-radius: 16px;
+            margin: 24px 16px;
+        }
+
+        .empty-tasks-icon {
+            opacity: 0.8;
+            margin-bottom: 16px;
+        }
+
+        .empty-tasks-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--m3-on-surface);
+            margin: 0 0 8px 0;
+        }
+
+        .empty-tasks-subtitle {
+            font-size: 1rem;
+            color: var(--m3-on-surface-variant);
+            margin: 0;
+            max-width: 400px;
+        }
     </style>
 
-    <!-- This finds the messages and makes them disappear -->
     <script>
-        // Wait until the entire page is loaded before running the script
         document.addEventListener('DOMContentLoaded', function() {
-
-            // Find all elements with the 'flash-message' class
             const flashMessages = document.querySelectorAll('.flash-message');
-
-            // Loop through each messages found
             flashMessages.forEach(function(message) {
-                
-                // Set a timer to run a function after 1 seconds (1000 milliseconds)
                 setTimeout(function() {
-                    // Start the fade-out by setting opacity to 0
                     message.style.opacity = '0';
-                    
-                    // After the fade-out animation (500ms), hide the element completely
-                    // so it doesn't take up any space on the page.
                     setTimeout(function() {
                         message.style.display = 'none';
-                    }, 500); // This must match the CSS transition time
-
+                    }, 500); 
                 }, 2000); 
             });
         });
@@ -92,7 +106,6 @@
     <!-- Main container -->
     <div class="TasksMain">
         <!-- Tasks overview container -->
-        <!-- All of the tasks table -->
         <div class="Tasks">
             {% if session['role'] == 'admin' %}
                 <div class="TasksNav">
@@ -102,10 +115,7 @@
                     <h1 class="tasks-title">All tasks:</h1>
                 </div>
                     {% if tasks %}
-                    <!-- The 'Table' -->
-                    <!-- Each 'row' is an accordion item -->
                     <div class="TasksRowsContainer" id="taskAccordion">
-                        <!-- The Header -->
                         <div class="task-header">
                             <div class="header-item">Content</div>
                             <div class="header-item">Created At</div>
@@ -114,7 +124,6 @@
                             <div class="header-item">Status</div>
                         </div>
                         {% for task in tasks %}
-                        <!-- Task Card -->
                         <div class="TaskRow accordion-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
                             <div class="TaskContent">
                                 <span class="mobile-header">Content:</span>
@@ -137,16 +146,13 @@
                                 {{ task.status }}
                             </div>
                         </div>
-                        <!-- Accordion item expands into the table of assignments for this task -->
                         <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
                             <div class="AssignmentsTable">
-                                <!-- HEADER SECTION: Flexbox container to separate Title and Button -->
                                 <div class="assignments-table-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
                                     <div>
                                         <h3 class="assignment-title m-0">Assignments:</h3>
                                     </div>
                                     <div class="TaskManager">
-                                        <!-- Button for closing the task-->
                                         <button class='btn btn-danger btn-sm' id="close-task-button" data-task-id="{{task.id}}">
                                             Close Task
                                         </button>
@@ -175,17 +181,22 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p> NO TASKS </p
+                    <!-- ADMIN EMPTY STATE -->
+                    <div class="empty-tasks-container">
+                        <svg class="empty-tasks-icon" xmlns="http://www.w3.org/2000/svg" height="64px" viewBox="0 0 24 24" width="64px" fill="var(--m3-primary)">
+                            <path d="M0 0h24v24H0V0z" fill="none"/>
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <h2 class="empty-tasks-title">No tasks found</h2>
+                        <p class="empty-tasks-subtitle">You haven't created any tasks yet. Click "create task" to get started.</p>
+                    </div>
                     {% endif %}
             {% else %}
                 <div class="tasks-header-card">
                     <h1 class="tasks-title">My tasks:</h1>
                 </div>
                 {% if tasks %}
-                <!-- The 'Table' -->
-                <!-- Each 'row' is an accordion item -->
                 <div class="TasksRowsContainer" id="taskAccordion">
-                    <!-- The Header -->
                     <div class="task-header">
                         <div class="header-item">Content</div>
                         <div class="header-item">Created At</div>
@@ -194,7 +205,6 @@
                         <div class="header-item">Status</div>
                     </div>
                     {% for task in tasks %}
-                    <!-- Task Card -->
                     <div class="TaskRow accordion-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
                         <div class="TaskContent">
                             <span class="mobile-header">Content:</span>
@@ -217,18 +227,19 @@
                             {{ task.status }}
                         </div>
                     </div>
-                    <!-- Accordion item expands into the table of assignments for this task -->
                     <div id="collapse-{{ task.id }}" class="collapse" data-bs-parent="#taskAccordion">
-                        <table class="table mb-0">
+                        <table class="table mb-0 assignments-table-theme">
                             <thead>
                                 <tr>
-                                    <th>last sub</th>
-                                    <th>status</th>
+                                    <th class='assignment-header-item'>Worker</th>
+                                    <th class='assignment-header-item'>Last Submission</th>
+                                    <th class='assignment-header-item'>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for assignment_id in task.assignments_ids %}
                                 <tr class="AssignmentRowHover" data-assignment-id="{{ assignment_id }}" data-task-id="{{ task.id }}">
+                                    <td>{{ assignments_info[assignment_id]['assigned_worker'] }}</td>
                                     <td id="last-sub-for-assignment-{{ assignment_id }}">{{ assignments_info[assignment_id]['who_last_submitted'] }}: {{ assignments_info[assignment_id]['last_submission']}}
                                     <td id="assignment-status-{{ assignment_id }}">{{ assignments_info[assignment_id]['status'] }}</td>
                                 </tr>
@@ -239,24 +250,33 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                <p> NO TASKS </p
+                <!-- WORKER EMPTY STATE -->
+                <div class="empty-tasks-container">
+                    <svg class="empty-tasks-icon" xmlns="http://www.w3.org/2000/svg" height="64px" viewBox="0 0 24 24" width="64px" fill="var(--m3-primary)">
+                        <path d="M0 0h24v24H0V0z" fill="none"/>
+                        <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                    </svg>
+                    <h2 class="empty-tasks-title">You're all caught up!</h2>
+                    <p class="empty-tasks-subtitle">There are no pending assignments for you right now.</p>
+                </div>
                 {% endif %}
             {% endif %}
         </div>
-        <!-- Task container -->
-        <!-- The particular task area if one is chosen -->
         <div class="TaskContainer collapsed">
             <button class="TaskExpandBtn">&lt;&lt;</button>
             <div class="Task hidden">
                 <div class="TaskNav">
                     <button class="TaskHideBtn">&gt;&gt;</button>
                 </div>
-                <!-- Task details -->
-                <div class="NoSelectedTask">
-                    <h1>NO selected task</h1>
+                <div class="NoSelectedTask" style="text-align: center; padding: 48px; color: var(--m3-on-surface-variant);">
+                    <!-- Fallback if there's no task selected yet -->
+                    <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 0 24 24" width="48px" fill="currentColor" style="opacity: 0.5;">
+                        <path d="M0 0h24v24H0z" fill="none"/><path d="M15 15H3v2h12v-2zm0-8H3v2h12V7zM3 13h18v-2H3v2zm0 8h18v-2H3v2zM3 3v2h18V3H3z"/>
+                    </svg>
+                    <h2>Select a task to view details</h2>
                 </div>
                 <div class="SelectedTask hidden">
-                    <!-- Appended with html via AJAX when the TaskRow is clicked -->
+                    <!-- Appended with html via AJAX -->
                 </div>
                 <div class="CreateTask hidden" id="create-task-container">
                     <!-- Appended only if the user has permission -->
@@ -268,6 +288,5 @@
     <script src="{{ url_for('static', filename='js/pages/tasks/table-poller.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pages/tasks/create-task.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pages/tasks/assignment-and-chat-logic.js') }}"></script>
-    <!-- Main init must be last so the functions above are defined -->
     <script src="{{ url_for('static', filename='js/pages/tasks/main-init.js') }}"></script>
 {% endblock %}

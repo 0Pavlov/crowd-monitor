@@ -1,57 +1,58 @@
-/* DEFINE THE MATERIAL 3 COLOR PALETTE */
+/* DEFINE THE MATERIAL 3 COLOR PALETTE (Light Theme) */
 :root {
   /* Base Source Color */
   --source-color: #3478f5;
 
   /* Primary Palette (for key components and actions) */
-  --m3-primary: #a8c7fa;
+  --m3-primary: #005ac1;
   --m3-on-primary: #ffffff;
-  --m3-primary-container: #20252b;
-  --m3-on-primary-container: #001550;
+  --m3-primary-container: #d8e2ff;
+  --m3-on-primary-container: #001a41;
 
   /* Secondary Palette (for less prominent components) */
-  --m3-secondary: #c4c7c5;
+  --m3-secondary: #535e78;
   --m3-on-secondary: #ffffff;
-  --m3-secondary-container: #dde2f9;
-  --m3-on-secondary-container: #151b2c;
+  --m3-secondary-container: #dbe2f9;
+  --m3-on-secondary-container: #101b32;
 
   /* Tertiary Palette (for contrasting accents and positive feedback) */
-  --m3-tertiary: #735471;
+  --m3-tertiary: #76517b;
   --m3-on-tertiary: #ffffff;
-  --m3-tertiary-container: #fdd7f8;
-  --m3-on-tertiary-container: #2b122b;
+  --m3-tertiary-container: #ffd6fc;
+  --m3-on-tertiary-container: #2d0b34;
 
   /* Error Palette */
-  --m3-error: #ffb4ab;
+  --m3-error: #ba1a1a;
   --m3-on-error: #ffffff;
   --m3-error-container: #ffdad6;
   --m3-on-error-container: #410002;
 
   /* Surface & Background Palette (the "canvas" of the app) */
-  --m3-background: #000000;
-  --m3-on-background: #1b1b1f;
-  --m3-surface: #fefbff;
-  --m3-on-surface: #ffffff;
-  --m3-surface-variant: #e1e2ec;
-  --m3-on-surface-variant: #a0a0a0;
+  --m3-background: #fdfbff;
+  --m3-on-background: #1a1b1e;
+  --m3-surface: #fdfbff;
+  --m3-on-surface: #1a1b1e;
+  --m3-surface-variant: #e0e2ec;
+  --m3-on-surface-variant: #44474e;
   
   /* Elevated Surface Tones */
   --m3-surface-container-lowest: #ffffff;
-  --m3-surface-container-low: #121212;
-  --m3-surface-container: #f2f3fa;
-  --m3-surface-container-high: #eceef4;
-  --m3-surface-container-highest: #e6e8ee;
+  --m3-surface-container-low: #f3f3fa;
+  --m3-surface-container: #ededf4;
+  --m3-surface-container-high: #e7e8ee;
+  --m3-surface-container-highest: #e2e2e9;
 
   /* Outlines & Dividers */
-  --m3-outline: #757780;
-  --m3-outline-variant: #333333;
+  --m3-outline: #74777f;
+  --m3-outline-variant: #c4c6cf;
 
-  --m3-button-background: #1e1e1e;
-  --m3-button-text: #e0e0e0;
+  /* Custom component mappings */
+  --m3-button-background: #ffffff;
+  --m3-button-text: #005ac1;
 
-  --m3-header-color: #9aa0a6;
-  --m3-card-text-color: #e2e2e2;
-  --m3-table-row-hover: #2c2c2c;
+  --m3-header-color: #44474e;
+  --m3-card-text-color: #1a1b1e;
+  --m3-table-row-hover: #e7e8ee;
     
   --main-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
