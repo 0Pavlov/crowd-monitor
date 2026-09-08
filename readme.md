@@ -1,7 +1,9 @@
 # How to use
 
 * **Clone:** ```bash git clone "https://github.com/0Pavlov/crowd-monitor/```.
-* **CD:** ```bash cd crowd-monitor```.
+* **CD:** ```bash
+cd crowd-monitor
+```.
 * **Venv:** ```bash python -m venv venv```.
 * **Activate:** ```bash platform specific (research)```.
 * **Dependencies:** ```bash pip install -r requirements.txt```.
