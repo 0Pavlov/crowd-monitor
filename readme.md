@@ -8,12 +8,27 @@ git clone "https://github.com/0Pavlov/crowd-monitor/
 ```bash
 cd crowd-monitor
 ```
-* **Venv:** ```bash python -m venv venv```.
-* **Activate:** ```bash platform specific (research)```.
-* **Dependencies:** ```bash pip install -r requirements.txt```.
-* **Run:** ```bash Flask run```.
+* **Venv:**
+```bash
+python -m venv venv
+```
+* **Activate:**
+```bash
+platform specific (research)
+```
+* **Dependencies:**
+```bash
+pip install -r requirements.txt
+```
+* **Run:**
+```bash
+Flask run
+```
 * **Open:** Open the link in the browser and register a new user.
-* **Rights:** In the /model/ folder there is a script ```bash python change_role.py name admin\worker```.
+* **Rights:** In the /model/ folder there is a script
+```bash
+python change_role.py name admin\worker
+```
 
 # Initial project plan
 
