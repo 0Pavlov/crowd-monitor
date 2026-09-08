@@ -22,3 +22,12 @@ used in IT.
 - Python Flask for the UI.
 - SQLite3 for the db.
 - AI API's for the project's AI features.
+
+
+### 📌 Project Update (08.09.2026)
+
+I am making this repository public today. While I have decided to pivot to a new tech stack, I am wrapping this project up to serve as a portfolio piece.
+
+* **The Journey:** Building this app taught me a lot about Flask routing, templating, authentication, databases, polling, responsive UI, JavaScript, and building custom modules and tools.
+* **The Pivot:** At some point, I reached the limits of vanilla CSS and JavaScript for the frontend (or at least it became unreasonable to continue scaling with this stack). I then discovered modern frontend frameworks like Svelte and backend frameworks like FastAPI. I've decided to focus my learning there, meaning active development on this version is ending.
+* **AI Assistance:** All of the core backend logic in this project was handwritten by me prior to this date. Moving forward from today, any final commits (mostly UI polishing and chat improvements) will be heavily assisted by AI to help me quickly reach a "finished" state.
